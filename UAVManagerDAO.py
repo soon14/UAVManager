@@ -1,0 +1,1042 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+import sys
+import math
+
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+import ConfigParser
+import hashlib
+import json
+from sqlalchemy import create_engine
+from sqlalchemy import func
+from sqlalchemy.orm import sessionmaker,query
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import  SignatureExpired,BadSignature
+from UAVManagerEntity import User, Role, Role_basic, Manager,Battery,Device,Pad,Parts,Approval,Fault, class_to_dict
+
+from flask import Flask, request ,jsonify
+from flask import Response,make_response
+
+cf = ConfigParser.ConfigParser()
+cf.read("config.conf")
+db_host = cf.get("db_uav", "db_host")
+db_port = cf.getint("db_uav", "db_port")
+db_user = cf.get("db_uav", "db_user")
+db_pass = cf.get("db_uav", "db_pass")
+db_name = cf.get("db_uav","db_name")
+
+usr_host = cf.get("db_usr", "db_host")
+usr_port = cf.getint("db_usr", "db_port")
+usr_user = cf.get("db_usr", "db_user")
+usr_pass = cf.get("db_usr", "db_pass")
+usr_name = cf.get("db_usr","db_name")
+
+secret_key = cf.get('token','SECRET_KEY')
+
+engine_uav = create_engine('mysql+mysqldb://' + db_user + ':' + db_pass + '@' + db_host + ':' + str(db_port) + '/' + db_name+'?charset=utf8')
+engine_usr = create_engine('mysql+mysqldb://' + usr_user + ':' + usr_pass + '@' + usr_host + ':' + str(usr_port) + '/' + usr_name+'?charset=utf8')
+Session_UAV = sessionmaker(bind=engine_uav)
+session_uav = Session_UAV()
+Session_User = sessionmaker(bind=engine_usr)
+session_usr = Session_User()
+
+
+def md5_key(arg):
+    hash = hashlib.md5()
+    hash.update(arg)
+    return hash.hexdigest()
+
+class UserDAO:
+    #verify passowrd
+    def verify_password(self,username,password):
+        if(not username or not password):
+            return False
+
+        usr=session_usr.query(User).filter(User.user_id==username).first()
+        if(not usr or usr.user_password!=md5_key(password)):
+            return False
+        else:
+            return True
+    #verify token
+    def verify_token(self,token,password):
+        s=Serializer(secret_key)
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None # valid token, but expired
+        except BadSignature:
+            return None # invalid token
+        usr=session_usr.query(User).filter(User.user_id == data['id']).first()
+        return usr
+
+    #insert obj into table
+    def insert_user(self,user,user_login):
+        roles = self.get_role(user_login)
+        if '5' in roles and '6' not in roles:
+            if user.user_team==user_login.user_role:
+                session_usr.add(user)
+                rs=session_usr.commit()
+                return rs
+            else:
+                return -1
+        elif '6' in roles:
+            session_usr.add(user)
+            rs = session_usr.commit()
+            return rs
+        else:
+            return -1
+
+    #get obj by id
+    def get_user_byId(self,userid):
+        session_usr.query(User).filter(User.user_id==userid)
+        return session_usr.commit()
+
+    #get obj by name
+    def get_user_byName(self,name):
+        if(not name):
+            return -1
+        else:
+            usr=session_usr.query(User).filter(User.user_id==name).first()
+            return usr
+
+    #authority
+    def get_role(self,user):
+        rs = session_usr.query(Role).filter(Role.role_id==user.user_role).first()
+        role = rs.role_basic.split(',')
+        return role
+
+class DeviceDAO:
+    def query_all(self,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            rs=session_uav.query(Device).filter(Device.user_team==user.user_team).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs = session_uav.query(Device).all()
+            return class_to_dict(rs)
+        else:
+            return None
+
+    def query_page(self,user,page_index,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            rs=session_uav.query(Device).filter(Device.user_team==user.user_team).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs = session_uav.query(Device).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        else:
+            return None
+
+    def query_pages(self,user,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            rs=session_uav.query(Device).filter(Device.user_team==user.user_team).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs = session_uav.query(Device).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        else:
+            return None
+
+
+    def query_condition(self,user,device_id,device_ver,device_type,uad_code,device_status,page_index,page_size):
+        q = session_uav.query(Device)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' not in roles:
+            return None
+        if '1' in roles and '5' not in roles:
+            q = q.filter(Device.user_team == user.user_team)
+        if device_ver:
+            q = q.filter(Device.device_ver==device_ver)
+        if device_id:
+            q = q.filter(Device.device_id == device_id)
+        if device_type:
+            q = q.filter(Device.device_type == device_type)
+        if uad_code:
+            q = q.filter(Device.uad_code == uad_code)
+        if device_status:
+            q = q.filter(Device.device_status == device_status)
+        device=q.limit(page_size).offset((page_index-1)*page_size).all()
+        return  class_to_dict(device)
+
+    def query_statistic(self,user,device_status):
+        usrDao=UserDAO()
+        roles = usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql=''
+            if(device_status!='总数'):
+                sql='select device_type,count(device_type) from tb_device where user_team=\''+user.user_team+'\'&& device_status=\''+device_status+'\' group by device_type;'
+            else:
+                sql = 'select device_type,count(device_type) from tb_device where user_team=\'' + user.user_team + '\' group by device_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+        elif '5' in roles:
+            sql=''
+            if(device_status!='总数'):
+                sql='select device_type, count(device_type) from tb_device where device_status=\''+device_status+'\' group by device_type;'
+            else:
+                sql = 'select device_type, count(device_type) from tb_device group by device_type;'
+
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+        else:
+            return None
+
+    def query_statistic_all(self,user):
+        #get type first
+        usrDao=UserDAO()
+        roles = usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql = 'select device_type from tb_device where user_team=\'' + user.user_team + '\' group by device_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret=[]
+            for idx in rs:
+                item = {}
+                strType=idx[0]
+                item['name']=strType
+                item['count']=len(session_uav.query(Device).filter(Device.device_type==strType,Device.user_team==user.user_team).all())
+                item['instock']=len(session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='在库',Device.user_team==user.user_team).all())
+                item['removal'] = len(session_uav.query(Device).filter(Device.device_type == strType, Device.device_status == '出库',Device.user_team == user.user_team).all())
+                item['maintain']=len(session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='维修',Device.user_team==user.user_team).all())
+                ret.append(item)
+            return json.dumps(ret)
+        elif '5' in roles:
+            sql = 'select device_type from tb_device group by device_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret=[]
+            for idx in rs:
+                item = {}
+                strType=idx[0]
+                item['name']=strType
+                item['count']=len(session_uav.query(Device).filter(Device.device_type==strType).all())
+                item['instock']=len(session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='在库').all())
+                item['removal'] = len(session_uav.query(Device).filter(Device.device_type == strType, Device.device_status == '出库').all())
+                item['maintain']=len(session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='维修').all())
+
+                ret.append(item)
+            return json.dumps(ret)
+        else:
+            return None
+
+    def query_type(self,user_team):
+        sql = 'select device_type from tb_device where user_team=\'' + user_team + '\' group by device_type;'
+        rs = session_uav.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['device_type'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def query_type(self):
+        sql = 'select device_type from tb_device group by device_type;'
+        rs = session_uav.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['type'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def add_device(self,usr,device):
+        q = session_uav.query(Device)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '2' in roles:
+            session_uav.add(device)
+            session_uav.commit()
+            return 1
+        else:
+            return -1
+
+    def modify_device(self,usr,device):
+        q = session_uav.query(Device)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '3' in roles:
+            session_uav.update(Device).where(Device.device_id == device.device_id).values(device_ver=device.device_ver,device_type=device.device_type,uad_code=device.uad_code,\
+                                                                                          device_fact=device.device_fact,device_date=device.device_date,user_team=device.user_team, \
+                                                                                          uad_camera=device.uad_camera,uav_yuntai=device.uav_yuntai,uad_rcontrol=device.uad_rcontrol, \
+                                                                                          device_status=device.device_status)
+            session_uav.commit()
+            return 1
+        else:
+            return -1;
+
+class BatteryDAO:
+    def query_all(self,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            rs=session_uav.query(Battery).filter(Battery.user_team==user.user_team).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs = session_uav.query(Battery).all()
+            return class_to_dict(rs)
+        else:
+            return None
+
+    def query_page(self,user,page_index,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            rs=session_uav.query(Battery).filter(Battery.user_team==user.user_team).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs = session_uav.query(Battery).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        else:
+            return None
+
+    def query_pages(self):
+
+    def query_condition(self,user,bttery_id,bttery_ver,bttery_type,bttery_status,page_index,page_size):
+        q = session_uav.query(Battery)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' not in roles:
+            return None
+        if '1' in roles and '5' not in roles:
+            q = q.filter(Battery.user_team == user.user_team)
+        if bttery_ver:
+            q = q.filter(Battery.battery_ver==bttery_ver)
+        if bttery_id:
+            q = q.filter(Battery.battery_id == bttery_id)
+        if bttery_type:
+            q = q.filter(Battery.battery_type == bttery_type)
+        if bttery_status:
+            q = q.filter(Battery.battery_status == bttery_status)
+        battery=q.limit(page_size).offset((page_index-1)*page_size).all()
+        return class_to_dict(battery)
+
+    def query_statistic(self,user,bttery_status):
+        usrDao=UserDAO()
+        roles = usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql=''
+            if(bttery_status!='总数'):
+                sql='select battery_type,count(battery_type) from tb_battery where user_team=\''+user.user_team+'\'&& battery_status=\''+bttery_status+'\' group by battery_type;'
+            else:
+                sql = 'select battery_type,count(battery_type) from tb_battery where user_team=\'' + user.user_team + '\' group by battery_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+            return rs
+        elif '5' in roles:
+            sql=''
+            if(bttery_status!='总数'):
+                sql='select battery_type, count(battery_type) from tb_battery where battery_status=\''+bttery_status+'\' group by battery_type;'
+            else:
+                sql = 'select battery_type, count(battery_type) from tb_battery group by battery_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+        else:
+            return None
+
+    def query_statistic_all(self,user):
+        #get type first
+        usrDao=UserDAO()
+        roles = usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql = 'select battery_type from tb_battery where user_team=\'' + user.user_team + '\' group by battery_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret=[]
+            for idx in rs:
+                item = {}
+                strType=idx[0]
+                item['name']=strType
+                item['count']=len(session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.user_team==user.user_team).all())
+                item['instock']=len(session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='在库',Battery.user_team==user.user_team).all())
+                item['removal']=len(session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='出库',Battery.user_team==user.user_team).all())
+                item['maintain']=len(session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='维修',Battery.user_team==user.user_team).all())
+                ret.append(item)
+            return json.dumps(ret)
+        elif '5' in roles:
+            sql = 'select battery_type from tb_battery group by battery_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret=[]
+            for idx in rs:
+                item = {}
+                strType=idx[0]
+                item['name']=strType
+                item['count']=len(session_uav.query(Battery).filter(Battery.battery_type==strType).all())
+                item['instock']=len(session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='在库').all())
+                item['removal'] = len(session_uav.query(Battery).filter(Battery.battery_type == strType, Battery.battery_status == '出库').all())
+                item['maintain']=len(session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='维修').all())
+                ret.append(item)
+            return json.dumps(ret)
+        else:
+            return None
+
+    def query_type(self,user_team):
+        sql = 'select battery_type from tb_battery where user_team=\'' + user_team + '\' group by battery_type;'
+        rs = session_uav.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['battery_type'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def query_type(self):
+        sql = 'select battery_type from tb_battery group by battery_type;'
+        rs = session_uav.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['type'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def add_battery(self,usr,battery):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '2' in roles:
+            session_uav.add(battery)
+            session_uav.commit()
+            return 1
+        else:
+            return -1
+
+    def modify_battery(self,usr,battery):
+        q = session_uav.query(Battery)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '3' in roles:
+            session_uav.update(Battery).where(Battery.battery_id == battery.battery_id).values(battery_ver=battery.battery_ver,battery_type=battery.battery_type,battery_fact=battery.battery_fact,\
+                                                                                          battery_date=battery.battery_date,approver_name=battery.approver_name,user_team=battery.user_team, \
+                                                                                          battery_status=battery.battery_status)
+            session_uav.commit()
+            return 1
+        else:
+            return -1;
+
+class PadDao:
+    def query_all(self,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            rs=session_uav.query(Pad).filter(Pad.user_team==user.user_team).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs = session_uav.query(Pad).all()
+            return class_to_dict(rs)
+        else:
+            return None
+
+    def query_page(self,user,page_index,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            rs=session_uav.query(Pad).filter(Pad.user_team==user.user_team).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs = session_uav.query(Pad).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        else:
+            return None
+
+    def query_condition(self, user, pad_id, pad_ver, pad_type, pad_status, page_index, page_size):
+        q = session_uav.query(Pad)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' not in roles:
+            return None
+        if '1' in roles and '5' not in roles:
+            q = q.filter(Pad.user_team == user.user_team)
+        if pad_ver:
+            q = q.filter(Pad.bttery_ver==pad_ver)
+        if pad_id:
+            q = q.filter(Pad.bttery_id == pad_id)
+        if pad_type:
+            q = q.filter(Pad.bttery_type == pad_type)
+        if pad_status:
+            q = q.filter(Pad.bttery_status == pad_status)
+        pad=q.limit(page_size).offset((page_index-1)*page_size).all()
+        return  class_to_dict(pad)
+
+    def query_statistic(self,user,pad_status):
+        usrDao=UserDAO()
+        roles = usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql=''
+            if(pad_status!='总数'):
+                sql='select pad_type,count(pad_type) from tb_pad where user_team=\''+user.user_team+'\'&& pad_status=\''+pad_status+'\' group by pad_type;'
+            else:
+                sql = 'select pad_type,count(pad_type) from tb_pad where user_team=\'' + user.user_team + '\' group by pad_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+        elif '5' in roles:
+            sql=''
+            if(pad_status!='总数'):
+                sql='select pad_type, count(pad_type) from tb_pad where pad_status=\''+pad_status+'\' group by device_type;'
+            else:
+                sql = 'select pad_type, count(pad_type) from tb_pad group by device_type;'
+
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+        else:
+            return None
+
+    def query_type(self,user_team):
+        sql = 'select pad_type from tb_battery where user_team=\'' + user_team + '\' group by pad_type;'
+        rs = session_uav.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['pad_type'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def query_type(self):
+        sql = 'select pad_type from tb_battery where group by pad_type;'
+        rs = session_uav.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['type'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def add_pad(self,usr,pad):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '2' in roles:
+            session_uav.add(pad)
+            session_uav.commit()
+            return 1
+        else:
+            return -1
+
+    def modify_pad(self,usr,pad):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '3' in roles:
+            session_uav.update(Pad).where(Pad.pad_id == pad.pad_id).values(pad_ver=pad.pad_ver,pad_type=pad.pad_type,pad_fact=pad.pad_fact,\
+                                                                                          pad_date=pad.pad_date,approver_name=pad.approver_name,user_team=pad.user_team, \
+                                                                                          pad_status=pad.pad_status)
+            session_uav.commit()
+            return 1
+        else:
+            return -1;
+
+#配件
+class PartsDao:
+    def query_all(self,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles:
+            return class_to_dict(session_uav.query(Parts).all())
+        else:
+            return None
+
+    def query_page(self,user,page_index,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            rs=session_uav.query(Parts).filter(Parts.user_team==user.user_team).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs = session_uav.query(Parts).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        else:
+            return None
+
+    def query_statistic(self,user,part_status):
+        usrDao=UserDAO()
+        roles = usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql=''
+            if(part_status!='总数'):
+                sql='select parts_type,count(parts_type) from tb_parts where user_team=\''+user.user_team+'\'&& parts_status=\''+part_status+'\' group by device_type;'
+            else:
+                sql = 'select parts_type,count(parts_type) from tb_parts where user_team=\'' + user.user_team + '\' group by parts_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+        elif '5' in roles:
+            sql=''
+            if(part_status!='总数'):
+                sql='select parts_type, count(parts_type) from tb_parts where parts_status=\''+part_status+'\' group by device_type;'
+            else:
+                sql = 'select parts_type, count(parts_type) from tb_parts group by parts_type;'
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+        else:
+            return None
+
+    def query_type(self):
+        sql = 'select parts_type from tb_parts group by parts_type;'
+        rs = session_uav.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['type'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def query_condition(self,user,parts_id,parts_ver,parts_type,parts_status,page_index,page_size):
+        q = session_uav.query(Parts)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        sql = 'select * from tb_device where '
+        if '1' not in roles:
+            return None
+        if '1' in roles and '5' not in roles:
+            q = q.filter(Parts.user_team == user.user_team)
+        if parts_ver:
+            q = q.filter(Parts.parts_ver==parts_ver)
+        if parts_id:
+            q = q.filter(Parts.parts_id == parts_id)
+        if parts_type:
+            q = q.filter(Parts.parts_type == parts_type)
+        if parts_status:
+            q = q.filter(Parts.parts_status == parts_status)
+        parts=q.limit(page_size).offset((page_index-1)*page_size).all()
+        return  class_to_dict(parts)
+
+#出入库管理
+class ManagerDAO:
+    def query_all(self,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles:
+            return class_to_dict(session_uav.query(Manager).all())
+        else:
+            return None
+
+    def query_page(self,user,page_index,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles:
+            return class_to_dict(session_uav.query(Manager).limit(page_size).offset((page_index-1)*page_size).all())
+        else:
+            return None
+
+    def query_borrow(self,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        #只能看到本班组设备的借用情况
+        if '1' in roles:
+            return class_to_dict(session_uav.query(Manager).filter(Manager.manager_status=='借用',Manager.user_team==user.user_team).all())
+        else:
+            return None
+
+    def query_condition(self,user,device_ver,device_id,device_type,manager_status,borrow_time,return_time,page_index,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles:
+            q = session_uav.query(Manager)
+            if device_ver:
+                q = q.filter(Manager.device_ver==device_ver)
+            if device_id:
+                q = q.filter(Manager.device_id == device_id)
+            if device_type:
+                q = q.filter(Manager.device_type == device_type)
+            if manager_status:
+                q = q.filter(Manager.manager_status == manager_status)
+            if borrow_time:
+                q = q.filter(Manager.borrower_date == borrow_time)
+            if return_time:
+                q = q.filter(Manager.return_date == return_time)
+            mngr=q.limit(page_size).offset((page_index-1)*page_size).all()
+            return  class_to_dict(mngr)
+        else:
+            return None;
+
+    #借用的判断逻辑为：首先判断借用人和借用设备是否是同一个班组
+    #   不是同一个班组则判断是否提交借调申请
+    #       提交了借调申请则判断当前用户是否有权限批准
+    #       未提交借调申请返回错误
+    #   是同一个班组
+    #       当前用户是否有权限批准
+    #       无权限批准则返回错误
+    def manager_borrow(self,user,approver,borrower,borrow_team,uav_id,borrow_time,return_time):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        #判断设备类型
+        device = session_uav.query(Device).filter(Device.device_id == uav_id).first()
+        battery = session_uav.query(Battery).filter(Battery.battery_id == uav_id).first()
+        part = session_uav.query(Parts).filter(Parts.parts_id == uav_id).first()
+        pad = session_uav.query(Pad).filter(Pad.pad_id == uav_id).first()
+        idx = 0
+        user_team=''
+        status = ''
+        if device:
+            idx = 1
+            user_team = device.user_team
+            status = device.device_status
+        if battery:
+            idx = 2
+            user_team = battery.user_team
+            status = battery.battery_status
+        if part:
+            idx = 3
+            user_team = part.user_team
+            status = part.parts_status
+        if pad:
+            idx = 4
+            user_team = pad.user_team
+            status = pad.pad_status
+        if status!='在库':
+            return -2#设备未归还
+        if idx==0:
+            return -1
+
+        #判断是否是一个班组
+        usr=session_usr.query(User).filter(User.user_name==borrower).first()
+        #如果用户不存在
+        if usr==None:
+            return -1
+
+        #如果不是同一班组
+        if usr.user_team!=user_team:
+            #是否经过审批流程
+            approve=session_uav.query(Approval).filter(Approval.apply_person==usr.usr_name,Approval.approval_status==1)
+            if(approve != None):
+                if '4' in roles:
+                    #审批人是否有权限审批借出
+                    if user.user_team==user_team: #有
+                        if idx==1:
+                            obj = Manager(device_id=uav_id, device_ver=device.device_ver,device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                            session_uav.add(obj)
+                            session_uav.commit()
+                            session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
+                            session_uav.commit()
+                            return 1
+                        if idx==2:
+                            obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver, borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用', return_date=return_time)
+                            session_uav.add(obj)
+                            session_uav.commit()
+                            session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
+                            session_uav.commit()
+                            return 1
+                        if idx==3:
+                            obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                            session_uav.add(obj)
+                            session_uav.commit()
+                            session_uav.query(Parts).filter(Parts.parts_id == uav_id).update({Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
+                            session_uav.commit()
+                            return 1
+                        if idx==4:
+                            obj = Manager(device_id=uav_id, device_ver=pad.device_ver,device_type=pad.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                            session_uav.add(obj)
+                            session_uav.commit()
+                            session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
+                            session_uav.commit()
+                            return 1
+                        #借调申请记录的处理
+                        #
+                        #
+                    else:#无
+                        return -1
+                elif '5' in roles:
+                    if idx == 1:
+                        obj = Manager(device_id=uav_id, device_ver=device.device_ver, device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                        session_uav.add(obj)
+                        session_uav.commit()
+                        session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
+                        session_uav.commit()
+                        return 1
+                    if idx == 2:
+                        obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                        session_uav.add(obj)
+                        session_uav.commit()
+                        session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
+                        session_uav.commit()
+                        return 1
+                    if idx == 3:
+                        obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                        session_uav.add(obj)
+                        session_uav.commit()
+                        session_uav.query(Parts).filter(Parts.parts_id == uav_id).update({Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
+                        session_uav.commit()
+                        return 1
+                    if idx == 4:
+                        obj = Manager(device_id=uav_id, device_ver=pad.device_ver,device_type=pad.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                        session_uav.add(obj)
+                        session_uav.commit()
+                        session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
+                        session_uav.commit()
+                        return 1
+                    return 1
+                else:
+                    return -1
+            else:
+                return -1
+        else:#同一班组
+            if '4' in roles:
+                if user.user_team==user_team:#是否是班组管理员
+                    if idx == 1:
+                        obj = Manager(device_id=uav_id, device_ver=device.device_ver,device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用', return_date=return_time)
+                        session_uav.add(obj)
+                        session_uav.commit()
+                        session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
+                        session_uav.commit()
+                        return 1
+                    if idx == 2:
+                        obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                        session_uav.add(obj)
+                        session_uav.commit()
+                        session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
+                        session_uav.commit()
+                        return 1
+                    if idx == 3:
+                        obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                        session_uav.add(obj)
+                        session_uav.commit()
+                        session_uav.query(Parts).filter(Parts.parts_id == uav_id).update({Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
+                        session_uav.commit()
+                        return 1
+                    if idx == 4:
+                        obj = Manager(device_id=uav_id, device_ver=pad.device_ver, device_type=pad.device_type, approver_name=approver, borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                        session_uav.add(obj)
+                        session_uav.commit()
+                        session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
+                        session_uav.commit()
+                        return 1
+                else:
+                    return -1
+            elif '5' in roles:#管理员权限
+                if idx == 1:
+                    obj = Manager(device_id=uav_id, device_ver=device.device_ver,device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                    session_uav.add(obj)
+                    session_uav.commit()
+                    session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
+                    session_uav.commit()
+                    return 1
+                if idx == 2:
+                    obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用', return_date=return_time)
+                    session_uav.add(obj)
+                    session_uav.commit()
+                    session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
+                    session_uav.commit()
+                    return 1
+                if idx == 3:
+                    obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                    session_uav.add(obj)
+                    session_uav.commit()
+                    session_uav.query(Parts).filter(Parts.parts_id == uav_id).update( {Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
+                    session_uav.commit()
+                    return 1
+                if idx == 4:
+                    obj = Manager(device_id=uav_id, device_ver=pad.device_ver,device_type=pad.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                    session_uav.add(obj)
+                    session_uav.commit()
+                    session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
+                    session_uav.commit()
+                    return 1
+            else:
+                return -1
+
+    def manager_return(self,user,device_id,return_date,return_desc):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '4' in roles or '5' in roles:
+            device = session_uav.query(Device).filter(Device.device_id==device_id).first()
+            battery= session_uav.query(Battery).filter(Battery.battery_id==device_id).first()
+            part   = session_uav.query(Battery).filter(Parts.parts_id==device_id).first()
+            pad = session_uav.query(Battery).filter(Pad.pad_id == device_id).first()
+            manager = session_uav.query(Manager).filter(Manager.device_id==device_id,Manager.manager_status=='借用').first()
+            idx=0
+            if device:
+                idx=1
+            if battery:
+                idx=2
+            if part:
+                idx=3
+            if pad:
+                idx=4
+
+            if not manager:
+                return -1
+
+            if idx!=0:
+                session_uav.query(Manager).filter(Manager.device_id == manager.device_id and Manager.manager_status=='借用').update({Manager.manager_status: '归还',Manager.return_date:return_date,Manager.return_desc:return_desc}, synchronize_session=False)
+                session_uav.commit()
+            else:
+                return -1
+
+            if idx==1:
+                session_uav.query(Device).filter(Device.device_id == manager.device_id).update({Device.device_status: '在库'},synchronize_session=False)
+                session_uav.commit()
+            if idx==2:
+                session_uav.query(Battery).filter(Battery.battery_id == manager.device_id).update({Battery.battery_status: '在库'},synchronize_session=False)
+                session_uav.commit()
+            if idx==3:
+                session_uav.query(Parts).filter(Parts.parts_id == manager.device_id).update({Parts.parts_status: '在库'},synchronize_session=False)
+                session_uav.commit()
+            if idx==4:
+                session_uav.query(Pad).filter(Pad.pad_id == manager.device_id).update({Pad.pad_status: '在库'},synchronize_session=False)
+                session_uav.commit()
+            return 1
+
+#故障管理
+class FaultDao:
+    def query_list(self,user,device_ver,page_index,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        q = session_uav.query(Fault)
+        if device_ver:
+            q = q.filter(Fault.device_ver == device_ver)
+        allFaults = q.limit(page_size).offset((page_index-1)*page_size).all()
+        return class_to_dict(allFaults)
+
+    def query_pages(self,page_size):
+        if page_size>0:
+            return math.ceil(session_uav.query(Fault).count()/page_size)
+        else:
+            return -1
+
+    def query_statistics(self,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql = 'select fault_reason,count(*) from tb_fault where user_team=\'' + user.user_team + '\' group by fault_reason;'
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+        elif '5' in roles:
+            sql = 'select fault_reason, count(*) from tb_fault group by fault_reason;'
+            rs = session_uav.execute(sql).fetchall()
+            ret = []
+            for i in rs:
+                item = {}
+                item['name']=i[0]
+                item['value']=i[1]
+                ret.append(item)
+            return json.dumps(ret)
+        else:
+            return None
+
+    def query_types(self):
+        sql = 'select device_ver from tb_fault group by device_ver;'
+        rs = session_uav.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['device_ver'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def add_fault(self,user,fault):
+        device = session_uav.query(Device).filter(Device.device_id==fault.device_id).fisrt()
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+
+        device = session_uav.query(Device).filter(Device.device_id == fault.device_id).first()
+        battery = session_uav.query(Battery).filter(Battery.battery_id == fault.device_id).first()
+        part = session_uav.query(Battery).filter(Parts.parts_id == fault.device_id).first()
+        pad = session_uav.query(Battery).filter(Pad.pad_id == fault.device_id).first()
+
+        idx = 0
+        if device:
+            idx = 1
+        if battery:
+            idx = 2
+        if part:
+            idx = 3
+        if pad:
+            idx = 4
+        if idx==0:
+            return -2
+
+        if '2' in roles and '5' not in roles:
+            if device.user_team==user.user_team:
+                session_uav.add(fault)
+                session_uav.commit()
+                if idx == 1:
+                    session_uav.query(Device).filter(Device.device_id == fault.device_id).update(
+                        {Device.device_status: '维修'}, synchronize_session=False)
+                    session_uav.commit()
+                if idx == 2:
+                    session_uav.query(Battery).filter(Battery.battery_id == fault.device_id).update(
+                        {Battery.battery_status: '维修'}, synchronize_session=False)
+                    session_uav.commit()
+                if idx == 3:
+                    session_uav.query(Parts).filter(Parts.parts_id == fault.device_id).update(
+                        {Parts.parts_status: '维修'}, synchronize_session=False)
+                    session_uav.commit()
+                if idx == 4:
+                    session_uav.query(Pad).filter(Pad.pad_id == fault.device_id).update({Pad.pad_status: '维修'},
+                                                                                          synchronize_session=False)
+                    session_uav.commit()
+                return 1
+            else :
+                return -1
+        if '5' in roles:
+            session_uav.add(fault)
+            session_uav.commit()
+        return -1
+
+#借调申请管理
+class ApprovalDao:
+    def approval_query(self,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '4' in roles and  '5' not in roles:
+            rs=session_uav.query(Approval).filter(Approval.approval_team==user.user_team,Approval.approval_status==0).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs=session_uav.query(Approval).filter(Approval.approval_status==0).all()
+            return class_to_dict(rs)
+        else:
+            return None
