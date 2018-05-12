@@ -132,15 +132,22 @@ class DeviceDAO:
         else:
             return None
 
+    #查询页数
     def query_pages(self,user,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
-            rs=session_uav.query(Device).filter(Device.user_team==user.user_team).limit(page_size).offset((page_index-1)*page_size).all()
-            return class_to_dict(rs)
+            sql ='select count(*) from tb_device where user_team = '+'\'user_team\''
+            rs=math.ceil(session_uav.execute(sql)/page_size)
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
         elif '5' in roles:
-            rs = session_uav.query(Device).limit(page_size).offset((page_index-1)*page_size).all()
-            return class_to_dict(rs)
+            sql ='select count(*) from tb_device'
+            rs=math.ceil(session_uav.execute(sql)/page_size)
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
         else:
             return None
 
@@ -307,7 +314,25 @@ class BatteryDAO:
         else:
             return None
 
-    def query_pages(self):
+    def query_pages(self,user,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql ='select count(*) from tb_battery where user_team = '+'\'user_team\''
+            rs=math.ceil(session_uav.execute(sql)/page_size)
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
+        elif '5' in roles:
+            sql ='select count(*) from tb_battery'
+            rs=math.ceil(session_uav.execute(sql)/page_size)
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
+        else:
+            return None
+
+
 
     def query_condition(self,user,bttery_id,bttery_ver,bttery_type,bttery_status,page_index,page_size):
         q = session_uav.query(Battery)
@@ -466,6 +491,24 @@ class PadDao:
         else:
             return None
 
+    def query_pages(self,user,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql ='select count(*) from tb_pad where user_team = '+'\'user_team\''
+            rs=math.ceil(session_uav.execute(sql)/page_size)
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
+        elif '5' in roles:
+            sql ='select count(*) from tb_pad'
+            rs=math.ceil(session_uav.execute(sql)/page_size)
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
+        else:
+            return None
+
     def query_condition(self, user, pad_id, pad_ver, pad_type, pad_status, page_index, page_size):
         q = session_uav.query(Pad)
         usrDao=UserDAO()
@@ -584,6 +627,24 @@ class PartsDao:
         else:
             return None
 
+    def query_pages(self,user,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles and '5' not in roles:
+            sql ='select count(*) from tb_parts where user_team = '+'\'user_team\''
+            rs=math.ceil(session_uav.execute(sql)/page_size)
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
+        elif '5' in roles:
+            sql ='select count(*) from tb_parts'
+            rs=math.ceil(session_uav.execute(sql)/page_size)
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
+        else:
+            return None
+
     def query_statistic(self,user,part_status):
         usrDao=UserDAO()
         roles = usrDao.get_role(user)
@@ -663,6 +724,18 @@ class ManagerDAO:
         roles=usrDao.get_role(user)
         if '1' in roles:
             return class_to_dict(session_uav.query(Manager).limit(page_size).offset((page_index-1)*page_size).all())
+        else:
+            return None
+
+    def query_pages(self,user,page_size):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles or '5' in roles:
+            sql ='select count(*) from tb_parts'
+            rs=math.ceil(session_uav.execute(sql)/page_size)
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
         else:
             return None
 

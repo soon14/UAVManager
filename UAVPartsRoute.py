@@ -47,6 +47,26 @@ class UAVPartsList(Resource):
     def get(self):
         return self.post()
 
+class UAVPartsListPages(Resource):
+    def __init__(self):
+        self.dao = PartsDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            page_size=data['page_size']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return self.dao.query_pages(page_size)
+        else:
+            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
 class UAVPartsTypes(Resource):
     def __init__(self):
         self.dao = PartsDao()

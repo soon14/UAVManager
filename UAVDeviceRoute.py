@@ -51,6 +51,24 @@ class UAVDeviceList(Resource):
     def get(self):
         return self.post()
 
+class UAVDeviceListPages(Resource):
+    def __init__(self):
+        self.dao = DeviceDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            page_size = data['page_size']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return self.dao.query_pages(user,page_size)
+
+    def get(self):
+        return self.post()
+
 class UAVDeviceManagerSearch(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
