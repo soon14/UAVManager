@@ -175,6 +175,7 @@ class Photo(EntityBase):
     photo_id = Column(Integer,primary_key=True)
     photo_line = Column(Integer)
     photo_tower_id = Column(Integer)
+    photo_voltage = Column(String(45))
     photo_path=Column(String(256))
     photo_classify=Column(String(45))
 

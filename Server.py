@@ -14,7 +14,7 @@ from flask_restful import Api
 from flask_httpauth import HTTPBasicAuth
 from flask import Flask, render_template
 
-import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute
+import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute,PhotoUpload
 import UAVManagerDAO
 
 auth = HTTPBasicAuth()
@@ -41,6 +41,8 @@ def verify_password(username_or_token,password):
 def unauthorized():
     return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
+##########################################登录模块
+
 @app.route('/uavmanager/api/v1.0/login', methods=['GET', 'POST'])
 def login():
     if(request.data!=""):
@@ -61,6 +63,9 @@ def login():
         rst = make_response(jsonify({'Status': False}))
 
     return rst
+
+
+##########################################无人机管理模块
 
 #manager related api
 api.add_resource(UAVManagerRoute.ManagerListPages,'/uavmanager/api/v1.0/manager/list')
@@ -106,12 +111,14 @@ api.add_resource(UAVFaultRoute.UAVFaultListPages,'/uavmanager/api/v1.0/fault/pag
 
 
 #fault report api
-api.add_resource(UAVFaultReportRoute.FaultReportQuery,'/uavmanager/api/v1.0/faultreport')
-api.add_resource(UAVFaultReportRoute.FaultReportUpdate,'/uavmanager/api/v1.0/faultreport/update')
+api.add_resource(UAVFaultReportRoute.FaultReportQuery, '/uavmanager/api/v1.0/faultreport')
+api.add_resource(UAVFaultReportRoute.FaultReportUpdate, '/uavmanager/api/v1.0/faultreport/update')
 
 #approval
-api.add_resource(UAVApporvalRoute.UAVApprovalList,'/uavmanager/api/v1.0/approval/list')
+api.add_resource(UAVApporvalRoute.UAVApprovalList, '/uavmanager/api/v1.0/approval/list')
 
+###################################################################文件上传模块
+api.add_resource(PhotoUpload.FileUpload, '/uavmanager/api/v1.0/approval/list')
 
 if __name__ == '__main__':
     app.run()

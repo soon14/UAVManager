@@ -2,240 +2,240 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9c33995-67a2-44fa-950c-b400d34ac7e9" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/UAVManager.iml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/UAVFaultReportRoute.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/tornado_server.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/DESCRIPTION.rst" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/INSTALLER" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/METADATA" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/RECORD" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/WHEEL" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/metadata.json" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/top_level.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/futures/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/futures/_base.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/futures/process.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/futures/thread.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/DESCRIPTION.rst" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/INSTALLER" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/METADATA" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/RECORD" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/WHEEL" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/metadata.json" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/top_level.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/DESCRIPTION.rst" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/INSTALLER" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/METADATA" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/RECORD" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/WHEEL" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/metadata.json" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/top_level.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/_compat.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/client.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/connection.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/exceptions.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/lock.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/sentinel.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/utils.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/INSTALLER" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/METADATA" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/RECORD" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/WHEEL" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/top_level.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/_speedups.pyd" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/compat.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/decoder.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/encoder.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/errors.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/ordered_dict.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/raw_json.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/scanner.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_bigint_as_string.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_bitsize_int_as_string.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_check_circular.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_decimal.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_decode.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_default.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_dump.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_encode_basestring_ascii.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_encode_for_html.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_errors.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_fail.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_float.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_for_json.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_indent.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_item_sort_key.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_iterable.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_namedtuple.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_pass1.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_pass2.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_pass3.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_raw_json.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_recursion.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_scanstring.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_separators.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_speedups.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_str_subclass.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_subclass.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_tool.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_tuple.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_unicode.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tool.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/DESCRIPTION.rst" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/INSTALLER" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/METADATA" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/RECORD" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/WHEEL" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/metadata.json" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/top_level.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/zip-safe" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch_helpers.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/DESCRIPTION.rst" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/INSTALLER" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/METADATA" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/RECORD" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/WHEEL" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/metadata.json" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/top_level.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/_locale_data.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/auth.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/autoreload.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/concurrent.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/curl_httpclient.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/escape.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/gen.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/http1connection.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/httpclient.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/httpserver.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/httputil.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/ioloop.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/iostream.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/locale.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/locks.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/log.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/netutil.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/options.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/asyncio.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/auto.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/caresresolver.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/common.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/epoll.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/interface.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/kqueue.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/posix.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/select.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/twisted.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/windows.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/process.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/queues.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/routing.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/simple_httpclient.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/stack_context.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/tcpclient.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/tcpserver.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/template.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/__main__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/asyncio_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/auth_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/autoreload_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/concurrent_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/csv_translations/fr_FR.csv" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/curl_httpclient_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/escape_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/gen_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/gettext_translations/fr_FR/LC_MESSAGES/tornado_test.mo" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/gettext_translations/fr_FR/LC_MESSAGES/tornado_test.po" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/http1connection_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/httpclient_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/httpserver_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/httputil_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/import_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/ioloop_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/iostream_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/locale_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/locks_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/log_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/netutil_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/options_test.cfg" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/options_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/process_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/queues_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/resolve_test_helper.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/routing_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/runtests.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/simple_httpclient_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/stack_context_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/dir/index.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/robots.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/sample.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/sample.xml.bz2" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/sample.xml.gz" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static_foo.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/tcpclient_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/tcpserver_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/template_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/templates/utf8.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/test.crt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/test.key" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/testing_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/twisted_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/util.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/util_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/web_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/websocket_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/windows_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/wsgi_test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/testing.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/util.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/web.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/websocket.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/wsgi.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/DESCRIPTION.rst" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/INSTALLER" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/METADATA" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/RECORD" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/WHEEL" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/metadata.json" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/top_level.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/DESCRIPTION.rst" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/INSTALLER" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/METADATA" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/RECORD" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/WHEEL" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/metadata.json" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/top_level.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/authorization.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/helpers.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/server.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/settings.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/tests.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/backports.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/client.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/connection.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/exceptions.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/pubsub.py" />
-      <change beforePath="$PROJECT_DIR$/Server.py" afterPath="$PROJECT_DIR$/Server.py" />
-      <change beforePath="$PROJECT_DIR$/UAVDeviceRoute.py" afterPath="$PROJECT_DIR$/UAVDeviceRoute.py" />
-      <change beforePath="$PROJECT_DIR$/UAVManagerDAO.py" afterPath="$PROJECT_DIR$/UAVManagerDAO.py" />
-      <change beforePath="$PROJECT_DIR$/UAVManagerEntity.py" afterPath="$PROJECT_DIR$/UAVManagerEntity.py" />
-      <change beforePath="$PROJECT_DIR$/UAVManagerRoute.py" afterPath="$PROJECT_DIR$/UAVManagerRoute.py" />
-      <change beforePath="$PROJECT_DIR$/UAVPadRoute.py" afterPath="$PROJECT_DIR$/UAVPadRoute.py" />
-      <change beforePath="$PROJECT_DIR$/UAVPartsRoute.py" afterPath="$PROJECT_DIR$/UAVPartsRoute.py" />
-      <change beforePath="$PROJECT_DIR$/venv/pip-selfcheck.json" afterPath="$PROJECT_DIR$/venv/pip-selfcheck.json" />
+      <change afterPath="$PROJECT_DIR$/.idea/UAVManager.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UAVFaultReportRoute.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tornado_server.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc-0.5.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/backports_abc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/futures/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/futures/_base.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/futures/process.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/concurrent/futures/thread.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/futures-3.2.0.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis-2.10.6.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/_compat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/client.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/connection.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/exceptions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/lock.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/sentinel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/redis/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson-3.15.0.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/_speedups.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/compat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/decoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/encoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/errors.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/ordered_dict.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/raw_json.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/scanner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_bigint_as_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_bitsize_int_as_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_check_circular.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_decimal.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_decode.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_default.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_dump.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_encode_basestring_ascii.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_encode_for_html.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_errors.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_fail.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_float.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_for_json.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_indent.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_item_sort_key.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_iterable.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_namedtuple.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_pass1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_pass2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_pass3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_raw_json.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_recursion.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_scanstring.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_separators.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_speedups.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_str_subclass.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_subclass.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_tool.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_tuple.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tests/test_unicode.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/simplejson/tool.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch-3.4.0.3.dist-info/zip-safe" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/singledispatch_helpers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado-5.0.2.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/_locale_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/auth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/autoreload.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/concurrent.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/curl_httpclient.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/escape.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/gen.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/http1connection.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/httpclient.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/httpserver.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/httputil.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/ioloop.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/iostream.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/locale.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/locks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/log.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/netutil.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/options.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/asyncio.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/auto.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/caresresolver.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/common.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/epoll.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/kqueue.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/posix.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/select.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/twisted.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/platform/windows.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/process.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/queues.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/routing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/simple_httpclient.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/stack_context.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/tcpclient.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/tcpserver.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/template.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/__main__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/asyncio_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/auth_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/autoreload_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/concurrent_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/csv_translations/fr_FR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/curl_httpclient_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/escape_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/gen_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/gettext_translations/fr_FR/LC_MESSAGES/tornado_test.mo" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/gettext_translations/fr_FR/LC_MESSAGES/tornado_test.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/http1connection_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/httpclient_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/httpserver_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/httputil_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/import_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/ioloop_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/iostream_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/locale_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/locks_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/log_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/netutil_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/options_test.cfg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/options_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/process_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/queues_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/resolve_test_helper.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/routing_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/runtests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/simple_httpclient_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/stack_context_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/dir/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/robots.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/sample.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/sample.xml.bz2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static/sample.xml.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/static_foo.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/tcpclient_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/tcpserver_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/template_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/templates/utf8.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/test.crt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/test.key" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/testing_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/twisted_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/util.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/util_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/web_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/websocket_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/windows_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/wsgi_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/testing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/util.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/web.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/websocket.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/wsgi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_redis-2.4.18.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/DESCRIPTION.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server-0.1.5a1.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/authorization.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/helpers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/server.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado_websocket_server/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/backports.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/client.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/connection.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/exceptions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornadoredis/pubsub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UAVDeviceRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/UAVDeviceRoute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UAVManagerDAO.py" beforeDir="false" afterPath="$PROJECT_DIR$/UAVManagerDAO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UAVManagerEntity.py" beforeDir="false" afterPath="$PROJECT_DIR$/UAVManagerEntity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UAVManagerRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/UAVManagerRoute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UAVPadRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/UAVPadRoute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UAVPartsRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/UAVPartsRoute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/pip-selfcheck.json" beforeDir="false" afterPath="$PROJECT_DIR$/venv/pip-selfcheck.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -246,32 +246,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="UAVBatteryRoute.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="UAVBatteryRoute.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/UAVBatteryRoute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="49" column="41" lean-forward="false" selection-start-line="49" selection-start-column="41" selection-end-line="49" selection-end-column="41" />
+            <state relative-caret-position="285">
+              <caret line="15" column="60" lean-forward="true" selection-start-line="15" selection-start-column="60" selection-end-line="15" selection-end-column="60" />
               <folding>
-                <element signature="e#986#1868#0" expanded="false" />
-                <element signature="e#1916#2649#0" expanded="false" />
-                <element signature="e#2692#3478#0" expanded="false" />
-                <element signature="e#3517#4105#0" expanded="false" />
-                <element signature="e#4148#4677#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UAVDeviceRoute.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3">
-              <caret line="48" column="25" lean-forward="false" selection-start-line="48" selection-start-column="25" selection-end-line="48" selection-end-column="25" />
-              <folding>
-                <element signature="e#2138#2666#0" expanded="false" />
-                <element signature="e#2712#6369#0" expanded="false" />
-                <element signature="e#6418#7171#0" expanded="false" />
-                <element signature="e#7224#7956#0" expanded="false" />
+                <element signature="e#986#1868#0" />
+                <element signature="e#1916#2649#0" />
+                <element signature="e#2692#3478#0" />
+                <element signature="e#3517#4105#0" />
+                <element signature="e#4148#4677#0" />
               </folding>
             </state>
           </provider>
@@ -280,13 +265,21 @@
       <file leaf-file-name="UAVManagerEntity.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UAVManagerEntity.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="533">
-              <caret line="133" column="17" lean-forward="false" selection-start-line="133" selection-start-column="6" selection-end-line="133" selection-end-column="17" />
+            <state relative-caret-position="369">
+              <caret line="175" selection-start-line="175" selection-end-line="179" selection-end-column="37" />
               <folding>
-                <element signature="e#3221#3580#0" expanded="false" />
-                <element signature="e#3617#3979#0" expanded="false" />
-                <element signature="e#4333#5037#0" expanded="false" />
-                <element signature="e#6021#6403#0" expanded="false" />
+                <element signature="e#489#749#0" />
+                <element signature="e#779#919#0" />
+                <element signature="e#955#1077#0" />
+                <element signature="e#1193#1637#0" />
+                <element signature="e#1669#2142#0" />
+                <element signature="e#2175#2509#0" />
+                <element signature="e#2538#2839#0" />
+                <element signature="e#2870#3187#0" />
+                <element signature="e#3617#3979#0" />
+                <element signature="e#4010#4296#0" />
+                <element signature="e#4333#5037#0" />
+                <element signature="e#6021#6403#0" />
               </folding>
             </state>
           </provider>
@@ -295,15 +288,13 @@
       <file leaf-file-name="UAVManagerRoute.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UAVManagerRoute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="123" column="30" lean-forward="false" selection-start-line="123" selection-start-column="30" selection-end-line="123" selection-end-column="30" />
+            <state relative-caret-position="255">
+              <caret line="45" column="12" selection-start-line="45" selection-start-column="12" selection-end-line="45" selection-end-column="43" />
               <folding>
-                <element signature="e#946#1352#0" expanded="false" />
-                <element signature="e#1392#2456#0" expanded="false" />
-                <element signature="e#1506#2408#0" expanded="false" />
-                <element signature="e#2498#3182#0" expanded="false" />
-                <element signature="e#3333#4798#0" expanded="false" />
-                <element signature="e#4835#6113#0" expanded="false" />
+                <element signature="e#946#1352#0" />
+                <element signature="e#2498#3182#0" />
+                <element signature="e#3333#4798#0" />
+                <element signature="e#4835#6113#0" />
               </folding>
             </state>
           </provider>
@@ -312,58 +303,93 @@
       <file leaf-file-name="UAVManagerDAO.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UAVManagerDAO.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="152" column="19" lean-forward="false" selection-start-line="152" selection-start-column="8" selection-end-line="152" selection-end-column="19" />
+            <state relative-caret-position="2736">
+              <caret line="1139" column="24" lean-forward="true" selection-start-line="1139" selection-start-column="24" selection-end-line="1139" selection-end-column="24" />
               <folding>
-                <element signature="e#1647#3442#0" expanded="false" />
-                <element signature="e#3108#3255#0" expanded="false" />
-                <element signature="e#3170#3255#0" expanded="false" />
-                <element signature="e#3309#3442#0" expanded="false" />
-                <element signature="e#4471#5060#0" expanded="false" />
-                <element signature="e#5307#6074#0" expanded="false" />
-                <element signature="e#6134#7528#0" expanded="false" />
-                <element signature="e#7578#9633#0" expanded="false" />
-                <element signature="e#9679#9950#0" expanded="false" />
-                <element signature="e#9985#10253#0" expanded="false" />
-                <element signature="e#10289#10553#0" expanded="false" />
-                <element signature="e#10600#10840#0" expanded="false" />
-                <element signature="e#10890#11764#0" expanded="false" />
-                <element signature="e#11788#19443#0" expanded="false" />
-                <element signature="e#19463#24249#0" expanded="false" />
-                <element signature="e#19497#19862#0" expanded="false" />
-                <element signature="e#19924#20389#0" expanded="false" />
-                <element signature="e#20441#20946#0" expanded="false" />
-                <element signature="e#21744#23078#0" expanded="false" />
-                <element signature="e#24275#28129#0" expanded="false" />
-                <element signature="e#28160#45201#0" expanded="false" />
-                <element signature="e#29047#29324#0" expanded="false" />
-                <element signature="e#29463#30295#0" expanded="false" />
-                <element signature="e#43167#45201#0" expanded="false" />
-                <element signature="e#46732#46999#0" expanded="false" />
-                <element signature="e#47045#49173#0" expanded="false" />
-                <element signature="e#47834#49062#0" expanded="false" />
-                <element signature="e#49755#51106#0" expanded="false" />
+                <element signature="e#3108#3255#0" />
+                <element signature="e#3170#3255#0" />
+                <element signature="e#3309#3442#0" />
+                <element signature="e#3465#11764#0" />
+                <element signature="e#4471#5060#0" />
+                <element signature="e#5307#6074#0" />
+                <element signature="e#6134#7528#0" />
+                <element signature="e#7578#9633#0" />
+                <element signature="e#9679#9950#0" />
+                <element signature="e#9985#10253#0" />
+                <element signature="e#10289#10553#0" />
+                <element signature="e#10600#10840#0" />
+                <element signature="e#10890#11764#0" />
+                <element signature="e#11788#19443#0" />
+                <element signature="e#19463#24249#0" />
+                <element signature="e#19497#19862#0" />
+                <element signature="e#19924#20389#0" />
+                <element signature="e#20441#20946#0" />
+                <element signature="e#21744#23078#0" />
+                <element signature="e#24275#28129#0" />
+                <element signature="e#28160#45201#0" />
+                <element signature="e#29047#29324#0" />
+                <element signature="e#29463#30295#0" />
+                <element signature="e#43167#45201#0" />
+                <element signature="e#45229#49173#0" />
+                <element signature="e#46732#46999#0" />
+                <element signature="e#47045#49173#0" />
+                <element signature="e#47834#49062#0" />
+                <element signature="e#49201#49722#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UAVFaultReportRoute.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/UAVFaultReportRoute.py">
+      <file leaf-file-name="PowerLineDao.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PowerLineDao.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="23" column="46" lean-forward="false" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
-              <folding />
+            <state relative-caret-position="1045">
+              <caret line="103" column="63" selection-start-line="103" selection-start-column="63" selection-end-line="103" selection-end-column="63" />
+              <folding>
+                <element signature="e#42#52#0" expanded="true" />
+                <element signature="e#1216#1284#0" />
+                <element signature="e#1330#1535#0" />
+                <element signature="e#1581#1786#0" />
+                <element signature="e#1886#1956#0" />
+                <element signature="e#2000#2206#0" />
+                <element signature="e#2264#2470#0" />
+                <element signature="e#2354#2434#0" />
+                <element signature="e#2557#2627#0" />
+                <element signature="e#2667#2873#0" />
+                <element signature="e#2958#3256#0" />
+                <element signature="e#2924#3130#0" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UAVPadRoute.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UAVPadRoute.py">
+      <file leaf-file-name="PowerLinesRoute.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PowerLinesRoute.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="PowerTowersRoute.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PowerTowersRoute.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="PhotoUpload.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PhotoUpload.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="627">
+              <caret line="36" column="42" lean-forward="true" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
+              <folding>
+                <element signature="e#42#52#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.conf" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config.conf">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -371,25 +397,13 @@
       <file leaf-file-name="Server.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="69" column="0" lean-forward="true" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+            <state relative-caret-position="388">
+              <caret line="119" column="73" selection-start-line="119" selection-start-column="73" selection-end-line="119" selection-end-column="73" />
               <folding>
-                <element signature="e#795#879#0" expanded="false" />
-                <element signature="e#956#1151#0" expanded="false" />
-                <element signature="e#1197#1265#0" expanded="false" />
-                <element signature="e#1350#2140#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tornado_server.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tornado_server.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="10" column="25" lean-forward="false" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
-              <folding>
-                <element signature="e#33#71#0" expanded="true" />
+                <element signature="e#795#879#0" />
+                <element signature="e#956#1151#0" />
+                <element signature="e#1197#1265#0" />
+                <element signature="e#1350#2140#0" />
               </folding>
             </state>
           </provider>
@@ -422,12 +436,17 @@
         <option value="$PROJECT_DIR$/UAVPadRoute.py" />
         <option value="$PROJECT_DIR$/tornado_server.py" />
         <option value="$PROJECT_DIR$/UAVDeviceRoute.py" />
-        <option value="$PROJECT_DIR$/UAVManagerEntity.py" />
         <option value="$PROJECT_DIR$/venv/UAVFaultReportRoute.py" />
         <option value="$PROJECT_DIR$/UAVFaultReportRoute.py" />
-        <option value="$PROJECT_DIR$/Server.py" />
-        <option value="$PROJECT_DIR$/UAVManagerDAO.py" />
+        <option value="$PROJECT_DIR$/config.conf" />
         <option value="$PROJECT_DIR$/UAVManagerRoute.py" />
+        <option value="$PROJECT_DIR$/UAVManagerDAO.py" />
+        <option value="$PROJECT_DIR$/UAVManagerEntity.py" />
+        <option value="$PROJECT_DIR$/PowerLineDao.py" />
+        <option value="$PROJECT_DIR$/PhotoUpload.py" />
+        <option value="$PROJECT_DIR$/Server.py" />
+        <option value="$PROJECT_DIR$/PowerLinesRoute.py" />
+        <option value="$PROJECT_DIR$/PowerTowersRoute.py" />
       </list>
     </option>
   </component>
@@ -438,38 +457,22 @@
     <option name="height" value="540" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
-      <flattenPackages />
-      <showMembers />
-      <showModules />
-      <showLibraryContents />
-      <hideEmptyPackages />
-      <abbreviatePackageNames />
-      <autoscrollToSource />
-      <autoscrollFromSource />
-      <sortByType />
-      <manualOrder />
+    <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="UAVManager_8091" type="b2602c69:ProjectViewProjectNode" />
-              <item name="UAVManager_8091" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="UAVManager_8091" type="b2602c69:ProjectViewProjectNode" />
-              <item name="UAVManager_8091" type="462c0819:PsiDirectoryNode" />
-              <item name="venv" type="462c0819:PsiDirectoryNode" />
+              <item name="UAVManager" type="b2602c69:ProjectViewProjectNode" />
+              <item name="UAVManager" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -488,8 +491,9 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.UAVFaultReportRoute">
+  <component name="RunManager" selected="Python.tornado_server">
     <configuration name="Server" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="UAVManager" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -500,7 +504,6 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="UAVManager" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Server.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -508,6 +511,7 @@
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <configuration name="UAVFaultReportRoute" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="UAVManager" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -518,7 +522,6 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="UAVManager" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/UAVFaultReportRoute.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -526,6 +529,7 @@
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <configuration name="tornado_server" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="UAVManager" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -536,28 +540,24 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="UAVManager" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tornado_server.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <list size="3">
-      <item index="0" class="java.lang.String" itemvalue="Python.Server" />
-      <item index="1" class="java.lang.String" itemvalue="Python.tornado_server" />
-      <item index="2" class="java.lang.String" itemvalue="Python.UAVFaultReportRoute" />
+    <list>
+      <item itemvalue="Python.Server" />
+      <item itemvalue="Python.tornado_server" />
+      <item itemvalue="Python.UAVFaultReportRoute" />
     </list>
     <recent_temporary>
-      <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Python.UAVFaultReportRoute" />
-        <item index="1" class="java.lang.String" itemvalue="Python.tornado_server" />
-        <item index="2" class="java.lang.String" itemvalue="Python.Server" />
+      <list>
+        <item itemvalue="Python.UAVFaultReportRoute" />
+        <item itemvalue="Python.tornado_server" />
+        <item itemvalue="Python.Server" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -573,26 +573,29 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1376" height="744" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20364584" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30834213" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24498416" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20294118" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32961783" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Python Console" order="8" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.30834213" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.24498416" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -606,58 +609,109 @@
           <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="40" />
+      <option name="time" value="42" />
     </breakpoint-manager>
-    <watches-manager />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/UAVBatteryRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1045">
-          <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+        <state relative-caret-position="513">
+          <caret line="49" column="41" selection-start-line="49" selection-start-column="41" selection-end-line="49" selection-end-column="41" />
           <folding>
-            <element signature="e#986#1868#0" expanded="false" />
-            <element signature="e#1916#2649#0" expanded="false" />
-            <element signature="e#2692#3478#0" expanded="false" />
-            <element signature="e#3517#4105#0" expanded="false" />
-            <element signature="e#4148#4677#0" expanded="false" />
+            <element signature="e#986#1868#0" />
+            <element signature="e#1916#2649#0" />
+            <element signature="e#2692#3478#0" />
+            <element signature="e#3517#4105#0" />
+            <element signature="e#4148#4677#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="912">
+          <caret line="48" column="25" selection-start-line="48" selection-start-column="25" selection-end-line="48" selection-end-column="25" />
+          <folding>
+            <element signature="e#1213#2096#0" />
+            <element signature="e#2078#2096#0" />
+            <element signature="e#2138#2666#0" />
+            <element signature="e#2712#6369#0" />
+            <element signature="e#6418#7171#0" />
+            <element signature="e#7224#7956#0" />
+            <element signature="e#7994#8581#0" />
+            <element signature="e#8618#9204#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVManagerEntity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2147">
+          <caret line="133" column="17" selection-start-line="133" selection-start-column="6" selection-end-line="133" selection-end-column="17" />
+          <folding>
+            <element signature="e#489#749#0" />
+            <element signature="e#779#919#0" />
+            <element signature="e#955#1077#0" />
+            <element signature="e#1193#1637#0" />
+            <element signature="e#1669#2142#0" />
+            <element signature="e#2175#2509#0" />
+            <element signature="e#2538#2839#0" />
+            <element signature="e#2870#3187#0" />
+            <element signature="e#3617#3979#0" />
+            <element signature="e#4010#4296#0" />
+            <element signature="e#4333#5037#0" />
+            <element signature="e#6021#6403#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVManagerRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="684">
+          <caret line="123" column="30" selection-start-line="123" selection-start-column="30" selection-end-line="123" selection-end-column="30" />
+          <folding>
+            <element signature="e#946#1352#0" />
+            <element signature="e#2498#3182#0" />
+            <element signature="e#3333#4798#0" />
+            <element signature="e#4835#6113#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/UAVManagerDAO.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4161">
-          <caret line="475" column="13" lean-forward="false" selection-start-line="475" selection-start-column="13" selection-end-line="475" selection-end-column="13" />
+        <state relative-caret-position="2888">
+          <caret line="152" column="19" selection-start-line="152" selection-start-column="8" selection-end-line="152" selection-end-column="19" />
           <folding>
-            <element signature="e#1647#3442#0" expanded="false" />
-            <element signature="e#3108#3255#0" expanded="false" />
-            <element signature="e#3170#3255#0" expanded="false" />
-            <element signature="e#3309#3442#0" expanded="false" />
-            <element signature="e#4471#5060#0" expanded="false" />
-            <element signature="e#5307#6074#0" expanded="false" />
-            <element signature="e#6134#7528#0" expanded="false" />
-            <element signature="e#7578#9633#0" expanded="false" />
-            <element signature="e#9679#9950#0" expanded="false" />
-            <element signature="e#9985#10253#0" expanded="false" />
-            <element signature="e#10289#10553#0" expanded="false" />
-            <element signature="e#10600#10840#0" expanded="false" />
-            <element signature="e#10890#11764#0" expanded="false" />
-            <element signature="e#11788#19443#0" expanded="false" />
-            <element signature="e#19463#24249#0" expanded="false" />
-            <element signature="e#19497#19862#0" expanded="false" />
-            <element signature="e#19924#20389#0" expanded="false" />
-            <element signature="e#20441#20946#0" expanded="false" />
-            <element signature="e#21744#23078#0" expanded="false" />
-            <element signature="e#24275#28129#0" expanded="false" />
-            <element signature="e#28160#45201#0" expanded="false" />
-            <element signature="e#29047#29324#0" expanded="false" />
-            <element signature="e#29463#30295#0" expanded="false" />
-            <element signature="e#43167#45201#0" expanded="false" />
-            <element signature="e#46732#46999#0" expanded="false" />
-            <element signature="e#47045#49173#0" expanded="false" />
-            <element signature="e#47834#49062#0" expanded="false" />
-            <element signature="e#49755#51106#0" expanded="false" />
+            <element signature="e#3108#3255#0" />
+            <element signature="e#3170#3255#0" />
+            <element signature="e#3309#3442#0" />
+            <element signature="e#3465#11764#0" />
+            <element signature="e#4471#5060#0" />
+            <element signature="e#5307#6074#0" />
+            <element signature="e#6134#7528#0" />
+            <element signature="e#7578#9633#0" />
+            <element signature="e#9679#9950#0" />
+            <element signature="e#9985#10253#0" />
+            <element signature="e#10289#10553#0" />
+            <element signature="e#10600#10840#0" />
+            <element signature="e#10890#11764#0" />
+            <element signature="e#11788#19443#0" />
+            <element signature="e#19463#24249#0" />
+            <element signature="e#19497#19862#0" />
+            <element signature="e#19924#20389#0" />
+            <element signature="e#20441#20946#0" />
+            <element signature="e#21744#23078#0" />
+            <element signature="e#24275#28129#0" />
+            <element signature="e#28160#45201#0" />
+            <element signature="e#29047#29324#0" />
+            <element signature="e#29463#30295#0" />
+            <element signature="e#43167#45201#0" />
+            <element signature="e#45229#49173#0" />
+            <element signature="e#46732#46999#0" />
+            <element signature="e#47045#49173#0" />
+            <element signature="e#47834#49062#0" />
+            <element signature="e#49201#49722#0" />
           </folding>
         </state>
       </provider>
@@ -665,8 +719,236 @@
     <entry file="file://$PROJECT_DIR$/UAVPadRoute.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="798">
-          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-          <folding />
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="817">
+          <caret line="69" selection-start-line="69" selection-end-line="69" />
+          <folding>
+            <element signature="e#795#879#0" />
+            <element signature="e#956#1151#0" />
+            <element signature="e#1197#1265#0" />
+            <element signature="e#1350#2140#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tornado_server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+          <folding>
+            <element signature="e#33#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVFaultReportRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" column="33" lean-forward="true" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVBatteryRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="49" column="41" selection-start-line="49" selection-start-column="41" selection-end-line="49" selection-end-column="41" />
+          <folding>
+            <element signature="e#986#1868#0" />
+            <element signature="e#1916#2649#0" />
+            <element signature="e#2692#3478#0" />
+            <element signature="e#3517#4105#0" />
+            <element signature="e#4148#4677#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="912">
+          <caret line="48" column="25" selection-start-line="48" selection-start-column="25" selection-end-line="48" selection-end-column="25" />
+          <folding>
+            <element signature="e#1213#2096#0" />
+            <element signature="e#2078#2096#0" />
+            <element signature="e#2138#2666#0" />
+            <element signature="e#2712#6369#0" />
+            <element signature="e#6418#7171#0" />
+            <element signature="e#7224#7956#0" />
+            <element signature="e#7994#8581#0" />
+            <element signature="e#8618#9204#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVManagerEntity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2147">
+          <caret line="133" column="17" selection-start-line="133" selection-start-column="6" selection-end-line="133" selection-end-column="17" />
+          <folding>
+            <element signature="e#489#749#0" />
+            <element signature="e#779#919#0" />
+            <element signature="e#955#1077#0" />
+            <element signature="e#1193#1637#0" />
+            <element signature="e#1669#2142#0" />
+            <element signature="e#2175#2509#0" />
+            <element signature="e#2538#2839#0" />
+            <element signature="e#2870#3187#0" />
+            <element signature="e#3617#3979#0" />
+            <element signature="e#4010#4296#0" />
+            <element signature="e#4333#5037#0" />
+            <element signature="e#6021#6403#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVManagerRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="684">
+          <caret line="123" column="30" selection-start-line="123" selection-start-column="30" selection-end-line="123" selection-end-column="30" />
+          <folding>
+            <element signature="e#946#1352#0" />
+            <element signature="e#2498#3182#0" />
+            <element signature="e#3333#4798#0" />
+            <element signature="e#4835#6113#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVManagerDAO.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2888">
+          <caret line="152" column="19" selection-start-line="152" selection-start-column="8" selection-end-line="152" selection-end-column="19" />
+          <folding>
+            <element signature="e#3108#3255#0" />
+            <element signature="e#3170#3255#0" />
+            <element signature="e#3309#3442#0" />
+            <element signature="e#3465#11764#0" />
+            <element signature="e#4471#5060#0" />
+            <element signature="e#5307#6074#0" />
+            <element signature="e#6134#7528#0" />
+            <element signature="e#7578#9633#0" />
+            <element signature="e#9679#9950#0" />
+            <element signature="e#9985#10253#0" />
+            <element signature="e#10289#10553#0" />
+            <element signature="e#10600#10840#0" />
+            <element signature="e#10890#11764#0" />
+            <element signature="e#11788#19443#0" />
+            <element signature="e#19463#24249#0" />
+            <element signature="e#19497#19862#0" />
+            <element signature="e#19924#20389#0" />
+            <element signature="e#20441#20946#0" />
+            <element signature="e#21744#23078#0" />
+            <element signature="e#24275#28129#0" />
+            <element signature="e#28160#45201#0" />
+            <element signature="e#29047#29324#0" />
+            <element signature="e#29463#30295#0" />
+            <element signature="e#43167#45201#0" />
+            <element signature="e#45229#49173#0" />
+            <element signature="e#46732#46999#0" />
+            <element signature="e#47045#49173#0" />
+            <element signature="e#47834#49062#0" />
+            <element signature="e#49201#49722#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVPadRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="798">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="817">
+          <caret line="69" lean-forward="true" selection-start-line="69" selection-end-line="69" />
+          <folding>
+            <element signature="e#795#879#0" />
+            <element signature="e#956#1151#0" />
+            <element signature="e#1197#1265#0" />
+            <element signature="e#1350#2140#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tornado_server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+          <folding>
+            <element signature="e#33#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVFaultReportRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="23" column="46" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVBatteryRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1045">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
+          <folding>
+            <element signature="e#986#1868#0" />
+            <element signature="e#1916#2649#0" />
+            <element signature="e#2692#3478#0" />
+            <element signature="e#3517#4105#0" />
+            <element signature="e#4148#4677#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVManagerDAO.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4161">
+          <caret line="475" column="13" selection-start-line="475" selection-start-column="13" selection-end-line="475" selection-end-column="13" />
+          <folding>
+            <element signature="e#3108#3255#0" />
+            <element signature="e#3170#3255#0" />
+            <element signature="e#3309#3442#0" />
+            <element signature="e#3465#11764#0" />
+            <element signature="e#4471#5060#0" />
+            <element signature="e#5307#6074#0" />
+            <element signature="e#6134#7528#0" />
+            <element signature="e#7578#9633#0" />
+            <element signature="e#9679#9950#0" />
+            <element signature="e#9985#10253#0" />
+            <element signature="e#10289#10553#0" />
+            <element signature="e#10600#10840#0" />
+            <element signature="e#10890#11764#0" />
+            <element signature="e#11788#19443#0" />
+            <element signature="e#19463#24249#0" />
+            <element signature="e#19497#19862#0" />
+            <element signature="e#19924#20389#0" />
+            <element signature="e#20441#20946#0" />
+            <element signature="e#21744#23078#0" />
+            <element signature="e#24275#28129#0" />
+            <element signature="e#28160#45201#0" />
+            <element signature="e#29047#29324#0" />
+            <element signature="e#29463#30295#0" />
+            <element signature="e#43167#45201#0" />
+            <element signature="e#45229#49173#0" />
+            <element signature="e#46732#46999#0" />
+            <element signature="e#47045#49173#0" />
+            <element signature="e#47834#49062#0" />
+            <element signature="e#49201#49722#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVPadRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="798">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
         </state>
       </provider>
     </entry>
@@ -675,10 +957,10 @@
         <state relative-caret-position="361">
           <caret line="19" column="22" lean-forward="true" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
           <folding>
-            <element signature="e#795#879#0" expanded="false" />
-            <element signature="e#956#1151#0" expanded="false" />
-            <element signature="e#1197#1265#0" expanded="false" />
-            <element signature="e#1350#2140#0" expanded="false" />
+            <element signature="e#795#879#0" />
+            <element signature="e#956#1151#0" />
+            <element signature="e#1197#1265#0" />
+            <element signature="e#1350#2140#0" />
           </folding>
         </state>
       </provider>
@@ -696,12 +978,16 @@
     <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1406">
-          <caret line="211" column="35" lean-forward="false" selection-start-line="211" selection-start-column="35" selection-end-line="211" selection-end-column="35" />
+          <caret line="211" column="35" selection-start-line="211" selection-start-column="35" selection-end-line="211" selection-end-column="35" />
           <folding>
-            <element signature="e#2138#2666#0" expanded="false" />
-            <element signature="e#2712#6369#0" expanded="false" />
-            <element signature="e#6418#7171#0" expanded="false" />
-            <element signature="e#7224#7956#0" expanded="false" />
+            <element signature="e#1213#2096#0" />
+            <element signature="e#2078#2096#0" />
+            <element signature="e#2138#2666#0" />
+            <element signature="e#2712#6369#0" />
+            <element signature="e#6418#7171#0" />
+            <element signature="e#7224#7956#0" />
+            <element signature="e#7994#8581#0" />
+            <element signature="e#8618#9204#0" />
           </folding>
         </state>
       </provider>
@@ -709,12 +995,12 @@
     <entry file="file://$PROJECT_DIR$/Server.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1235">
-          <caret line="65" column="40" lean-forward="false" selection-start-line="65" selection-start-column="40" selection-end-line="65" selection-end-column="40" />
+          <caret line="65" column="40" selection-start-line="65" selection-start-column="40" selection-end-line="65" selection-end-column="40" />
           <folding>
-            <element signature="e#795#879#0" expanded="false" />
-            <element signature="e#956#1151#0" expanded="false" />
-            <element signature="e#1197#1265#0" expanded="false" />
-            <element signature="e#1350#2140#0" expanded="false" />
+            <element signature="e#795#879#0" />
+            <element signature="e#956#1151#0" />
+            <element signature="e#1197#1265#0" />
+            <element signature="e#1350#2140#0" />
           </folding>
         </state>
       </provider>
@@ -722,12 +1008,16 @@
     <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="589">
-          <caret line="53" column="35" lean-forward="false" selection-start-line="53" selection-start-column="35" selection-end-line="53" selection-end-column="35" />
+          <caret line="53" column="35" selection-start-line="53" selection-start-column="35" selection-end-line="53" selection-end-column="35" />
           <folding>
-            <element signature="e#2138#2666#0" expanded="false" />
-            <element signature="e#2712#6369#0" expanded="false" />
-            <element signature="e#6418#7171#0" expanded="false" />
-            <element signature="e#7224#7956#0" expanded="false" />
+            <element signature="e#1213#2096#0" />
+            <element signature="e#2078#2096#0" />
+            <element signature="e#2138#2666#0" />
+            <element signature="e#2712#6369#0" />
+            <element signature="e#6418#7171#0" />
+            <element signature="e#7224#7956#0" />
+            <element signature="e#7994#8581#0" />
+            <element signature="e#8618#9204#0" />
           </folding>
         </state>
       </provider>
@@ -735,10 +1025,10 @@
     <entry file="file://$PROJECT_DIR$/UAVPartsRoute.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
-          <caret line="49" column="34" lean-forward="false" selection-start-line="49" selection-start-column="34" selection-end-line="49" selection-end-column="34" />
+          <caret line="49" column="34" selection-start-line="49" selection-start-column="34" selection-end-line="49" selection-end-column="34" />
           <folding>
-            <element signature="e#1818#1836#0" expanded="false" />
-            <element signature="e#2536#3122#0" expanded="false" />
+            <element signature="e#1818#1836#0" />
+            <element signature="e#2536#3122#0" />
           </folding>
         </state>
       </provider>
@@ -748,34 +1038,35 @@
         <state relative-caret-position="5833">
           <caret line="1118" column="36" lean-forward="true" selection-start-line="1118" selection-start-column="36" selection-end-line="1118" selection-end-column="36" />
           <folding>
-            <element signature="e#1647#3442#0" expanded="false" />
-            <element signature="e#3108#3255#0" expanded="false" />
-            <element signature="e#3170#3255#0" expanded="false" />
-            <element signature="e#3309#3442#0" expanded="false" />
-            <element signature="e#4471#5060#0" expanded="false" />
-            <element signature="e#5307#6074#0" expanded="false" />
-            <element signature="e#6134#7528#0" expanded="false" />
-            <element signature="e#7578#9633#0" expanded="false" />
-            <element signature="e#9679#9950#0" expanded="false" />
-            <element signature="e#9985#10253#0" expanded="false" />
-            <element signature="e#10289#10553#0" expanded="false" />
-            <element signature="e#10600#10840#0" expanded="false" />
-            <element signature="e#10890#11764#0" expanded="false" />
-            <element signature="e#11788#19443#0" expanded="false" />
-            <element signature="e#19463#24249#0" expanded="false" />
-            <element signature="e#19497#19862#0" expanded="false" />
-            <element signature="e#19924#20389#0" expanded="false" />
-            <element signature="e#20441#20946#0" expanded="false" />
-            <element signature="e#21744#23078#0" expanded="false" />
-            <element signature="e#24275#28129#0" expanded="false" />
-            <element signature="e#28160#45201#0" expanded="false" />
-            <element signature="e#29047#29324#0" expanded="false" />
-            <element signature="e#29463#30295#0" expanded="false" />
-            <element signature="e#43167#45201#0" expanded="false" />
-            <element signature="e#46732#46999#0" expanded="false" />
-            <element signature="e#47045#49173#0" expanded="false" />
-            <element signature="e#47834#49062#0" expanded="false" />
-            <element signature="e#49755#51106#0" expanded="false" />
+            <element signature="e#3108#3255#0" />
+            <element signature="e#3170#3255#0" />
+            <element signature="e#3309#3442#0" />
+            <element signature="e#3465#11764#0" />
+            <element signature="e#4471#5060#0" />
+            <element signature="e#5307#6074#0" />
+            <element signature="e#6134#7528#0" />
+            <element signature="e#7578#9633#0" />
+            <element signature="e#9679#9950#0" />
+            <element signature="e#9985#10253#0" />
+            <element signature="e#10289#10553#0" />
+            <element signature="e#10600#10840#0" />
+            <element signature="e#10890#11764#0" />
+            <element signature="e#11788#19443#0" />
+            <element signature="e#19463#24249#0" />
+            <element signature="e#19497#19862#0" />
+            <element signature="e#19924#20389#0" />
+            <element signature="e#20441#20946#0" />
+            <element signature="e#21744#23078#0" />
+            <element signature="e#24275#28129#0" />
+            <element signature="e#28160#45201#0" />
+            <element signature="e#29047#29324#0" />
+            <element signature="e#29463#30295#0" />
+            <element signature="e#43167#45201#0" />
+            <element signature="e#45229#49173#0" />
+            <element signature="e#46732#46999#0" />
+            <element signature="e#47045#49173#0" />
+            <element signature="e#47834#49062#0" />
+            <element signature="e#49201#49722#0" />
           </folding>
         </state>
       </provider>
@@ -785,10 +1076,18 @@
         <state relative-caret-position="2109">
           <caret line="111" column="52" lean-forward="true" selection-start-line="111" selection-start-column="52" selection-end-line="111" selection-end-column="52" />
           <folding>
-            <element signature="e#3221#3580#0" expanded="false" />
-            <element signature="e#3617#3979#0" expanded="false" />
-            <element signature="e#4333#5037#0" expanded="false" />
-            <element signature="e#6021#6403#0" expanded="false" />
+            <element signature="e#489#749#0" />
+            <element signature="e#779#919#0" />
+            <element signature="e#955#1077#0" />
+            <element signature="e#1193#1637#0" />
+            <element signature="e#1669#2142#0" />
+            <element signature="e#2175#2509#0" />
+            <element signature="e#2538#2839#0" />
+            <element signature="e#2870#3187#0" />
+            <element signature="e#3617#3979#0" />
+            <element signature="e#4010#4296#0" />
+            <element signature="e#4333#5037#0" />
+            <element signature="e#6021#6403#0" />
           </folding>
         </state>
       </provider>
@@ -796,14 +1095,12 @@
     <entry file="file://$PROJECT_DIR$/UAVManagerRoute.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="722">
-          <caret line="38" column="6" lean-forward="false" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
+          <caret line="38" column="6" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
           <folding>
-            <element signature="e#946#1352#0" expanded="false" />
-            <element signature="e#1392#2456#0" expanded="false" />
-            <element signature="e#1506#2408#0" expanded="false" />
-            <element signature="e#2498#3182#0" expanded="false" />
-            <element signature="e#3333#4798#0" expanded="false" />
-            <element signature="e#4835#6113#0" expanded="false" />
+            <element signature="e#946#1352#0" />
+            <element signature="e#2498#3182#0" />
+            <element signature="e#3333#4798#0" />
+            <element signature="e#4835#6113#0" />
           </folding>
         </state>
       </provider>
@@ -811,15 +1108,7 @@
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/MySQLdb/connections.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
-          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UAVFaultRoute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
-          <folding />
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
         </state>
       </provider>
     </entry>
@@ -835,168 +1124,205 @@
         <state relative-caret-position="276">
           <caret line="23" column="71" lean-forward="true" selection-start-line="23" selection-start-column="71" selection-end-line="23" selection-end-column="71" />
           <folding>
-            <element signature="e#1818#1836#0" expanded="false" />
-            <element signature="e#2536#3122#0" expanded="false" />
+            <element signature="e#1818#1836#0" />
+            <element signature="e#2536#3122#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.conf">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="63" lean-forward="true" selection-start-line="15" selection-start-column="63" selection-end-line="15" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../code/venv/Lib/site-packages/sqlalchemy/sql/sqltypes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="642" column="11" lean-forward="false" selection-start-line="642" selection-start-column="6" selection-end-line="642" selection-end-column="11" />
-          <folding>
-            <element signature="e#14087#15277#0" expanded="false" />
-            <element signature="e#15314#15523#0" expanded="false" />
-            <element signature="e#15558#15762#0" expanded="false" />
-            <element signature="e#15823#22821#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../code/venv/Lib/site-packages/sqlalchemy/sql/sqltypes.py" />
     <entry file="file://$PROJECT_DIR$/UAVPadRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="798">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UAVBatteryRoute.py">
+    <entry file="file://$PROJECT_DIR$/venv/UAVFaultReportRoute.py" />
+    <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="49" column="41" lean-forward="false" selection-start-line="49" selection-start-column="41" selection-end-line="49" selection-end-column="41" />
+        <state relative-caret-position="274">
+          <caret line="69" column="26" selection-start-line="69" selection-start-column="26" selection-end-line="69" selection-end-column="26" />
           <folding>
-            <element signature="e#986#1868#0" expanded="false" />
-            <element signature="e#1916#2649#0" expanded="false" />
-            <element signature="e#2692#3478#0" expanded="false" />
-            <element signature="e#3517#4105#0" expanded="false" />
-            <element signature="e#4148#4677#0" expanded="false" />
+            <element signature="e#1213#2096#0" />
+            <element signature="e#2078#2096#0" />
+            <element signature="e#2138#2666#0" />
+            <element signature="e#2712#6369#0" />
+            <element signature="e#6418#7171#0" />
+            <element signature="e#7224#7956#0" />
+            <element signature="e#7994#8581#0" />
+            <element signature="e#8618#9204#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/UAVFaultReportRoute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tornado_server.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
-          <caret line="10" column="25" lean-forward="false" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+          <caret line="10" column="25" lean-forward="true" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
           <folding>
             <element signature="e#33#71#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Server.py">
+    <entry file="file://$PROJECT_DIR$/database.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVFaultReportRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="69" column="0" lean-forward="true" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+        <state relative-caret-position="57">
+          <caret line="6" column="11" lean-forward="true" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVFaultRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVManagerRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="45" column="12" selection-start-line="45" selection-start-column="12" selection-end-line="45" selection-end-column="43" />
           <folding>
-            <element signature="e#795#879#0" expanded="false" />
-            <element signature="e#956#1151#0" expanded="false" />
-            <element signature="e#1197#1265#0" expanded="false" />
-            <element signature="e#1350#2140#0" expanded="false" />
+            <element signature="e#946#1352#0" />
+            <element signature="e#2498#3182#0" />
+            <element signature="e#3333#4798#0" />
+            <element signature="e#4835#6113#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/UAVManagerEntity.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="533">
-          <caret line="133" column="17" lean-forward="false" selection-start-line="133" selection-start-column="6" selection-end-line="133" selection-end-column="17" />
+        <state relative-caret-position="369">
+          <caret line="175" selection-start-line="175" selection-end-line="179" selection-end-column="37" />
           <folding>
-            <element signature="e#3221#3580#0" expanded="false" />
-            <element signature="e#3617#3979#0" expanded="false" />
-            <element signature="e#4333#5037#0" expanded="false" />
-            <element signature="e#6021#6403#0" expanded="false" />
+            <element signature="e#489#749#0" />
+            <element signature="e#779#919#0" />
+            <element signature="e#955#1077#0" />
+            <element signature="e#1193#1637#0" />
+            <element signature="e#1669#2142#0" />
+            <element signature="e#2175#2509#0" />
+            <element signature="e#2538#2839#0" />
+            <element signature="e#2870#3187#0" />
+            <element signature="e#3617#3979#0" />
+            <element signature="e#4010#4296#0" />
+            <element signature="e#4333#5037#0" />
+            <element signature="e#6021#6403#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
+    <entry file="file://$PROJECT_DIR$/PhotoUpload.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3">
-          <caret line="48" column="25" lean-forward="false" selection-start-line="48" selection-start-column="25" selection-end-line="48" selection-end-column="25" />
+        <state relative-caret-position="627">
+          <caret line="36" column="42" lean-forward="true" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
           <folding>
-            <element signature="e#2138#2666#0" expanded="false" />
-            <element signature="e#2712#6369#0" expanded="false" />
-            <element signature="e#6418#7171#0" expanded="false" />
-            <element signature="e#7224#7956#0" expanded="false" />
+            <element signature="e#42#52#0" expanded="true" />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="388">
+          <caret line="119" column="73" selection-start-line="119" selection-start-column="73" selection-end-line="119" selection-end-column="73" />
+          <folding>
+            <element signature="e#795#879#0" />
+            <element signature="e#956#1151#0" />
+            <element signature="e#1197#1265#0" />
+            <element signature="e#1350#2140#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PowerLineDao.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1045">
+          <caret line="103" column="63" selection-start-line="103" selection-start-column="63" selection-end-line="103" selection-end-column="63" />
+          <folding>
+            <element signature="e#42#52#0" expanded="true" />
+            <element signature="e#1216#1284#0" />
+            <element signature="e#1330#1535#0" />
+            <element signature="e#1581#1786#0" />
+            <element signature="e#1886#1956#0" />
+            <element signature="e#2000#2206#0" />
+            <element signature="e#2264#2470#0" />
+            <element signature="e#2354#2434#0" />
+            <element signature="e#2557#2627#0" />
+            <element signature="e#2667#2873#0" />
+            <element signature="e#2958#3256#0" />
+            <element signature="e#2924#3130#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PowerLinesRoute.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PowerTowersRoute.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/UAVManagerDAO.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="152" column="19" lean-forward="false" selection-start-line="152" selection-start-column="8" selection-end-line="152" selection-end-column="19" />
+        <state relative-caret-position="2736">
+          <caret line="1139" column="24" lean-forward="true" selection-start-line="1139" selection-start-column="24" selection-end-line="1139" selection-end-column="24" />
           <folding>
-            <element signature="e#1647#3442#0" expanded="false" />
-            <element signature="e#3108#3255#0" expanded="false" />
-            <element signature="e#3170#3255#0" expanded="false" />
-            <element signature="e#3309#3442#0" expanded="false" />
-            <element signature="e#4471#5060#0" expanded="false" />
-            <element signature="e#5307#6074#0" expanded="false" />
-            <element signature="e#6134#7528#0" expanded="false" />
-            <element signature="e#7578#9633#0" expanded="false" />
-            <element signature="e#9679#9950#0" expanded="false" />
-            <element signature="e#9985#10253#0" expanded="false" />
-            <element signature="e#10289#10553#0" expanded="false" />
-            <element signature="e#10600#10840#0" expanded="false" />
-            <element signature="e#10890#11764#0" expanded="false" />
-            <element signature="e#11788#19443#0" expanded="false" />
-            <element signature="e#19463#24249#0" expanded="false" />
-            <element signature="e#19497#19862#0" expanded="false" />
-            <element signature="e#19924#20389#0" expanded="false" />
-            <element signature="e#20441#20946#0" expanded="false" />
-            <element signature="e#21744#23078#0" expanded="false" />
-            <element signature="e#24275#28129#0" expanded="false" />
-            <element signature="e#28160#45201#0" expanded="false" />
-            <element signature="e#29047#29324#0" expanded="false" />
-            <element signature="e#29463#30295#0" expanded="false" />
-            <element signature="e#43167#45201#0" expanded="false" />
-            <element signature="e#46732#46999#0" expanded="false" />
-            <element signature="e#47045#49173#0" expanded="false" />
-            <element signature="e#47834#49062#0" expanded="false" />
-            <element signature="e#49755#51106#0" expanded="false" />
+            <element signature="e#3108#3255#0" />
+            <element signature="e#3170#3255#0" />
+            <element signature="e#3309#3442#0" />
+            <element signature="e#3465#11764#0" />
+            <element signature="e#4471#5060#0" />
+            <element signature="e#5307#6074#0" />
+            <element signature="e#6134#7528#0" />
+            <element signature="e#7578#9633#0" />
+            <element signature="e#9679#9950#0" />
+            <element signature="e#9985#10253#0" />
+            <element signature="e#10289#10553#0" />
+            <element signature="e#10600#10840#0" />
+            <element signature="e#10890#11764#0" />
+            <element signature="e#11788#19443#0" />
+            <element signature="e#19463#24249#0" />
+            <element signature="e#19497#19862#0" />
+            <element signature="e#19924#20389#0" />
+            <element signature="e#20441#20946#0" />
+            <element signature="e#21744#23078#0" />
+            <element signature="e#24275#28129#0" />
+            <element signature="e#28160#45201#0" />
+            <element signature="e#29047#29324#0" />
+            <element signature="e#29463#30295#0" />
+            <element signature="e#43167#45201#0" />
+            <element signature="e#45229#49173#0" />
+            <element signature="e#46732#46999#0" />
+            <element signature="e#47045#49173#0" />
+            <element signature="e#47834#49062#0" />
+            <element signature="e#49201#49722#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UAVManagerRoute.py">
+    <entry file="file://$PROJECT_DIR$/UAVBatteryRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="123" column="30" lean-forward="false" selection-start-line="123" selection-start-column="30" selection-end-line="123" selection-end-column="30" />
+        <state relative-caret-position="285">
+          <caret line="15" column="60" lean-forward="true" selection-start-line="15" selection-start-column="60" selection-end-line="15" selection-end-column="60" />
           <folding>
-            <element signature="e#946#1352#0" expanded="false" />
-            <element signature="e#1392#2456#0" expanded="false" />
-            <element signature="e#1506#2408#0" expanded="false" />
-            <element signature="e#2498#3182#0" expanded="false" />
-            <element signature="e#3333#4798#0" expanded="false" />
-            <element signature="e#4835#6113#0" expanded="false" />
+            <element signature="e#986#1868#0" />
+            <element signature="e#1916#2649#0" />
+            <element signature="e#2692#3478#0" />
+            <element signature="e#3517#4105#0" />
+            <element signature="e#4148#4677#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UAVFaultReportRoute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="23" column="46" lean-forward="false" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>

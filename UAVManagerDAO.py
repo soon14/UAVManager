@@ -1131,9 +1131,8 @@ class ApprovalDao:
 
         if '4' in roles and '5' not in roles:
             if user.user_team == approval.approval_team:
-                session_uav.query(Approval).filter(Approval.apply_person == uav_id).update(
-                    {Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},
-                    synchronize_session=False)
+                session_uav.query(Approval).filter(Approval.apply_person == approval.apply_person).update(
+                    {Approval.approval_status: 1}, synchronize_session=False)
                 session_uav.commit()
 
 
