@@ -60,7 +60,7 @@ class UAVPartsListPages(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            return self.dao.query_pages(page_size)
+            return self.dao.query_pages(user,page_size)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 

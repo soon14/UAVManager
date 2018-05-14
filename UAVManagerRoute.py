@@ -8,7 +8,7 @@ from flask_restful import Resource
 from flask_restful import reqparse
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
-from UAVManagerDAO import ManagerDAO,UserDAO
+from UAVManagerDAO import ManagerDAO,UserDAO,DeviceDAO
 
 parser = reqparse.RequestParser()
 parser.add_argument('device_id', type=int, location='args')
@@ -64,6 +64,28 @@ class ManagerListPages(Resource):
     def get(self):
         return(self.post())
 
+class ManagerListPageNum(Resource):
+    def __init__(self):
+        self.dao = ManagerDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            page_size=data['page_size']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                rs=self.dao.query_pages(user,page_size)
+                return json.dumps(rs)
+        else:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return(self.post())
+
 class ManagerBorrow(Resource):
     def __init__(self):
         self.dao = ManagerDAO()
@@ -78,14 +100,24 @@ class ManagerBorrow(Resource):
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:
+                ret=[]
                 for item in borrowList:
                     rs=self.dao.manager_borrow(user,item['approver'],item['borrower'],item['borrow_team'],item['uav_id'],item['borrow_time'],item['return_time'])
                     if rs==-1:
                         return make_response(jsonify({'error': 'borrower not exist'}), 401)
                     if rs==-2:
                         return make_response(jsonify({'error': 'device not returned'}), 404)
-
-                return make_response(jsonify({'success': 'Borrow success'}), 200)
+                    uav_dao = DeviceDAO()
+                    uav=uav_dao.query_index(item['uav_id'])
+                    uavitem={}
+                    uavitem['device_ver']=uav.device_ver
+                    uavitem['device_id'] = uav.device_id
+                    uavitem['device_name'] = uav.device_name
+                    uavitem['user_team'] = uav.user_team
+                    uavitem['return_date'] = item['return_time']
+                    uavitem['approve'] = item['approver']
+                    ret.append(uavitem)
+                return json.dumps(ret)
         else:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
@@ -103,10 +135,22 @@ class ManagerReturn(Resource):
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:
+                ret=[]
                 for item in borrowList:
                     self.dao.manager_return(user,item['device_id'],item['return_date'],item['return_desc'])
-                return make_response(jsonify({'success': 'Borrow success'}), 200)
+                    uav_dao = DeviceDAO()
+                    uav=uav_dao.query_index(item['uav_id'])
+                    uavitem={}
+                    uavitem['device_ver']=uav.device_ver
+                    uavitem['device_id'] = uav.device_id
+                    uavitem['device_name'] = uav.device_name
+                    uavitem['user_team'] = uav.user_team
+                    uavitem['return_date'] = item['return_time']
+                    uavitem['approve'] = item['approver']
+                    ret.append(uavitem)
+                return json.dumps(ret)
         else:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
 
 

@@ -14,7 +14,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker,query
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import  SignatureExpired,BadSignature
-from UAVManagerEntity import User, Role, Role_basic, Manager,Battery,Device,Pad,Parts,Approval,Fault, class_to_dict
+from UAVManagerEntity import User, Role, Role_basic, Manager,Battery,Device,Pad,Parts,Approval,Fault,FaultReport, class_to_dict
 
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
@@ -138,19 +138,20 @@ class DeviceDAO:
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
             sql ='select count(*) from tb_device where user_team = '+'\'user_team\''
-            rs=math.ceil(session_uav.execute(sql)/page_size)
+            rs=session_uav.query(Device).filter(Device.user_team==user.user_team).count()/page_size+1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
         elif '5' in roles:
-            sql ='select count(*) from tb_device'
-            rs=math.ceil(session_uav.execute(sql)/page_size)
+            rs=session_uav.query(Device).count()/page_size+1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
         else:
             return None
 
+    def query_index(self,uav_id):
+        return class_to_dict(session_uav.query(Device).filter(Device.device_id==uav_id))
 
     def query_condition(self,user,device_id,device_ver,device_type,uad_code,device_status,page_index,page_size):
         q = session_uav.query(Device)
@@ -245,12 +246,22 @@ class DeviceDAO:
             return None
 
     def query_type(self,user_team):
-        sql = 'select device_type from tb_device where user_team=\'' + user_team + '\' group by device_type;'
+        sql = 'select device_type from tb_device group by device_type;'
         rs = session_uav.execute(sql).fetchall()
         ret = []
         for i in rs:
             item = {}
             item['device_type'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def query_ver(self):
+        sql = 'select device_ver from tb_device group by device_ver;'
+        rs = session_uav.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['device_ver'] = i[0]
             ret.append(item)
         return json.dumps(ret)
 
@@ -318,14 +329,12 @@ class BatteryDAO:
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
-            sql ='select count(*) from tb_battery where user_team = '+'\'user_team\''
-            rs=math.ceil(session_uav.execute(sql)/page_size)
+            rs=session_uav.query(Battery).filter(Battery.user_team==user.user_team).count()/page_size+1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
         elif '5' in roles:
-            sql ='select count(*) from tb_battery'
-            rs=math.ceil(session_uav.execute(sql)/page_size)
+            rs=session_uav.query(Battery).count() / page_size + 1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
@@ -495,14 +504,12 @@ class PadDao:
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
-            sql ='select count(*) from tb_pad where user_team = '+'\'user_team\''
-            rs=math.ceil(session_uav.execute(sql)/page_size)
+            rs=session_uav.query(Pad).filter(Pad.user_team == user.user_team).count() / page_size + 1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
         elif '5' in roles:
-            sql ='select count(*) from tb_pad'
-            rs=math.ceil(session_uav.execute(sql)/page_size)
+            rs=session_uav.query(Battery).count()/page_size+1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
@@ -518,13 +525,13 @@ class PadDao:
         if '1' in roles and '5' not in roles:
             q = q.filter(Pad.user_team == user.user_team)
         if pad_ver:
-            q = q.filter(Pad.bttery_ver==pad_ver)
+            q = q.filter(Pad.pad_ver==pad_ver)
         if pad_id:
-            q = q.filter(Pad.bttery_id == pad_id)
+            q = q.filter(Pad.pad_id == pad_id)
         if pad_type:
-            q = q.filter(Pad.bttery_type == pad_type)
+            q = q.filter(Pad.pad_type == pad_type)
         if pad_status:
-            q = q.filter(Pad.bttery_status == pad_status)
+            q = q.filter(Pad.pad_status == pad_status)
         pad=q.limit(page_size).offset((page_index-1)*page_size).all()
         return  class_to_dict(pad)
 
@@ -563,18 +570,8 @@ class PadDao:
         else:
             return None
 
-    def query_type(self,user_team):
-        sql = 'select pad_type from tb_battery where user_team=\'' + user_team + '\' group by pad_type;'
-        rs = session_uav.execute(sql).fetchall()
-        ret = []
-        for i in rs:
-            item = {}
-            item['pad_type'] = i[0]
-            ret.append(item)
-        return json.dumps(ret)
-
     def query_type(self):
-        sql = 'select pad_type from tb_battery where group by pad_type;'
+        sql = 'select pad_type from tb_pad group by pad_type;'
         rs = session_uav.execute(sql).fetchall()
         ret = []
         for i in rs:
@@ -631,14 +628,12 @@ class PartsDao:
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
-            sql ='select count(*) from tb_parts where user_team = '+'\'user_team\''
-            rs=math.ceil(session_uav.execute(sql)/page_size)
+            rs=session_uav.query(Parts).filter(Parts.user_team==user.user_team).count()/page_size+1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
         elif '5' in roles:
-            sql ='select count(*) from tb_parts'
-            rs=math.ceil(session_uav.execute(sql)/page_size)
+            rs=session_uav.query(Battery).count()/page_size+1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
@@ -665,7 +660,7 @@ class PartsDao:
         elif '5' in roles:
             sql=''
             if(part_status!='总数'):
-                sql='select parts_type, count(parts_type) from tb_parts where parts_status=\''+part_status+'\' group by device_type;'
+                sql='select parts_type, count(parts_type) from tb_parts where parts_status=\''+part_status+'\' group by parts_type;'
             else:
                 sql = 'select parts_type, count(parts_type) from tb_parts group by parts_type;'
             rs = session_uav.execute(sql).fetchall()
@@ -731,8 +726,7 @@ class ManagerDAO:
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' in roles or '5' in roles:
-            sql ='select count(*) from tb_parts'
-            rs=math.ceil(session_uav.execute(sql)/page_size)
+            rs=session_uav.query(Manager).count()/page_size+1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
@@ -1010,7 +1004,7 @@ class FaultDao:
 
     def query_pages(self,page_size):
         if page_size>0:
-            return math.ceil(session_uav.query(Fault).count()/page_size)
+            return session_uav.query(Fault).count()/page_size+1
         else:
             return -1
 
@@ -1100,6 +1094,22 @@ class FaultDao:
             session_uav.commit()
         return -1
 
+class FaultReportDao:
+    def query(self,fpid):
+        rs = session_uav.query(FaultReport).filter(FaultReport.fault_report_id==fpid).first()
+        return class_to_dict(rs)
+
+    def update(self,faultreport,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '3' in roles:
+            rs = session_uav.query(FaultReport).filter(FaultReport.fault_report_id == faultreport.fault_report_id).first()
+            session_uav.merge(rs)
+            session_uav.commit()
+            return 1
+        else:
+            return -1
+
 #借调申请管理
 class ApprovalDao:
     def approval_query(self,user):
@@ -1113,3 +1123,29 @@ class ApprovalDao:
             return class_to_dict(rs)
         else:
             return None
+
+    #批准借调
+    def approval_aggre(self,user,approval):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+
+        if '4' in roles and '5' not in roles:
+            if user.user_team == approval.approval_team:
+                session_uav.query(Approval).filter(Approval.apply_person == uav_id).update(
+                    {Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},
+                    synchronize_session=False)
+                session_uav.commit()
+
+
+    def approval_add(self,user,approval):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '4' in roles and  '5' not in roles:
+            if user.user_team==approval.approval_team:
+                return -1
+            session_uav.merge(approval)
+            session_uav.commit()
+            return 1
+        else:
+            return -2
+

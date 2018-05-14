@@ -4,7 +4,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer,String,DateTime
+from sqlalchemy import Column, Integer,String,DateTime,FLOAT
 
 #use orm
 EntityBase = declarative_base()
@@ -12,6 +12,7 @@ def to_dict(self):
     return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
 EntityBase.to_dict=to_dict
 
+#########################################################################用户管理
 class User(EntityBase):
     #table name
     __tablename__ = 'user'
@@ -33,6 +34,7 @@ class Role_basic(EntityBase):
     role_basic_id = Column(Integer,primary_key=True)
     role_basic_type = Column(String(45))
 
+#############################################################################无人机管理
 class Manager(EntityBase):
     __tablename__ = 'tb_manager'
     manager_id = Column(Integer,primary_key=True)
@@ -107,6 +109,18 @@ class Approval(EntityBase):
     pad_number=Column(Integer)
     approval_status=Column(Integer)
 
+class Approval_db(EntityBase):
+    __tablename__ = 'tb_approval_db'
+    apply_person=Column(String(45),primary_key=True)
+    approval_team=Column(String(45))
+    device_ver=Column(String(45))
+    device_number=Column(Integer)
+    battery_ver = Column(String(45))
+    battery_number=Column(Integer)
+    pad_ver = Column(String(45))
+    pad_number=Column(Integer)
+    approval_status=Column(Integer)
+
 class Fault(EntityBase):
     __tablename__ = 'tb_fault'
     fault_id = Column(Integer, primary_key=True)
@@ -134,6 +148,35 @@ class FaultReport(EntityBase):
     fault_crash_damage=Column(String(1024))
     fault_crash_electrric=Column(String(1024))
     fault_crash_around=Column(String(1024))
+
+##############################################################################线路杆塔管理
+class Lines(EntityBase):
+    __tablename__='tb_lines'
+    lines_id = Column(Integer,primary_key=True)
+    lines_name=Column(String(45))
+    lines_construct_date = Column(String(45))
+    lines_voltage = Column(String(45))
+    lines_work_team = Column(String(45))
+    lines_incharge = Column(String(45))
+
+class Towers(EntityBase):
+    __tablename__='tb_tower'
+    tower_id = Column(Integer,primary_key=True)
+    tower_line=Column(Integer)
+    tower_idx=Column(Integer)
+    tower_type=Column(String(45))
+    tower_height=Column(FLOAT)
+    tower_lat=Column(FLOAT)
+    tower_lng=Column(FLOAT)
+    tower_elevation=Column(FLOAT)
+
+class Photo(EntityBase):
+    __tablename__="tb_photo"
+    photo_id = Column(Integer,primary_key=True)
+    photo_line = Column(Integer)
+    photo_tower_id = Column(Integer)
+    photo_path=Column(String(256))
+    photo_classify=Column(String(45))
 
 def class_to_dict(obj):
     is_list = obj.__class__ == [].__class__

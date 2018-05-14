@@ -62,3 +62,20 @@ class UAVPadListPages(Resource):
 
     def get(self):
         return self.post()
+
+class UAVPadTypes(Resource):
+    def __init__(self):
+        self.dao = PadDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return self.dao.query_type()
+
+    def get(self):
+        return self.post()

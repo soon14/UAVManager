@@ -14,7 +14,7 @@ from flask_restful import Api
 from flask_httpauth import HTTPBasicAuth
 from flask import Flask, render_template
 
-import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute
+import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute
 import UAVManagerDAO
 
 auth = HTTPBasicAuth()
@@ -66,7 +66,8 @@ def login():
 api.add_resource(UAVManagerRoute.ManagerListPages,'/uavmanager/api/v1.0/manager/list')
 api.add_resource(UAVManagerRoute.ManagerBorrow,'/uavmanager/api/v1.0/manager/borrow')
 api.add_resource(UAVManagerRoute.ManagerReturn,'/uavmanager/api/v1.0/manager/return')
-api.add_resource(UAVManagerRoute.ManagerListPages,'/uavmanager/api/v1.0/manager/pages')
+api.add_resource(UAVManagerRoute.ManagerListPageNum,'/uavmanager/api/v1.0/manager/pages')
+
 
 #device related api
 api.add_resource(UAVDeviceRoute.UAVDeviceList,'/uavmanager/api/v1.0/devices')
@@ -74,6 +75,7 @@ api.add_resource(UAVDeviceRoute.UAVDeviceManagerSearch,'/uavmanager/api/v1.0/dev
 api.add_resource(UAVDeviceRoute.UAVDeviceManagerStatisticList,'/uavmanager/api/v1.0/device/statistics/all')
 api.add_resource(UAVDeviceRoute.UAVDeviceManagerStatistic,'/uavmanager/api/v1.0/device/statistic/<string:status>')
 api.add_resource(UAVDeviceRoute.UAVDeviceTypes,'/uavmanager/api/v1.0/device/types')
+api.add_resource(UAVDeviceRoute.UAVDeviceVers,'/uavmanager/api/v1.0/device/vers')
 api.add_resource(UAVDeviceRoute.UAVDeviceListPages,'/uavmanager/api/v1.0/devices/pages')
 
 #battery related api
@@ -88,12 +90,13 @@ api.add_resource(UAVBatteryRoute.UAVBatteryListPages,'/uavmanager/api/v1.0/batte
 api.add_resource(UAVPartsRoute.UAVPartsList,'/uavmanager/api/v1.0/parts')
 api.add_resource(UAVPartsRoute.UAVPartsStatistic,'/uavmanager/api/v1.0/parts/statistic/<string:parts_status>')
 api.add_resource(UAVPartsRoute.UAVPartsTypes,'/uavmanager/api/v1.0/parts/types')
-api.add_resource(UAVPartsRoute.UAVPartsListPages,'/uavmanager/api/v1.0/parts/types')
+api.add_resource(UAVPartsRoute.UAVPartsListPages,'/uavmanager/api/v1.0/parts/pages')
 
 
 #pad related api
 api.add_resource(UAVPadRoute.UAVPadList,'/uavmanager/api/v1.0/pad/list')
 api.add_resource(UAVPadRoute.UAVPadListPages,'/uavmanager/api/v1.0/pad/pages')
+api.add_resource(UAVPadRoute.UAVPadTypes,'/uavmanager/api/v1.0/pad/types')
 
 #fault related api
 api.add_resource(UAVFaultRoute.UAVFaultStatistics,'/uavmanager/api/v1.0/fault/statistics')
@@ -101,9 +104,14 @@ api.add_resource(UAVFaultRoute.UAVFaultList,'/uavmanager/api/v1.0/fault/list')
 api.add_resource(UAVFaultRoute.UAVFaultDeviceVersion,'/uavmanager/api/v1.0/fault/device_ver')
 api.add_resource(UAVFaultRoute.UAVFaultListPages,'/uavmanager/api/v1.0/fault/pages')
 
+
+#fault report api
+api.add_resource(UAVFaultReportRoute.FaultReportQuery,'/uavmanager/api/v1.0/faultreport')
+api.add_resource(UAVFaultReportRoute.FaultReportUpdate,'/uavmanager/api/v1.0/faultreport/update')
+
 #approval
-api.add_resource(UAVApporvalRoute.UAVApprovalList,'/uavmanager/api/v1.0/Xapproval/list')
+api.add_resource(UAVApporvalRoute.UAVApprovalList,'/uavmanager/api/v1.0/approval/list')
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=8090)
+    app.run()
