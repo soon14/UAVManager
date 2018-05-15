@@ -108,12 +108,11 @@ class ManagerBorrow(Resource):
                     if rs==-2:
                         return make_response(jsonify({'error': 'device not returned'}), 404)
                     uav_dao = DeviceDAO()
-                    uav=uav_dao.query_index(item['uav_id'])
+                    uav=uav_dao.query_index(int(item['uav_id']))
                     uavitem={}
-                    uavitem['device_ver']=uav.device_ver
-                    uavitem['device_id'] = uav.device_id
-                    uavitem['device_name'] = uav.device_name
-                    uavitem['user_team'] = uav.user_team
+                    uavitem['device_type']=uav['device_type']
+                    uavitem['device_id'] = uav['device_id']
+                    uavitem['user_team'] = uav['user_team']
                     uavitem['return_date'] = item['return_time']
                     uavitem['approve'] = item['approver']
                     ret.append(uavitem)
@@ -139,12 +138,11 @@ class ManagerReturn(Resource):
                 for item in borrowList:
                     self.dao.manager_return(user,item['device_id'],item['return_date'],item['return_desc'])
                     uav_dao = DeviceDAO()
-                    uav=uav_dao.query_index(item['uav_id'])
-                    uavitem={}
-                    uavitem['device_ver']=uav.device_ver
-                    uavitem['device_id'] = uav.device_id
-                    uavitem['device_name'] = uav.device_name
-                    uavitem['user_team'] = uav.user_team
+                    uav = uav_dao.query_index(int(item['uav_id']))
+                    uavitem = {}
+                    uavitem['device_type'] = uav['device_type']
+                    uavitem['device_id'] = uav['device_id']
+                    uavitem['user_team'] = uav['user_team']
                     uavitem['return_date'] = item['return_time']
                     uavitem['approve'] = item['approver']
                     ret.append(uavitem)

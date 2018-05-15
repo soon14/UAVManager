@@ -146,7 +146,7 @@ class FaultReport(EntityBase):
     fault_crash_desc=Column(String(1024))
     fault_crash_operation=Column(String(1024))
     fault_crash_damage=Column(String(1024))
-    fault_crash_electrric=Column(String(1024))
+    fault_crash_electric=Column(String(1024))
     fault_crash_around=Column(String(1024))
 
 ##############################################################################线路杆塔管理

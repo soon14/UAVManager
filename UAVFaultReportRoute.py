@@ -17,6 +17,7 @@ class FaultReportQuery(Resource):
         self.dao = FaultReportDao()
         self.userDao = UserDAO()
 
+    def post(self):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
@@ -24,7 +25,7 @@ class FaultReportQuery(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            return self.dao.query(user,fpid)
+            return self.dao.query(fpid)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
@@ -36,13 +37,14 @@ class FaultReportUpdate(Resource):
         self.dao = FaultReportDao()
         self.userDao = UserDAO()
 
+    def post(self):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
             report = data['report']
-            reportdict=json.loads(report)
+            reportdict=json.loads(json.dumps(report))
             report = FaultReport()
-            report.__dict__ = reportdict
+            report.__dict__ = reportdict[0]
 
             user = self.userDao.verify_token(token, '')
             if (not user):

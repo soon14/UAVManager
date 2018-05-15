@@ -151,7 +151,7 @@ class DeviceDAO:
             return None
 
     def query_index(self,uav_id):
-        return class_to_dict(session_uav.query(Device).filter(Device.device_id==uav_id))
+        return class_to_dict(session_uav.query(Device).filter(Device.device_id==uav_id).first())
 
     def query_condition(self,user,device_id,device_ver,device_type,uad_code,device_status,page_index,page_size):
         q = session_uav.query(Device)
@@ -733,6 +733,9 @@ class ManagerDAO:
         else:
             return None
 
+    #def query_index(self,device_id):
+
+
     def query_borrow(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -1096,15 +1099,28 @@ class FaultDao:
 
 class FaultReportDao:
     def query(self,fpid):
-        rs = session_uav.query(FaultReport).filter(FaultReport.fault_report_id==fpid).first()
+        rs = session_uav.query(FaultReport).filter(FaultReport.fault_report_id==fpid).all()
         return class_to_dict(rs)
 
-    def update(self,faultreport,user):
+    def update(self,user,faultreport):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '3' in roles:
             rs = session_uav.query(FaultReport).filter(FaultReport.fault_report_id == faultreport.fault_report_id).first()
-            session_uav.merge(rs)
+            rs.fault_report_device_id = faultreport.fault_report_device_id
+            rs.fault_report_line_name = faultreport.fault_report_line_name
+            rs.fault_report_towerRange = faultreport.fault_report_towerRange
+            rs.fault_report_date = faultreport.fault_report_date
+            rs.fault_report_flyer = faultreport.fault_report_flyer
+            rs.fault_report_wether = faultreport.fault_report_wether
+            rs.fault_report_observer = faultreport.fault_report_observer
+            rs.fault_time = faultreport.fault_time
+            rs.fault_crash_position = faultreport.fault_crash_position
+            rs.fault_crash_desc = faultreport.fault_crash_desc
+            rs.fault_crash_operation = faultreport.fault_crash_operation
+            rs.fault_crash_damage = faultreport.fault_crash_damage
+            rs.fault_crash_electric = faultreport.fault_crash_electric
+            rs.fault_crash_around = faultreport.fault_crash_around
             session_uav.commit()
             return 1
         else:

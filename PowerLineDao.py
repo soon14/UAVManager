@@ -22,15 +22,15 @@ from flask import Response,make_response
 
 cf = ConfigParser.ConfigParser()
 cf.read("config.conf")
-pwoer_host = cf.get("power_account", "db_host")
-pwoer_port = cf.getint("power_account", "db_port")
-pwoer_user = cf.get("power_account", "db_user")
-pwoer_pass = cf.get("power_account", "db_pass")
-pwoer_name = cf.get("power_account","db_name")
+power_host = cf.get("power_account", "db_host")
+power_port = cf.getint("power_account", "db_port")
+power_user = cf.get("power_account", "db_user")
+power_pass = cf.get("power_account", "db_pass")
+power_name = cf.get("power_account","db_name")
 
 secret_key = cf.get('token','SECRET_KEY')
 
-engine_pwoer = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(pwoer_port) + '/' + pwoer_name+'?charset=utf8')
+engine_pwoer = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(power_port) + '/' + power_name+'?charset=utf8')
 Session_Power= sessionmaker(bind=engine_pwoer)
 session_power = Session_Power()
 
