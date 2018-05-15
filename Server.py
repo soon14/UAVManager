@@ -82,6 +82,9 @@ api.add_resource(UAVDeviceRoute.UAVDeviceManagerStatistic,'/uavmanager/api/v1.0/
 api.add_resource(UAVDeviceRoute.UAVDeviceTypes,'/uavmanager/api/v1.0/device/types')
 api.add_resource(UAVDeviceRoute.UAVDeviceVers,'/uavmanager/api/v1.0/device/vers')
 api.add_resource(UAVDeviceRoute.UAVDeviceListPages,'/uavmanager/api/v1.0/devices/pages')
+api.add_resource(UAVDeviceRoute.UAVDeviceAdd,'/uavmanager/api/v1.0/device/add')
+api.add_resource(UAVDeviceRoute.UAVDeviceAdd,'/uavmanager/api/v1.0/device/modify_status')
+
 
 #battery related api
 api.add_resource(UAVBatteryRoute.UAVBatteryList,'/uavmanager/api/v1.0/batteries')
@@ -89,19 +92,23 @@ api.add_resource(UAVBatteryRoute.UAVBatteryStatisticsList,'/uavmanager/api/v1.0/
 api.add_resource(UAVBatteryRoute.UAVBatteryStatistic,'/uavmanager/api/v1.0/battery/statistic/<string:battery_status>')
 api.add_resource(UAVBatteryRoute.UAVBatteryTypes,'/uavmanager/api/v1.0/battery/types')
 api.add_resource(UAVBatteryRoute.UAVBatteryListPages,'/uavmanager/api/v1.0/batteries/pages')
-
+api.add_resource(UAVBatteryRoute.UAVBatteryAdd,'/uavmanager/api/v1.0/battery/add')
+api.add_resource(UAVBatteryRoute.UAVBatteryStatus,'/uavmanager/api/v1.0/battery/modify_status')
 
 #parts related api
 api.add_resource(UAVPartsRoute.UAVPartsList,'/uavmanager/api/v1.0/parts')
 api.add_resource(UAVPartsRoute.UAVPartsStatistic,'/uavmanager/api/v1.0/parts/statistic/<string:parts_status>')
 api.add_resource(UAVPartsRoute.UAVPartsTypes,'/uavmanager/api/v1.0/parts/types')
 api.add_resource(UAVPartsRoute.UAVPartsListPages,'/uavmanager/api/v1.0/parts/pages')
-
+api.add_resource(UAVPartsRoute.UAVPartsAdd,'/uavmanager/api/v1.0/parts/add')
+api.add_resource(UAVPartsRoute.UAVPartsStatus,'/uavmanager/api/v1.0/parts/modify_status')
 
 #pad related api
 api.add_resource(UAVPadRoute.UAVPadList,'/uavmanager/api/v1.0/pad/list')
 api.add_resource(UAVPadRoute.UAVPadListPages,'/uavmanager/api/v1.0/pad/pages')
 api.add_resource(UAVPadRoute.UAVPadTypes,'/uavmanager/api/v1.0/pad/types')
+api.add_resource(UAVPadRoute.UAVPadAdd,'/uavmanager/api/v1.0/pad/add')
+api.add_resource(UAVPadRoute.UAVPadStatus,'/uavmanager/api/v1.0/pad/modify_status')
 
 #fault related api
 api.add_resource(UAVFaultRoute.UAVFaultStatistics,'/uavmanager/api/v1.0/fault/statistics')

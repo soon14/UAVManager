@@ -111,3 +111,57 @@ class UAVPartsStatistic(Resource):
 
     def get(self,parts_status):
         return self.post(parts_status)
+
+class UAVPartsAdd(Resource):
+    def __init__(self):
+        self.dao = PartsDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            parts= data['parts']
+            parts_dict=json.loads(json.dumps(parts))
+            parts_obj = Parts()
+            parts_obj.__dict__ = parts_dict[0]
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.add_parts(user,parts_obj)
+            if rs==1:
+                return make_response(jsonify({'success': 'add device success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'add device failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class UAVPartsStatus(Resource):
+    def __init__(self):
+        self.dao = PartsDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            parts_id = data['parts_id']
+            status = data['status']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.modify_parts_status(user,parts_id,status)
+            if rs==1:
+                return make_response(jsonify({'success': 'modify device status success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'modify device status failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()

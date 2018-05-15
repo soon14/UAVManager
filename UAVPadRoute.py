@@ -79,3 +79,57 @@ class UAVPadTypes(Resource):
 
     def get(self):
         return self.post()
+
+class UAVPadAdd(Resource):
+    def __init__(self):
+        self.dao = PadDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            pad= data['pad']
+            pad_dict=json.loads(json.dumps(pad))
+            pad_obj = Pad()
+            pad_obj.__dict__ = pad_dict[0]
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.add_pad(user,pad_obj)
+            if rs==1:
+                return make_response(jsonify({'success': 'add device success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'add device failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class UAVPadStatus(Resource):
+    def __init__(self):
+        self.dao = PadDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            pad_id = data['pad_id']
+            status = data['status']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.modify_device_status(user,pad_id,status)
+            if rs==1:
+                return make_response(jsonify({'success': 'modify device status success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'modify device status failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()

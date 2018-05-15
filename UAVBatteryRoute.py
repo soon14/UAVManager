@@ -133,3 +133,59 @@ class UAVBatteryListPages(Resource):
 
     def get(self):
         return self.post()
+
+
+class UAVBatteryAdd(Resource):
+    def __init__(self):
+        self.dao = BatteryDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            battery = data['battery']
+            battery_dict = json.loads(json.dumps(battery))
+            battery_obj = Parts()
+            battery_obj.__dict__ = battery_dict[0]
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.add_battery(user, battery_obj)
+            if rs == 1:
+                return make_response(jsonify({'success': 'add device success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'add device failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+
+class UAVBatteryStatus(Resource):
+    def __init__(self):
+        self.dao = BatteryDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            battery_id = data['battery_id']
+            status = data['status']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.modify_parts_status(user, battery_id, status)
+            if rs == 1:
+                return make_response(jsonify({'success': 'modify device status success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'modify device status failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()

@@ -237,3 +237,53 @@ class UAVDeviceVers(Resource):
 
     def get(self):
         return self.post()
+
+class UAVDeviceAdd(Resource):
+    def __init__(self):
+        self.dao = DeviceDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            device= data['device']
+            device_dict=json.loads(json.dumps(device))
+            device_obj = Device()
+            device_obj.__dict__ = device_dict[0]
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.add_device(user,device_obj)
+            if rs==1:
+                return make_response(jsonify({'success': 'add device success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'add device failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class UAVDeviceStatus(Resource):
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            device_id = data['device_id']
+            status = data['status']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.modify_device_status(user,device_id,status)
+            if rs==1:
+                return make_response(jsonify({'success': 'modify device status success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'modify device status failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()

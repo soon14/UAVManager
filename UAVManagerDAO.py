@@ -287,7 +287,6 @@ class DeviceDAO:
             return -1
 
     def modify_device(self,usr,device):
-        q = session_uav.query(Device)
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
         if '3' in roles:
@@ -295,6 +294,16 @@ class DeviceDAO:
                                                                                           device_fact=device.device_fact,device_date=device.device_date,user_team=device.user_team, \
                                                                                           uad_camera=device.uad_camera,uav_yuntai=device.uav_yuntai,uad_rcontrol=device.uad_rcontrol, \
                                                                                           device_status=device.device_status)
+            session_uav.commit()
+            return 1
+        else:
+            return -1;
+
+    def modify_device_status(self,usr,device_id,status):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '3' in roles:
+            session_uav.update(Device).where(Device.device_id == device_id).values(device_status=status)
             session_uav.commit()
             return 1
         else:
@@ -340,8 +349,6 @@ class BatteryDAO:
             return json.dumps(item)
         else:
             return None
-
-
 
     def query_condition(self,user,bttery_id,bttery_ver,bttery_type,bttery_status,page_index,page_size):
         q = session_uav.query(Battery)
@@ -475,6 +482,17 @@ class BatteryDAO:
         else:
             return -1;
 
+    def modify_battery_status(self,usr,battery_id,status):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '3' in roles:
+            session_uav.update(Battery).where(Battery.battery_id == battery_id).values(battery_status=status)
+            session_uav.commit()
+            return 1
+        else:
+            return -1;
+
+
 class PadDao:
     def query_all(self,user):
         usrDao=UserDAO()
@@ -602,6 +620,16 @@ class PadDao:
         else:
             return -1;
 
+    def modify_pad_status(self,usr,pad_id,status):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '3' in roles:
+            session_uav.update(Pad).where(Pad.pad_id == pad_id).values(pad_status=status)
+            session_uav.commit()
+            return 1
+        else:
+            return -1;
+
 #配件
 class PartsDao:
     def query_all(self,user):
@@ -703,6 +731,39 @@ class PartsDao:
             q = q.filter(Parts.parts_status == parts_status)
         parts=q.limit(page_size).offset((page_index-1)*page_size).all()
         return  class_to_dict(parts)
+
+    def add_parts(self,usr,parts):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '2' in roles:
+            session_uav.add(parts)
+            session_uav.commit()
+            return 1
+        else:
+            return -1
+
+    def modify_parts(self,usr,parts):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '3' in roles:
+            session_uav.update(Parts).where(Parts.parts_id == parts.parts_id).values(parts_ver=parts.pad_ver,parts_type=parts.pad_type,parts_fact=parts.pad_fact, \
+                                                                           parts_date=parts.pad_date,approver_name=parts.approver_name,user_team=parts.user_team, \
+                                                                           parts_status=parts.pad_status)
+            session_uav.commit()
+            return 1
+        else:
+            return -1;
+
+    def modify_parts_status(self,usr,parts_id,status):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        if '3' in roles:
+            session_uav.update(Parts).where(Parts.parts_id == parts_id).values(parts_status=status)
+            session_uav.commit()
+            return 1
+        else:
+            return -1;
+
 
 #出入库管理
 class ManagerDAO:
