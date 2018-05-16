@@ -14,7 +14,7 @@ from flask_restful import Api
 from flask_httpauth import HTTPBasicAuth
 from flask import Flask, render_template
 
-import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute,PhotoUpload
+import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute,PhotoUpload,PowerLinesRoute
 import UAVManagerDAO
 
 auth = HTTPBasicAuth()
@@ -66,7 +66,6 @@ def login():
 
 
 ##########################################无人机管理模块
-
 #manager related api
 api.add_resource(UAVManagerRoute.ManagerListPages,'/uavmanager/api/v1.0/manager/list')
 api.add_resource(UAVManagerRoute.ManagerBorrow,'/uavmanager/api/v1.0/manager/borrow')
@@ -95,6 +94,7 @@ api.add_resource(UAVBatteryRoute.UAVBatteryListPages,'/uavmanager/api/v1.0/batte
 api.add_resource(UAVBatteryRoute.UAVBatteryAdd,'/uavmanager/api/v1.0/battery/add')
 api.add_resource(UAVBatteryRoute.UAVBatteryStatus,'/uavmanager/api/v1.0/battery/modify_status')
 
+
 #parts related api
 api.add_resource(UAVPartsRoute.UAVPartsList,'/uavmanager/api/v1.0/parts')
 api.add_resource(UAVPartsRoute.UAVPartsStatistic,'/uavmanager/api/v1.0/parts/statistic/<string:parts_status>')
@@ -103,12 +103,14 @@ api.add_resource(UAVPartsRoute.UAVPartsListPages,'/uavmanager/api/v1.0/parts/pag
 api.add_resource(UAVPartsRoute.UAVPartsAdd,'/uavmanager/api/v1.0/parts/add')
 api.add_resource(UAVPartsRoute.UAVPartsStatus,'/uavmanager/api/v1.0/parts/modify_status')
 
+
 #pad related api
 api.add_resource(UAVPadRoute.UAVPadList,'/uavmanager/api/v1.0/pad/list')
 api.add_resource(UAVPadRoute.UAVPadListPages,'/uavmanager/api/v1.0/pad/pages')
 api.add_resource(UAVPadRoute.UAVPadTypes,'/uavmanager/api/v1.0/pad/types')
 api.add_resource(UAVPadRoute.UAVPadAdd,'/uavmanager/api/v1.0/pad/add')
 api.add_resource(UAVPadRoute.UAVPadStatus,'/uavmanager/api/v1.0/pad/modify_status')
+
 
 #fault related api
 api.add_resource(UAVFaultRoute.UAVFaultStatistics,'/uavmanager/api/v1.0/fault/statistics')
@@ -121,11 +123,19 @@ api.add_resource(UAVFaultRoute.UAVFaultListPages,'/uavmanager/api/v1.0/fault/pag
 api.add_resource(UAVFaultReportRoute.FaultReportQuery, '/uavmanager/api/v1.0/faultreport')
 api.add_resource(UAVFaultReportRoute.FaultReportUpdate, '/uavmanager/api/v1.0/faultreport/update')
 
+
 #approval
 api.add_resource(UAVApporvalRoute.UAVApprovalList, '/uavmanager/api/v1.0/approval/list')
 
 ###################################################################文件上传模块
 api.add_resource(PhotoUpload.FileUpload, '/uavmanager/api/v1.0/approval/list')
+
+
+###################################################################电力线路杆塔查询模块
+api.add_resource(PowerLinesRoute.PowerLineListRoute,'/uavmanager/api/v1.0/lines')
+api.add_resource(PowerLinesRoute.PowerLineTowerRoute,'/uavmanager/api/v1.0/tower')
+api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/uavmanager/api/v1.0/photo')
+
 
 if __name__ == '__main__':
     app.run()

@@ -65,6 +65,10 @@ class TowerDao:
         rs = session_power.query(Towers).all()
         return class_to_dict(rs)
 
+    def query_towers(self,lineId):
+        rs = session_power.query(Towers).filter(Towers.tower_line==lineId).all()
+        return class_to_dict(rs)
+
     def add_tower(self,user,tower):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -89,6 +93,10 @@ class TowerDao:
 class PhotoDao:
     def query_photos(self):
         rs = session_power.query(Photo).all()
+        return class_to_dict(rs)
+
+    def query_photos(self,towerIdx):
+        rs = session_power.query(Photo).filter(Photo.photo_tower_id==towerIdx).all()
         return class_to_dict(rs)
 
     def add_photo(self,user,photo):

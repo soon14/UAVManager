@@ -47,6 +47,7 @@ class UAVBatteryList(Resource):
     def get(self):
         return self.post()
 
+
 class UAVBatteryStatisticsList(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -70,6 +71,7 @@ class UAVBatteryStatisticsList(Resource):
 
     def get(self):
         return self.post()
+
 
 class UAVBatteryStatistic(Resource):
     def __init__(self):
@@ -95,6 +97,7 @@ class UAVBatteryStatistic(Resource):
     def get(self,battery_status):
         return self.post(battery_status)
 
+
 class UAVBatteryTypes(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -115,6 +118,7 @@ class UAVBatteryTypes(Resource):
 
     def get(self):
         return self.post()
+
 
 class UAVBatteryListPages(Resource):
     def __init__(self):
