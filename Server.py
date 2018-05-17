@@ -82,8 +82,8 @@ api.add_resource(UAVDeviceRoute.UAVDeviceTypes,'/uavmanager/api/v1.0/device/type
 api.add_resource(UAVDeviceRoute.UAVDeviceVers,'/uavmanager/api/v1.0/device/vers')
 api.add_resource(UAVDeviceRoute.UAVDeviceListPages,'/uavmanager/api/v1.0/devices/pages')
 api.add_resource(UAVDeviceRoute.UAVDeviceAdd,'/uavmanager/api/v1.0/device/add')
-api.add_resource(UAVDeviceRoute.UAVDeviceAdd,'/uavmanager/api/v1.0/device/modify_status')
-
+api.add_resource(UAVDeviceRoute.UAVDeviceStatus,'/uavmanager/api/v1.0/device/modify_status')
+api.add_resource(UAVDeviceRoute.UAVDeviceModify,'/uavmanager/api/v1.0/device/modify')
 
 #battery related api
 api.add_resource(UAVBatteryRoute.UAVBatteryList,'/uavmanager/api/v1.0/batteries')
@@ -93,7 +93,7 @@ api.add_resource(UAVBatteryRoute.UAVBatteryTypes,'/uavmanager/api/v1.0/battery/t
 api.add_resource(UAVBatteryRoute.UAVBatteryListPages,'/uavmanager/api/v1.0/batteries/pages')
 api.add_resource(UAVBatteryRoute.UAVBatteryAdd,'/uavmanager/api/v1.0/battery/add')
 api.add_resource(UAVBatteryRoute.UAVBatteryStatus,'/uavmanager/api/v1.0/battery/modify_status')
-
+api.add_resource(UAVBatteryRoute.UAVBatteryModify,'/uavmanager/api/v1.0/battery/modify')
 
 #parts related api
 api.add_resource(UAVPartsRoute.UAVPartsList,'/uavmanager/api/v1.0/parts')
@@ -102,7 +102,7 @@ api.add_resource(UAVPartsRoute.UAVPartsTypes,'/uavmanager/api/v1.0/parts/types')
 api.add_resource(UAVPartsRoute.UAVPartsListPages,'/uavmanager/api/v1.0/parts/pages')
 api.add_resource(UAVPartsRoute.UAVPartsAdd,'/uavmanager/api/v1.0/parts/add')
 api.add_resource(UAVPartsRoute.UAVPartsStatus,'/uavmanager/api/v1.0/parts/modify_status')
-
+api.add_resource(UAVPartsRoute.UAVPartsModify,'/uavmanager/api/v1.0/parts/modify')
 
 #pad related api
 api.add_resource(UAVPadRoute.UAVPadList,'/uavmanager/api/v1.0/pad/list')
@@ -110,14 +110,14 @@ api.add_resource(UAVPadRoute.UAVPadListPages,'/uavmanager/api/v1.0/pad/pages')
 api.add_resource(UAVPadRoute.UAVPadTypes,'/uavmanager/api/v1.0/pad/types')
 api.add_resource(UAVPadRoute.UAVPadAdd,'/uavmanager/api/v1.0/pad/add')
 api.add_resource(UAVPadRoute.UAVPadStatus,'/uavmanager/api/v1.0/pad/modify_status')
-
+api.add_resource(UAVPadRoute.UAVPadModify,'/uavmanager/api/v1.0/pad/modify')
 
 #fault related api
 api.add_resource(UAVFaultRoute.UAVFaultStatistics,'/uavmanager/api/v1.0/fault/statistics')
 api.add_resource(UAVFaultRoute.UAVFaultList,'/uavmanager/api/v1.0/fault/list')
 api.add_resource(UAVFaultRoute.UAVFaultDeviceVersion,'/uavmanager/api/v1.0/fault/device_ver')
 api.add_resource(UAVFaultRoute.UAVFaultListPages,'/uavmanager/api/v1.0/fault/pages')
-
+api.add_resource(UAVFaultRoute.UAVFaultAdd,'/uavmanager/api/v1.0/fault/add')
 
 #fault report api
 api.add_resource(UAVFaultReportRoute.FaultReportQuery, '/uavmanager/api/v1.0/faultreport')
@@ -126,15 +126,24 @@ api.add_resource(UAVFaultReportRoute.FaultReportUpdate, '/uavmanager/api/v1.0/fa
 
 #approval
 api.add_resource(UAVApporvalRoute.UAVApprovalList, '/uavmanager/api/v1.0/approval/list')
+api.add_resource(UAVApporvalRoute.UAVApprovalAdd, '/uavmanager/api/v1.0/approval/add')
+
 
 ###################################################################文件上传模块
 api.add_resource(PhotoUpload.FileUpload, '/uavmanager/api/v1.0/approval/list')
 
 
 ###################################################################电力线路杆塔查询模块
-api.add_resource(PowerLinesRoute.PowerLineListRoute,'/uavmanager/api/v1.0/lines')
-api.add_resource(PowerLinesRoute.PowerLineTowerRoute,'/uavmanager/api/v1.0/tower')
-api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/uavmanager/api/v1.0/photo')
+api.add_resource(PowerLinesRoute.PowerLineListRoute,'/gis/api/v1.0/lines')
+api.add_resource(PowerLinesRoute.PowerLineTypeRoute,'/gis/api/v1.0/lines/types')
+api.add_resource(PowerLinesRoute.PowerLineVoltageRoute,'/gis/api/v1.0/lines/voltage')
+
+
+api.add_resource(PowerLinesRoute.PowerLineTowerRoute,'/gis/api/v1.0/tower')
+
+
+api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/gis/api/v1.0/photo')
+#api.add_resource(PowerLinesRoute.PwoerLinePhotoTypeRoute,'/gis/api/v1.0/photo/types')
 
 
 if __name__ == '__main__':

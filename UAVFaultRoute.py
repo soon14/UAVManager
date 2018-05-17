@@ -105,3 +105,35 @@ class UAVFaultStatistics(Resource):
 
     def get(self):
         return self.post()
+
+class UAVFaultAdd(Resource):
+    def __init__(self):
+        self.dao = FaultDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            faultdict=data['fault']
+            fault=Fault()
+            fault.device_id = faultdict[0]['device_id']
+            fault.device_ver = faultdict[0]['device_ver']
+            fault.fault_date = faultdict[0]['fault_date']
+            fault.fault_reason = faultdict[0]['fault_reason']
+            fault.fault_deal = faultdict[0]['fault_deal']
+            fault.fault_finished = faultdict[0]['fault_finished']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs=self.dao.add_fault(user,fault)
+            if rs==None:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+        else:
+            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()

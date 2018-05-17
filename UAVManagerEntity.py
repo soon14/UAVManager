@@ -111,7 +111,7 @@ class Approval(EntityBase):
 
 class Approval_db(EntityBase):
     __tablename__ = 'tb_approval_db'
-    apply_person=Column(String(45),primary_key=True)
+    apply_person=Column(String(45))
     approval_team=Column(String(45))
     device_ver=Column(String(45))
     device_number=Column(Integer)
@@ -162,7 +162,7 @@ class Lines(EntityBase):
 class Towers(EntityBase):
     __tablename__='tb_tower'
     tower_id = Column(Integer,primary_key=True)
-    tower_line=Column(Integer)
+    tower_linename=Column(String(128))
     tower_idx=Column(Integer)
     tower_type=Column(String(45))
     tower_height=Column(FLOAT)
@@ -175,7 +175,6 @@ class Photo(EntityBase):
     photo_id = Column(Integer,primary_key=True)
     photo_line = Column(Integer)
     photo_tower_id = Column(Integer)
-    photo_voltage = Column(String(45))
     photo_path=Column(String(256))
     photo_classify=Column(String(45))
 

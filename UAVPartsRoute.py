@@ -124,7 +124,14 @@ class UAVPartsAdd(Resource):
             parts= data['parts']
             parts_dict=json.loads(json.dumps(parts))
             parts_obj = Parts()
-            parts_obj.__dict__ = parts_dict[0]
+            parts_obj.parts_id = parts_dict[0]['parts_id']
+            parts_obj.parts_ver = parts_dict[0]['parts_ver']
+            parts_obj.parts_type = parts_dict[0]['parts_type']
+            parts_obj.parts_fact = parts_dict[0]['parts_fact']
+            parts_obj.parts_date = parts_dict[0]['parts_date']
+            parts_obj.user_team = parts_dict[0]['user_team']
+            parts_obj.parts_status = '在库'
+            parts_obj.parts_use_number = 0
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -139,6 +146,39 @@ class UAVPartsAdd(Resource):
 
     def get(self):
         return self.post()
+class UAVPartsModify(Resource):
+    def __init__(self):
+        self.dao = PartsDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            parts= data['parts']
+            parts_dict=json.loads(json.dumps(parts))
+            parts_obj = Parts()
+            parts_obj.parts_id = parts_dict[0]['parts_id']
+            parts_obj.parts_ver = parts_dict[0]['parts_ver']
+            parts_obj.parts_type = parts_dict[0]['parts_type']
+            parts_obj.parts_fact = parts_dict[0]['parts_fact']
+            parts_obj.parts_date = parts_dict[0]['parts_date']
+            parts_obj.user_team = parts_dict[0]['user_team']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.modify_parts(user,parts_obj)
+            if rs==1:
+                return make_response(jsonify({'success': 'add device success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'add device failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
 
 class UAVPartsStatus(Resource):
     def __init__(self):

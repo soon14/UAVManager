@@ -39,6 +39,20 @@ class LinesDao:
         rs = session_power.query(Lines).all()
         return class_to_dict(rs)
 
+    def query_lineTypes(self):
+        sql = 'select lines_voltage from tb_lines group by lines_voltage;'
+        rs = session_power.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['voltage'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def query_lineVoltage(self,voltage):
+        rs = session_power.query(Lines).filter(Lines.lines_voltage==voltage).all()
+        return class_to_dict(rs)
+
     def add_line(self,user,line):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -65,8 +79,8 @@ class TowerDao:
         rs = session_power.query(Towers).all()
         return class_to_dict(rs)
 
-    def query_towers(self,lineId):
-        rs = session_power.query(Towers).filter(Towers.tower_line==lineId).all()
+    def query_towers(self,linename):
+        rs = session_power.query(Towers).filter(Towers.tower_linename==linename).all()
         return class_to_dict(rs)
 
     def add_tower(self,user,tower):

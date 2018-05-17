@@ -150,8 +150,15 @@ class UAVBatteryAdd(Resource):
             token = data['token']
             battery = data['battery']
             battery_dict = json.loads(json.dumps(battery))
-            battery_obj = Parts()
-            battery_obj.__dict__ = battery_dict[0]
+            battery_obj = Battery()
+            battery_obj.battery_id = battery_dict[0]['battery_id']
+            battery_obj.battery_ver = battery_dict[0]['battery_ver']
+            battery_obj.battery_type = battery_dict[0]['battery_type']
+            battery_obj.battery_fact = battery_dict[0]['battery_fact']
+            battery_obj.battery_date = battery_dict[0]['battery_date']
+            battery_obj.user_team = battery_dict[0]['user_team']
+            battery_obj.battery_status = '在库'
+            battery_obj.battery_use_number = 0
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -183,7 +190,54 @@ class UAVBatteryStatus(Resource):
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
-            rs = self.dao.modify_parts_status(user, battery_id, status)
+            rs = self.dao.modify_battery_status(user, battery_id, status)
+            if rs == 1:
+                return make_response(jsonify({'success': 'modify device status success'}), 200)
+            else:
+                return make_response(jsonify({'failed': 'modify device status failed'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class UAVBatteryModify(Resource):
+    def __init__(self):
+        self.dao = BatteryDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            if (request.data != ""):
+                data = json.loads(request.data)
+                token = data['token']
+                battery = data['battery']
+                battery_dict = json.loads(json.dumps(battery))
+                battery_obj = Battery()
+                battery_obj.battery_id = battery_dict[0]['battery_id']
+                battery_obj.battery_ver = battery_dict[0]['battery_ver']
+                battery_obj.battery_type = battery_dict[0]['battery_type']
+                battery_obj.battery_fact = battery_dict[0]['battery_fact']
+                battery_obj.battery_date = battery_dict[0]['battery_date']
+                battery_obj.user_team = battery_dict[0]['user_team']
+                user = self.userDao.verify_token(token, '')
+                if (not user):
+                    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+                rs = self.dao.modify_battery(user, battery_obj)
+                if rs == 1:
+                    return make_response(jsonify({'success': 'add device success'}), 200)
+                else:
+                    return make_response(jsonify({'failed': 'add device failed'}), 401)
+            else:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs = self.dao.modify_battery_status(user, battery_id, status)
             if rs == 1:
                 return make_response(jsonify({'success': 'modify device status success'}), 200)
             else:
