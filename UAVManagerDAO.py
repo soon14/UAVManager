@@ -893,44 +893,52 @@ class ManagerDAO:
         #如果不是同一班组
         if usr.user_team!=user_team:
             #是否经过审批流程
-            approve=session_uav.query(Approval).filter(Approval.apply_person==usr.user_name,Approval.approval_status==1).first()
+            approve=session_uav.query(Approval).filter(Approval.apply_person==usr.user_name).first()
             if(approve != None):
-                if '4' in roles:
-                    #审批人是否有权限审批借出
-                    if user.user_team==user_team: #有
-                        if idx==1:
-                            obj = Manager(device_id=uav_id, device_ver=device.device_ver,device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
-                            session_uav.add(obj)
-                            session_uav.commit()
-                            session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
-                            session_uav.commit()
-                            return 1
-                        if idx==2:
-                            obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver, borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用', return_date=return_time)
-                            session_uav.add(obj)
-                            session_uav.commit()
-                            session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
-                            session_uav.commit()
-                            return 1
-                        if idx==3:
-                            obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
-                            session_uav.add(obj)
-                            session_uav.commit()
-                            session_uav.query(Parts).filter(Parts.parts_id == uav_id).update({Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
-                            session_uav.commit()
-                            return 1
-                        if idx==4:
-                            obj = Manager(device_id=uav_id, device_ver=pad.device_ver,device_type=pad.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
-                            session_uav.add(obj)
-                            session_uav.commit()
-                            session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
-                            session_uav.commit()
-                            return 1
-                        #借调申请记录的处理
-                        #
-                        #
-                    else:#无
+                if(Approval.approval_status==1)
+                    if '4' in roles:
+                        #审批人是否有权限审批借出
+                        if user.user_team==user_team: #有
+                            if idx==1:
+                                obj = Manager(device_id=uav_id, device_ver=device.device_ver,device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                                session_uav.add(obj)
+                                session_uav.commit()
+                                session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
+                                session_uav.commit()
+                                return 1
+                            if idx==2:
+                                obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver, borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用', return_date=return_time)
+                                session_uav.add(obj)
+                                session_uav.commit()
+                                session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
+                                session_uav.commit()
+                                return 1
+                            if idx==3:
+                                obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                                session_uav.add(obj)
+                                session_uav.commit()
+                                session_uav.query(Parts).filter(Parts.parts_id == uav_id).update({Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
+                                session_uav.commit()
+                                return 1
+                            if idx==4:
+                                obj = Manager(device_id=uav_id, device_ver=pad.device_ver,device_type=pad.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                                session_uav.add(obj)
+                                session_uav.commit()
+                                session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
+                                session_uav.commit()
+                                return 1
+                            #借调申请记录的处理
+                            approvalDao = ApprovalDao()
+                            approvalDao.approval_finished(approve.apply_person)
+                        else:#无
+                            return -1
+                    elif(Approval.approval_status==0):
+                        #未审批
                         return -1
+                    else:
+                        #审批不通过
+                        approvalDao = ApprovalDao()
+                        approvalDao.approval_finished(approve.apply_person)
                 elif '5' in roles:
                     if idx == 1:
                         obj = Manager(device_id=uav_id, device_ver=device.device_ver, device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
@@ -1247,7 +1255,15 @@ class ApprovalDao:
                     {Approval.approval_status: 1}, synchronize_session=False)
                 session_uav.commit()
 
+    def approval_disagree(self,user,approval):
+                usrDao=UserDAO()
+        roles=usrDao.get_role(user)
 
+        if '4' in roles and '5' not in roles:
+            if user.user_team == approval.approval_team:
+                session_uav.query(Approval).filter(Approval.apply_person == approval.apply_person).update(
+                    {Approval.approval_status: 2}, synchronize_session=False)
+                session_uav.commit()
 
     def approval_add(self,user,approval):
         usrDao=UserDAO()
@@ -1255,9 +1271,31 @@ class ApprovalDao:
         if '4' in roles and  '5' not in roles:
             if user.user_team==approval.approval_team:
                 return -1
+
+            approvalTmp = session_uav.query(Approval).filter(Approval.apply_person==approval.apply_person).first()
+            if(approvalTmp !=None and approvalTmp.approval_status!=0):
+                self.approval_finished(approval.apply_person)
+            
             session_uav.merge(approval)
             session_uav.commit()
             return 1
         else:
             return -2
 
+    def approval_finished(self,apply_person):
+        approval_cur = session_uav.query(Approval).filter(Approval.apply_person==apply_person).first()
+        approval_db=Approval_db()
+        approval_db.apply_person=approval_cur.apply_person
+        approval_db.approval_team=approval_cur.approval_team
+        approval_db.device_ver=approval_cur.device_ver
+        approval_db.device_number=approval_cur.device_number
+        approval_db.battery_ver = approval_cur.battery_ver
+        approval_db.battery_number=approval_cur.battery_number
+        approval_db.pad_ver = approval_cur.pad_ver
+        approval_db.pad_number=approval_cur.pad_number
+        approval_db.approval_status=approval_cur.approval_status
+
+        session_uav.add(approval_db)
+        session_uav.commit()
+        session_uav.delete(approval_cur)
+        session_uav.commit()

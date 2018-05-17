@@ -126,8 +126,9 @@ api.add_resource(UAVFaultReportRoute.FaultReportUpdate, '/uavmanager/api/v1.0/fa
 
 #approval
 api.add_resource(UAVApporvalRoute.UAVApprovalList, '/uavmanager/api/v1.0/approval/list')
-#api.add_resource(UAVApporvalRoute.UAVApprovalAdd, '/uavmanager/api/v1.0/approval/add')
-
+api.add_resource(UAVApporvalRoute.UAVApprovalAdd, '/uavmanager/api/v1.0/approval/add')
+api.add_resource(UAVApporvalRoute.UAVApprovalAgree, '/uavmanager/api/v1.0/approval/agree')
+api.add_resource(UAVApporvalRoute.UAVApprovalDisagree, '/uavmanager/api/v1.0/approval/disagree')
 
 ###################################################################文件上传模块
 api.add_resource(PhotoUpload.FileUpload, '/uavmanager/api/v1.0/approval/list')
