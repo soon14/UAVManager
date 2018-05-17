@@ -14,7 +14,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker,query
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import  SignatureExpired,BadSignature
-from UAVManagerEntity import User, Role, Role_basic, Manager,Battery,Device,Pad,Parts,Approval,Fault,FaultReport, class_to_dict
+from UAVManagerEntity import User, Role, Role_basic, Manager,Battery,Device,Pad,Parts,Approval,Fault,FaultReport,Approval_db, class_to_dict
 
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
