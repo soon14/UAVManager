@@ -37,6 +37,10 @@ class UAVApprovalList(Resource):
         return self.post()
 
 class UAVApprovalAdd(Resource):
+    def __init__(self):
+        self.dao = ApprovalDao()
+        self.userDao = UserDAO()
+
     def post(self):
         if (request.data != ""):
             data = json.loads(request.data)
@@ -69,7 +73,11 @@ class UAVApprovalAdd(Resource):
         return self.post()
 
 class UAVApprovalAgree(Resource):
-        def post(self):
+    def __init__(self):
+        self.dao = ApprovalDao()
+        self.userDao = UserDAO()
+
+    def post(self):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
@@ -83,7 +91,6 @@ class UAVApprovalAgree(Resource):
             approval.battery_number = approvaldict[0]['battery_number']
             approval.pad_ver = approvaldict[0]['pad_ver']
             approval.pad_number = approvaldict[0]['pad_number']
-            approval.approval_status = 0
 
             user = self.userDao.verify_token(token, '')
             if (not user):
@@ -101,7 +108,11 @@ class UAVApprovalAgree(Resource):
         return self.post()
 
 class UAVApprovalDisagree(Resource):
-        def post(self):
+    def __init__(self):
+        self.dao = ApprovalDao()
+        self.userDao = UserDAO()
+
+    def post(self):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
@@ -115,7 +126,6 @@ class UAVApprovalDisagree(Resource):
             approval.battery_number = approvaldict[0]['battery_number']
             approval.pad_ver = approvaldict[0]['pad_ver']
             approval.pad_number = approvaldict[0]['pad_number']
-            approval.approval_status = 0
 
             user = self.userDao.verify_token(token, '')
             if (not user):

@@ -107,15 +107,8 @@ class ManagerBorrow(Resource):
                         return make_response(jsonify({'error': 'borrower not exist'}), 401)
                     if rs==-2:
                         return make_response(jsonify({'error': 'device not returned'}), 404)
-                    uav_dao = DeviceDAO()
-                    uav=uav_dao.query_index(int(item['uav_id']))
-                    uavitem={}
-                    uavitem['device_type']=uav['device_type']
-                    uavitem['device_id'] = uav['device_id']
-                    uavitem['user_team'] = uav['user_team']
-                    uavitem['return_date'] = item['return_time']
-                    uavitem['approve'] = item['approver']
-                    ret.append(uavitem)
+
+                    ret = self.dao.manager_query_device(int(item['uav_id']),item['return_time'],item['approver'])
                 return json.dumps(ret)
         else:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -134,18 +127,12 @@ class ManagerReturn(Resource):
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:
-                ret=[]
+
                 for item in borrowList:
-                    self.dao.manager_return(user,item['device_id'],item['return_date'],item['return_desc'])
-                    uav_dao = DeviceDAO()
-                    uav = uav_dao.query_index(int(item['uav_id']))
-                    uavitem = {}
-                    uavitem['device_type'] = uav['device_type']
-                    uavitem['device_id'] = uav['device_id']
-                    uavitem['user_team'] = uav['user_team']
-                    uavitem['return_date'] = item['return_time']
-                    uavitem['approve'] = item['approver']
-                    ret.append(uavitem)
+                    rs=self.dao.manager_return(user,item['device_id'],item['return_date'],item['return_desc'])
+                    if rs!=1:
+                        return make_response(jsonify({'error': 'return deivce failed'}), 401)
+                    ret = self.dao.manager_query_device(int(item['device_id']), item['return_date'],"")
                 return json.dumps(ret)
         else:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)

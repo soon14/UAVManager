@@ -7,18 +7,11 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 import ConfigParser
-import hashlib
 import json
 from sqlalchemy import create_engine
-from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker,query
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from itsdangerous import  SignatureExpired,BadSignature
 from UAVManagerEntity import User, Lines, Towers,Photo, class_to_dict
 from UAVManagerDAO import UserDAO
-
-from flask import Flask, request ,jsonify
-from flask import Response,make_response
 
 cf = ConfigParser.ConfigParser()
 cf.read("config.conf")
@@ -38,6 +31,11 @@ class LinesDao:
     def query_lines(self):
         rs = session_power.query(Lines).all()
         return class_to_dict(rs)
+
+    def query_line(self,lineID):
+        rs = session_power.query(Lines).filter(Lines.lines_id==lineID).all()
+        return class_to_dict(rs)
+
 
     def query_lineTypes(self):
         sql = 'select lines_voltage from tb_lines group by lines_voltage;'
@@ -80,8 +78,11 @@ class TowerDao:
         return class_to_dict(rs)
 
     def query_towers(self,linename):
-        rs = session_power.query(Towers).filter(Towers.tower_linename==linename).all()
-        return class_to_dict(rs)
+        if linename is not None:
+            rs = session_power.query(Towers).filter(Towers.tower_linename==linename).all()
+            return class_to_dict(rs)
+        else:
+            return self.query_towers()
 
     def add_tower(self,user,tower):
         usrDao=UserDAO()

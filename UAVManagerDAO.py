@@ -895,7 +895,7 @@ class ManagerDAO:
             #是否经过审批流程
             approve=session_uav.query(Approval).filter(Approval.apply_person==usr.user_name).first()
             if(approve != None):
-                if(Approval.approval_status==1)
+                if(Approval.approval_status==1):
                     if '4' in roles:
                         #审批人是否有权限审批借出
                         if user.user_team==user_team: #有
@@ -1011,7 +1011,10 @@ class ManagerDAO:
                     obj = Manager(device_id=uav_id, device_ver=device.device_ver,device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                     session_uav.add(obj)
                     session_uav.commit()
-                    session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
+                    if  device.device_use_number is None:
+                        session_uav.query(Device).filter(Device.device_id == int(uav_id)).update({Device.device_status: '出库', Device.device_use_number: 1},synchronize_session=False)
+                    else:
+                        session_uav.query(Device).filter(Device.device_id == int(uav_id)).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
                     session_uav.commit()
                     return 1
                 if idx == 2:
@@ -1079,6 +1082,63 @@ class ManagerDAO:
                 session_uav.query(Pad).filter(Pad.pad_id == manager.device_id).update({Pad.pad_status: '在库'},synchronize_session=False)
                 session_uav.commit()
             return 1
+
+    def manager_query_device(self,device_id,retruntime,approver):
+        device = session_uav.query(Device).filter(Device.device_id == device_id).first()
+        battery = session_uav.query(Battery).filter(Battery.battery_id == device_id).first()
+        part = session_uav.query(Battery).filter(Parts.parts_id == device_id).first()
+        pad = session_uav.query(Battery).filter(Pad.pad_id == device_id).first()
+        idx = 0
+        if device:
+            idx = 1
+        if battery:
+            idx = 2
+        if part:
+            idx = 3
+        if pad:
+            idx = 4
+
+        if idx==0:
+            return  None
+
+        ret = []
+        if idx==1:
+            uav_dao = DeviceDAO()
+            uav = uav_dao.query_index(device_id)
+            deviceitem = {}
+            deviceitem['device_type'] = uav['device_type']
+            deviceitem['device_id'] = uav['device_id']
+            deviceitem['user_team'] = uav['user_team']
+            deviceitem['return_date'] = retruntime
+            deviceitem['approve'] = approver
+
+        elif idx==2:
+            battery = class_to_dict(session_uav.query(Battery).filter(Battery.battery_id==device_id))
+            deviceitem = {}
+            deviceitem['device_type'] = battery['battery_type']
+            deviceitem['device_id'] = battery['battery_id']
+            deviceitem['user_team'] = battery['user_team']
+            deviceitem['return_date'] = retruntime
+            deviceitem['approve'] = approver
+
+        elif idx==3:
+            part = class_to_dict(session_uav.query(Parts).filter(Parts.parts_id==device_id))
+            deviceitem = {}
+            deviceitem['device_type'] = battery['parts_type']
+            deviceitem['device_id'] = battery['parts_id']
+            deviceitem['user_team'] = battery['user_team']
+            deviceitem['return_date'] = retruntime
+            deviceitem['approve'] = approver
+        else:
+            pad = class_to_dict(session_uav.query(Pad).filter(Pad.pad_id==device_id))
+            deviceitem = {}
+            deviceitem['device_type'] = battery['pad_type']
+            deviceitem['device_id'] = battery['pad_id']
+            deviceitem['user_team'] = battery['user_team']
+            deviceitem['return_date'] = retruntime
+            deviceitem['approve'] = approver
+        ret.append(deviceitem)
+        return ret
 
 #故障管理
 class FaultDao:
@@ -1256,7 +1316,7 @@ class ApprovalDao:
                 session_uav.commit()
 
     def approval_disagree(self,user,approval):
-                usrDao=UserDAO()
+        usrDao=UserDAO()
         roles=usrDao.get_role(user)
 
         if '4' in roles and '5' not in roles:
@@ -1268,7 +1328,7 @@ class ApprovalDao:
     def approval_add(self,user,approval):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
-        if '4' in roles and  '5' not in roles:
+        if '4' in roles and '5' not in roles:
             if user.user_team==approval.approval_team:
                 return -1
 

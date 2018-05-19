@@ -64,6 +64,9 @@ def login():
 
     return rst
 
+##########################################用户权限管理模块
+api.add_resource(UAVManagerRoute.ManagerListPages,'/uavmanager/api/v1.0/manager/list')
+
 
 ##########################################无人机管理模块
 #manager related api
@@ -136,6 +139,7 @@ api.add_resource(PhotoUpload.FileUpload, '/uavmanager/api/v1.0/approval/list')
 
 ###################################################################电力线路杆塔查询模块
 api.add_resource(PowerLinesRoute.PowerLineListRoute,'/gis/api/v1.0/lines')
+api.add_resource(PowerLinesRoute.PowerLineRoute,'/gis/api/v1.0/line')
 api.add_resource(PowerLinesRoute.PowerLineTypeRoute,'/gis/api/v1.0/lines/types')
 api.add_resource(PowerLinesRoute.PowerLineVoltageRoute,'/gis/api/v1.0/lines/voltage')
 

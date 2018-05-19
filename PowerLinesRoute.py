@@ -16,6 +16,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('voltage', type=str, location='args')
 parser.add_argument('linename', type=str, location='args')
 parser.add_argument('towerid', type=int, location='args')
+parser.add_argument('lineid', type=int, location='args')
 class PowerLineListRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -33,6 +34,31 @@ class PowerLineListRoute(Resource):
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         else:
             return rs
+    #else:
+        #    return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class PowerLineRoute(Resource):
+    def __init__(self):
+        self.dao = LinesDao()
+        self.userDao = UserDAO
+
+    def post(self):
+        #if (request.data != ""):
+        #    data = json.loads(request.data)
+        #    token = data['token']
+        #    user = self.userDao.verify_token(token, '')
+        #    if (not user):
+        #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        args = parser.parse_args()
+        lineid = args.get('lineid')
+        rs=self.dao.query_line(lineid)
+        if rs==None:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        else:
+            return json.dumps(rs)
     #else:
         #    return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
