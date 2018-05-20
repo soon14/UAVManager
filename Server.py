@@ -65,7 +65,9 @@ def login():
     return rst
 
 ##########################################用户权限管理模块
-api.add_resource(UAVManagerRoute.ManagerListPages,'/uavmanager/api/v1.0/manager/list')
+#api.add_resource(UserManagerRoute.UserList,'/usermanager/api/v1.0/user/list')
+#api.add_resource(UserManagerRoute.UserAdd,'/usermanager/api/v1.0/user/Add')
+#api.add_resource(UserManagerRoute.AuthorityAdd,'/usermanager/api/v1.0/user/AddAuthority')
 
 
 ##########################################无人机管理模块
@@ -140,12 +142,15 @@ api.add_resource(PhotoUpload.FileUpload, '/uavmanager/api/v1.0/approval/list')
 ###################################################################电力线路杆塔查询模块
 api.add_resource(PowerLinesRoute.PowerLineListRoute,'/gis/api/v1.0/lines')
 api.add_resource(PowerLinesRoute.PowerLineRoute,'/gis/api/v1.0/line')
-api.add_resource(PowerLinesRoute.PowerLineTypeRoute,'/gis/api/v1.0/lines/types')
+api.add_resource(PowerLinesRoute.PowerLineAddRoute,'/gis/api/v1.0/line/add')
+api.add_resource(PowerLinesRoute.PowerLineTypeRoute,'/gis/api/v1.0/lines/voltage')
+api.add_resource(PowerLinesRoute.PowerLineWorkteamRoute,'/gis/api/v1.0/lines/workteam')
 api.add_resource(PowerLinesRoute.PowerLineVoltageRoute,'/gis/api/v1.0/lines/voltage')
 
 
 api.add_resource(PowerLinesRoute.PowerLineTowerRoute,'/gis/api/v1.0/tower')
-
+api.add_resource(PowerLinesRoute.PowerLineTowerQueryRoute,'/gis/api/v1.0/tower/query')
+api.add_resource(PowerLinesRoute.PowerLineTowerAdd,'/gis/api/v1.0/tower/add')
 
 api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/gis/api/v1.0/photo')
 #api.add_resource(PowerLinesRoute.PwoerLinePhotoTypeRoute,'/gis/api/v1.0/photo/types')

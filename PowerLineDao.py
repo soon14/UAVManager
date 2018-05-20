@@ -36,6 +36,41 @@ class LinesDao:
         rs = session_power.query(Lines).filter(Lines.lines_id==lineID).all()
         return class_to_dict(rs)
 
+    def query_line_condition(self,voltage,work_team,line_name,page_index,page_size):
+        q = session_power.query(Lines)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if voltage:
+            q = q.filter(Lines.lines_voltage==voltage)
+        if device_id:
+            q = q.filter(Lines.lines_work_team == work_team)
+        if device_type:
+            q = q.filter(Lines.lines_name == line_name)
+        lines = q.all()
+        lineids=[]
+        for line in lines:
+            lineids.add(line.line_id)
+        towers=session_power(Towers).filter(Towers.line_id.in(lineids)).limit(page_size).offset((page_index-1)*page_size).all()
+        return  class_to_dict(towers)
+
+    def query_line_pages(self,voltage,work_team,line_name,page_size):
+        q = session_power.query(Lines)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if voltage:
+            q = q.filter(Lines.lines_voltage==voltage)
+        if device_id:
+            q = q.filter(Lines.lines_work_team == work_team)
+        if device_type:
+            q = q.filter(Lines.lines_name == line_name)
+        lines = q.all()
+        lineids=[]
+        for line in lines:
+            lineids.add(line.line_id)
+        towersNum=session_power(Towers).filter(Towers.line_id.in(lineids)).limit(page_size).offset((page_index-1)*page_size).count()/page_size+1
+        item = {}
+        item['pages'] = towersNum
+        return  item
 
     def query_lineTypes(self):
         sql = 'select lines_voltage from tb_lines group by lines_voltage;'
@@ -44,6 +79,16 @@ class LinesDao:
         for i in rs:
             item = {}
             item['voltage'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
+    def query_lineWorkTeam(self):
+        sql = 'select lines_work_team from tb_lines group by lines_work_team;'
+        rs = session_power.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['work_team'] = i[0]
             ret.append(item)
         return json.dumps(ret)
 

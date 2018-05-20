@@ -11,12 +11,15 @@ from flask import Flask, request ,jsonify
 from flask import Response,make_response
 from PowerLineDao import LinesDao, TowerDao,PhotoDao
 from UAVManagerDAO import UserDAO
-from UAVManagerEntity import User
+from UAVManagerEntity import User,Lines,Towers
 parser = reqparse.RequestParser()
-parser.add_argument('voltage', type=str, location='args')
 parser.add_argument('linename', type=str, location='args')
-parser.add_argument('towerid', type=int, location='args')
 parser.add_argument('lineid', type=int, location='args')
+parser.add_argument('towerid', type=int, location='args')
+parser.add_argument('voltage', type=str, location='args')
+parser.add_argument('work_team', type=str, location='args')
+parser.add_argument('line_name', type=str, location='args')
+
 class PowerLineListRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -88,6 +91,29 @@ class PowerLineTypeRoute(Resource):
     def get(self):
         return self.post()
 
+class PowerLineWorkteamRoute(Resource):
+    def __init__(self):
+        self.dao = LinesDao()
+        self.userDao = UserDAO
+
+    def post(self):
+        #if (request.data != ""):
+        #    data = json.loads(request.data)
+        #    token = data['token']
+        #    user = self.userDao.verify_token(token, '')
+        #    if (not user):
+        #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        rs=self.dao.query_lineWorkTeam()
+        if rs==None:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        else:
+            return rs
+    #else:
+        #    return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
 class PowerLineVoltageRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -113,7 +139,66 @@ class PowerLineVoltageRoute(Resource):
     def get(self):
         return self.post()
 
+class PowerLineAddRoute(Resource):
+    def __init__(self):
+        self.dao = LinesDao()
+        self.userDao = UserDAO
 
+    def post(self):
+        if (request.data != ""):
+             data = json.loads(request.data)
+             token = data['token']
+             lineInfo = data['line']
+             user = self.userDao.verify_token(token, '')
+             if (not user):
+                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            line=Lines()
+            line.lines_name=lineInfo[0]['lines_name']
+            line.lines_construct_date = lineInfo[0]['lines_construct_date']
+            line.lines_voltage = lineInfo[0]['lines_voltage']
+            line.lines_work_team = lineInfo[0]['lines_work_team']
+            line.lines_incharge = lineInfo[0]['lines_incharge']
+            self.dao.add_line(user,line)
+            if rs==None:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+            else:
+             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()   
+
+class PowerLineTowerQueryRoute(Resource):
+    def __init__(self):
+        self.dao = LinesDao()
+        self.userDao = UserDAO
+
+    def post(self):
+        if (request.data != ""):
+             data = json.loads(request.data)
+             token = data['token']
+             user = self.userDao.verify_token(token, '')
+             if (not user):
+                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            line=Lines()
+            args = parser.parse_args()
+            voltage = args.get('voltage')
+            work_team = args.get('work_team')
+            line_name = args.get('line_name')
+
+            self.dao.query_line_condition(user,line)
+            if rs==None:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+            else:
+             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()   
+
+##################################################
 class PowerLineTowerRoute(Resource):
     def __init__(self):
         self.dao = TowerDao()
@@ -141,6 +226,38 @@ class PowerLineTowerRoute(Resource):
     def get(self):
         return self.post()
 
+class PowerLineTowerAdd(Resource):
+    def __init__(self):
+        self.dao = TowerDao()
+        self.userDao = UserDAO
+
+    def post(self):
+        if (request.data != ""):
+             data = json.loads(request.data)
+             token = data['token']
+             towerdict = data['tower']
+             user = self.userDao.verify_token(token, '')
+             if (not user):
+                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            tower=Towers()
+            tower.tower_linename=towerdict[0]['tower_linename']
+            tower.tower_idx=towerdict[0]['tower_idx']
+            tower.tower_type=towerdict[0]['tower_type']
+            tower.tower_height=towerdict[0]['tower_height']
+            tower.tower_lat=towerdict[0]['tower_lat']
+            tower.tower_lng=towerdict[0]['tower_lng']
+            tower.tower_elevation=towerdict[0]['tower_elevation']
+            self.dao.add_tower(user,tower)
+            if rs==None:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+            else:
+             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()  
+######################################################
 class PwoerLinePhotoIdxRoute(Resource):
     def __init__(self):
         self.dao = PhotoDao()
@@ -166,4 +283,3 @@ class PwoerLinePhotoIdxRoute(Resource):
 
     def get(self):
         return self.post()
-
