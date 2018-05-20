@@ -65,8 +65,8 @@ def login():
     return rst
 
 ##########################################用户权限管理模块
-#api.add_resource(UserManagerRoute.UserList,'/usermanager/api/v1.0/user/list')
-#api.add_resource(UserManagerRoute.UserAdd,'/usermanager/api/v1.0/user/Add')
+api.add_resource(UserManagerRoute.UserList,'/usermanager/api/v1.0/user/list')
+api.add_resource(UserManagerRoute.UserAdd,'/usermanager/api/v1.0/user/Add')
 #api.add_resource(UserManagerRoute.AuthorityAdd,'/usermanager/api/v1.0/user/AddAuthority')
 
 

@@ -87,7 +87,7 @@ class UserDAO:
             return rs
         else:
             return -1
-
+    
     #get obj by id
     def get_user_byId(self,userid):
         session_usr.query(User).filter(User.user_id==userid)
@@ -106,6 +106,14 @@ class UserDAO:
         rs = session_usr.query(Role).filter(Role.role_id==user.user_role).first()
         role = rs.role_basic.split(',')
         return role
+
+    def query_users(self,user):
+        roles = self.get_role(user)
+        if '5' in roles or '6' in roles:
+            rs = session_usr.query(User).all()
+            return class_to_dict(rs)
+        else:
+            return None
 
 class DeviceDAO:
     def query_all(self,user):
