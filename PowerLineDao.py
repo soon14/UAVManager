@@ -23,8 +23,8 @@ power_name = cf.get("power_account","db_name")
 
 secret_key = cf.get('token','SECRET_KEY')
 
-engine_pwoer = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(power_port) + '/' + power_name+'?charset=utf8')
-Session_Power= sessionmaker(bind=engine_pwoer)
+engine_power = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(power_port) + '/' + power_name+'?charset=utf8')
+Session_Power= sessionmaker(bind=engine_power)
 session_power = Session_Power()
 
 class LinesDao:
@@ -36,40 +36,53 @@ class LinesDao:
         rs = session_power.query(Lines).filter(Lines.lines_id==lineID).all()
         return class_to_dict(rs)
 
-    def query_line_condition(self,voltage,work_team,line_name,page_index,page_size):
-        q = session_power.query(Lines)
-        usrDao=UserDAO()
-        roles=usrDao.get_role(user)
-        if voltage:
-            q = q.filter(Lines.lines_voltage==voltage)
-        if device_id:
-            q = q.filter(Lines.lines_work_team == work_team)
-        if device_type:
-            q = q.filter(Lines.lines_name == line_name)
-        lines = q.all()
-        lineids=[]
-        for line in lines:
-            lineids.add(line.line_id)
-        towers=session_power(Towers).filter(Towers.line_id.in(lineids)).limit(page_size).offset((page_index-1)*page_size).all()
-        return  class_to_dict(towers)
+    def query_line_pages(self,page_size,page_index):
+        lines=session_power.query(Lines).limit(page_size).offset((page_index - 1) * page_size).all()
+        return class_to_dict(lines)
 
-    def query_line_pages(self,voltage,work_team,line_name,page_size):
+    def query_line_condition(self,user,voltage,work_team,line_name,page_size,page_index):
         q = session_power.query(Lines)
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if voltage:
             q = q.filter(Lines.lines_voltage==voltage)
-        if device_id:
+        if work_team:
             q = q.filter(Lines.lines_work_team == work_team)
-        if device_type:
+        if line_name:
             q = q.filter(Lines.lines_name == line_name)
         lines = q.all()
-        lineids=[]
+        linenames=[]
         for line in lines:
-            lineids.add(line.line_id)
-        towersNum=session_power(Towers).filter(Towers.line_id.in(lineids)).limit(page_size).offset((page_index-1)*page_size).count()/page_size+1
+            linenames.append(line.lines_name)
+        if len(linenames)>0:
+            towers=session_power.query(Towers).filter(Towers.tower_linename.in_(linenames)).limit(page_size).offset((page_index-1)*page_size).all()
+            return  class_to_dict(towers)
+        else:
+            return None
+
+    def query_tower_pages(self,user,voltage,work_team,line_name,page_size):
+        q = session_power.query(Lines)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if voltage:
+            q = q.filter(Lines.lines_voltage==voltage)
+        if work_team:
+            q = q.filter(Lines.lines_work_team == work_team)
+        if line_name:
+            q = q.filter(Lines.lines_name == line_name)
+        lines = q.all()
+        linenames = []
+        for line in lines:
+            linenames.append(line.lines_name)
+        towersNum=session_power.query(Towers).filter(Towers.tower_linename.in_(linenames)).count()/page_size+1
         item = {}
         item['pages'] = towersNum
+        return  item
+
+    def query_line_pagesNumber(self,user,page_size):
+        page_line=session_power.query(Lines).count()/page_size+1
+        item = {}
+        item['pages'] = page_line
         return  item
 
     def query_lineTypes(self):
@@ -118,7 +131,7 @@ class LinesDao:
             return -1
 
 class TowerDao:
-    def query_towers(self):
+    def query_towers_all(self):
         rs = session_power.query(Towers).all()
         return class_to_dict(rs)
 
@@ -127,7 +140,7 @@ class TowerDao:
             rs = session_power.query(Towers).filter(Towers.tower_linename==linename).all()
             return class_to_dict(rs)
         else:
-            return self.query_towers()
+            return self.query_towers_all()
 
     def add_tower(self,user,tower):
         usrDao=UserDAO()

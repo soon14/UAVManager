@@ -509,7 +509,6 @@ class BatteryDAO:
         else:
             return -1;
 
-
 class PadDao:
     def query_all(self,user):
         usrDao=UserDAO()
@@ -788,7 +787,6 @@ class PartsDao:
             return 1
         else:
             return -1;
-
 
 #出入库管理
 class ManagerDAO:
