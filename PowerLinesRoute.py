@@ -58,6 +58,7 @@ class PowerLineRoute(Resource):
         #    if (not user):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         args = parser.parse_args()
+
         lineid = args.get('lineid')
         rs=self.dao.query_line(lineid)
         if rs==None:
@@ -83,9 +84,10 @@ class PowerLineListPageRoute(Resource):
         #    if (not user):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         args = parser.parse_args()
+        work_team=args.get('work_team')
         page_size = args.get('page_size')
         page_index = args.get('page_index')
-        rs=self.dao.query_line_pages(page_size,page_index)
+        rs=self.dao.query_line_pages(work_team,page_size,page_index)
         if rs==None:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         else:
@@ -95,6 +97,32 @@ class PowerLineListPageRoute(Resource):
 
     def get(self):
         return self.post()
+
+class PowerLineDeleteRoute(Resource):
+    def __init__(self):
+        self.dao = LinesDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            args = parser.parse_args()
+            lineid=args.get('lineid')
+            rs=self.dao.query_line_delete(user,lineid)
+            if rs!=1:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+        else:
+            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
 
 class PowerLineTypeRoute(Resource):
     def __init__(self):
@@ -308,6 +336,32 @@ class PowerLineTowerAdd(Resource):
 
     def get(self):
         return self.post()
+
+class PowerLineTowerDeleteRoute(Resource):
+    def __init__(self):
+        self.dao = TowerDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            args = parser.parse_args()
+            towerid=args.get('lineid')
+            rs=self.dao.del_tower(user,towerid)
+            if rs!=1:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+        else:
+            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
 
 class PowerLineTowerPagesRoute(Resource):
     def __init__(self):

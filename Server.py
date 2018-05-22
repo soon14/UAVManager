@@ -136,13 +136,14 @@ api.add_resource(UAVApporvalRoute.UAVApprovalAgree, '/uavmanager/api/v1.0/approv
 api.add_resource(UAVApporvalRoute.UAVApprovalDisagree, '/uavmanager/api/v1.0/approval/disagree')
 
 ###################################################################文件上传模块
-api.add_resource(PhotoUpload.FileUpload, '/uavmanager/api/v1.0/approval/list')
+api.add_resource(PhotoUpload.FileUpload,'/gis/api/v1.0/FileUpload')
 
 
 ###################################################################电力线路杆塔查询模块
 api.add_resource(PowerLinesRoute.PowerLineListRoute,'/gis/api/v1.0/lines')
 api.add_resource(PowerLinesRoute.PowerLineListPages,'/gis/api/v1.0/lines/pages')
 api.add_resource(PowerLinesRoute.PowerLineListPageRoute,'/gis/api/v1.0/linesList')
+api.add_resource(PowerLinesRoute.PowerLineDeleteRoute,'/gis/api/v1.0/linesDelete')
 api.add_resource(PowerLinesRoute.PowerLineVoltageRoute,'/gis/api/v1.0/lines/lines/voltage')
 
 api.add_resource(PowerLinesRoute.PowerLineRoute,'/gis/api/v1.0/line')
@@ -150,14 +151,14 @@ api.add_resource(PowerLinesRoute.PowerLineAddRoute,'/gis/api/v1.0/line/add')
 api.add_resource(PowerLinesRoute.PowerLineTypeRoute,'/gis/api/v1.0/lines/type/voltage')
 api.add_resource(PowerLinesRoute.PowerLineWorkteamRoute,'/gis/api/v1.0/lines/type/workteam')
 
-
 api.add_resource(PowerLinesRoute.PowerLineTowerRoute,'/gis/api/v1.0/tower')
 api.add_resource(PowerLinesRoute.PowerLineTowerPagesRoute,'/gis/api/v1.0/tower/pages')
+api.add_resource(PowerLinesRoute.PowerLineTowerDeleteRoute,'/gis/api/v1.0/towerDelete')
 
 api.add_resource(PowerLinesRoute.PowerLineTowerQueryRoute,'/gis/api/v1.0/tower/query')
 api.add_resource(PowerLinesRoute.PowerLineTowerAdd,'/gis/api/v1.0/tower/add')
 
-api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/gis/api/v1.0/uploadphoto')
+api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/gis/api/v1.0/photo')
 #api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/gis/api/v1.0/photozip')
 #api.add_resource(PowerLinesRoute.PwoerLinePhotoTypeRoute,'/gis/api/v1.0/photo/types')
 

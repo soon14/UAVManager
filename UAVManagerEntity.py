@@ -159,6 +159,7 @@ class Lines(EntityBase):
     lines_voltage = Column(String(45))
     lines_work_team = Column(String(45))
     lines_incharge = Column(String(45))
+    deleted = Column(Integer)
 
 class Towers(EntityBase):
     __tablename__='tb_tower'
@@ -170,6 +171,7 @@ class Towers(EntityBase):
     tower_lat=Column(FLOAT)
     tower_lng=Column(FLOAT)
     tower_elevation=Column(FLOAT)
+    deleted = Column(Integer)
 
 class Photo(EntityBase):
     __tablename__="tb_photo"

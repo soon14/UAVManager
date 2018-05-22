@@ -29,16 +29,30 @@ session_power = Session_Power()
 
 class LinesDao:
     def query_lines(self):
-        rs = session_power.query(Lines).all()
+        rs = session_power.query(Lines).filter(Lines.deleted==0).all()
         return class_to_dict(rs)
 
     def query_line(self,lineID):
-        rs = session_power.query(Lines).filter(Lines.lines_id==lineID).all()
+        rs = session_power.query(Lines).filter(Lines.lines_id==lineID,Lines.deleted==0).all()
         return class_to_dict(rs)
 
-    def query_line_pages(self,page_size,page_index):
-        lines=session_power.query(Lines).limit(page_size).offset((page_index - 1) * page_size).all()
+    def query_line_pages(self,work_team,page_size,page_index):
+        q = session_power.query(Lines)
+        if work_team:
+            q = q.filter(Lines.lines_work_team == work_team)
+        lines=q.filter(Lines.deleted==0).limit(page_size).offset((page_index - 1) * page_size).all()
         return class_to_dict(lines)
+
+    def query_line_delete(self,user,lineid):
+        line = session_power.query(Lines.lines_id==lineid).first()
+        line.deleted=1
+        session_power.commit()
+
+        towers = session_power.query(Towers.tower_linename==line.lines_name).all()
+        for tower in towers:
+            tower.deleted=1
+            session_power.commit()
+        return 1
 
     def query_line_condition(self,user,voltage,work_team,line_name,page_size,page_index):
         q = session_power.query(Lines)
@@ -50,7 +64,7 @@ class LinesDao:
             q = q.filter(Lines.lines_work_team == work_team)
         if line_name:
             q = q.filter(Lines.lines_name == line_name)
-        lines = q.all()
+        lines = q.filter(Lines.deleted==0).all()
         linenames=[]
         for line in lines:
             linenames.append(line.lines_name)
@@ -70,7 +84,7 @@ class LinesDao:
             q = q.filter(Lines.lines_work_team == work_team)
         if line_name:
             q = q.filter(Lines.lines_name == line_name)
-        lines = q.all()
+        lines = q.filter(Lines.deleted==0).all()
         linenames = []
         for line in lines:
             linenames.append(line.lines_name)
@@ -80,7 +94,7 @@ class LinesDao:
         return  item
 
     def query_line_pagesNumber(self,user,page_size):
-        page_line=session_power.query(Lines).count()/page_size+1
+        page_line=session_power.query(Lines).filter(Lines.deleted==0).count()/page_size+1
         item = {}
         item['pages'] = page_line
         return  item
@@ -132,12 +146,12 @@ class LinesDao:
 
 class TowerDao:
     def query_towers_all(self):
-        rs = session_power.query(Towers).all()
+        rs = session_power.query(Towers).filter(Towers.deleted==0).all()
         return class_to_dict(rs)
 
     def query_towers(self,linename):
         if linename is not None:
-            rs = session_power.query(Towers).filter(Towers.tower_linename==linename).all()
+            rs = session_power.query(Towers).filter(Towers.tower_linename==linename,Towers.deleted==0).all()
             return class_to_dict(rs)
         else:
             return self.query_towers_all()
@@ -163,6 +177,12 @@ class TowerDao:
         else:
             return -1
 
+    def del_tower(self,user,towersid):
+        tower=session_power.query(Towers).filter(Towers.tower_id==towersid).first()
+        tower.deleted=1
+        session_power.commit()
+        return 1
+
 class PhotoDao:
     def query_photos(self):
         rs = session_power.query(Photo).all()
@@ -185,7 +205,7 @@ class PhotoDao:
     def add_photo(self,voltage,line_id,tower_id,classify,path):
         #是否进行判断
         line = session_power.query(Lines).filter(Lines.lines_id==line_id).first()
-        photo = Photo(photo_voltage=voltage,photo_line=line_id,photo_tower_id=tower_id,photo_path=path,photo_classify=classify)
+        photo = Photo(photo_line=line_id,photo_tower_id=tower_id,photo_path=path,photo_classify=classify)
         session_power.add(photo)
         session_power.commit()
         return 1
