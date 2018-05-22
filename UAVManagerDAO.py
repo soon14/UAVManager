@@ -1311,7 +1311,7 @@ class ApprovalDao:
             return None
 
     #批准借调
-    def approval_aggre(self,user,approval):
+    def approval_aggree(self,user,approval):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
 

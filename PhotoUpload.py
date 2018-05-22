@@ -14,12 +14,14 @@ from werkzeug import secure_filename
 from PowerLineDao import PhotoDao
 from UAVManagerDAO import UserDAO
 from UAVManagerEntity import Photo
-
+import datetime
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 cf = ConfigParser.ConfigParser()
 cf.read("config.conf")
 save_folder = cf.get("picture","UPLOAD_FOLDER")
+save__picture_folder = cf.get("picture","IMAGE_UPLOAD_FOLDER")
 database_folder = cf.get("picture","DATABASEFOLDER")
+nowTime=datetime.datetime.now().strftime('%Y%m%d')
 
 class FileUpload(Resource):
     def __init__(self):
@@ -56,5 +58,25 @@ class FileUpload(Resource):
             rs = self.photoDao.add_photo(voltage,line_id,tower_id,classify,os.path.join(db_folder, filename))
             if rs == 1:
                 return make_response(jsonify({'seccess': 'upload success'}), 200)
+        else:
+            return make_response(jsonify({'error': 'param error'}), 401)
+
+class ImageUpload(Resource):
+
+    def allowed_file(self,filename):
+        return '.' in filename and \
+               filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+    def post(self):
+        if (request.form != ""):
+            image = request.files['image']
+
+            file_folder = save__picture_folder+'/'+nowTime
+            if not os.path.isdir(file_folder):
+                os.makedirs(file_folder)
+            if image and self.allowed_file(image.filename):
+                filename = secure_filename(image.filename)
+                image.save(os.path.join(file_folder, filename))
+                return make_response(jsonify({'seccess': 'image upload success'}), 200)
         else:
             return make_response(jsonify({'error': 'param error'}), 401)

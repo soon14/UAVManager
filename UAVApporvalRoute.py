@@ -96,7 +96,7 @@ class UAVApprovalAgree(Resource):
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
-            rs=self.dao.approval_agree(user,approval)
+            rs=self.dao.approval_aggree(user,approval)
             if rs==None:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:

@@ -93,8 +93,11 @@ class LinesDao:
         item['pages'] = towersNum
         return  item
 
-    def query_line_pagesNumber(self,user,page_size):
-        page_line=session_power.query(Lines).filter(Lines.deleted==0).count()/page_size+1
+    def query_line_pagesNumber(self,user,work_team,page_size):
+        q = session_power.query(Lines)
+        if work_team is not None:
+            q = q.filter(Lines.lines_work_team == work_team)
+        page_line=q.filter(Lines.deleted==0).count()/page_size+1
         item = {}
         item['pages'] = page_line
         return  item

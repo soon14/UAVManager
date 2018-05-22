@@ -234,11 +234,12 @@ class PowerLineListPages(Resource):
              data = json.loads(request.data)
              token = data['token']
              args = parser.parse_args()
+             work_team = args.get('work_team')
              page_size = args.get('page_size')
              user = self.userDao.verify_token(token, '')
              if (not user):
                   return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-             rs=self.dao.query_line_pagesNumber(user,page_size)
+             rs=self.dao.query_line_pagesNumber(user,work_team,page_size)
              if rs==None:
                   return make_response(jsonify({'error': 'Unauthorized access'}), 401)
              else:
