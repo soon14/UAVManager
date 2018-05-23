@@ -131,7 +131,10 @@ class LinesDao:
         roles=usrDao.get_role(user)
         if '3' in roles:
             session_power.add(line)
-            session_power.commit()
+            try:
+                session_power.commit()
+            except:
+                session_power.rollback()
             return 1
         else:
             return -1
@@ -142,7 +145,10 @@ class LinesDao:
         if '3' in roles:
             for item in lines:
                 session_power.add(item)
-                session_power.commit()
+                try:
+                    session_power.commit()
+                except:
+                    session_power.rollback()
                 return 1
         else:
             return -1
@@ -164,7 +170,10 @@ class TowerDao:
         roles=usrDao.get_role(user)
         if '3' in roles:
             session_power.add(tower)
-            session_power.commit()
+            try:
+                session_power.commit()
+            except:
+                session_power.rollback()
             return 1
         else:
             return -1
@@ -175,7 +184,10 @@ class TowerDao:
         if '3' in roles:
             for item in towers:
                 session_power.add(item)
-                session_power.commit()
+                try:
+                    session_power.commit()
+                except:
+                    session_power.rollback()
                 return 1
         else:
             return -1
@@ -183,7 +195,10 @@ class TowerDao:
     def del_tower(self,user,towersid):
         tower=session_power.query(Towers).filter(Towers.tower_id==towersid).first()
         tower.deleted=1
-        session_power.commit()
+        try:
+            session_power.commit()
+        except:
+            session_power.rollback()
         return 1
 
 class PhotoDao:
@@ -200,7 +215,10 @@ class PhotoDao:
         roles=usrDao.get_role(user)
         if '3' in roles:
             session_power.add(photo)
-            session_power.commit()
+            try:
+                session_power.commit()
+            except:
+                session_power.rollback()
             return 1
         else:
             return -1
@@ -210,7 +228,10 @@ class PhotoDao:
         line = session_power.query(Lines).filter(Lines.lines_id==line_id).first()
         photo = Photo(photo_line=line_id,photo_tower_id=tower_id,photo_path=path,photo_classify=classify)
         session_power.add(photo)
-        session_power.commit()
+        try:
+            session_power.commit()
+        except:
+            session_power.rollback()
         return 1
 
     def add_photos(self,user,photos):
@@ -219,7 +240,10 @@ class PhotoDao:
         if '3' in roles:
             for item in photos:
                 session_power.add(item)
-                session_power.commit()
+                try:
+                    session_power.commit()
+                except:
+                    session_power.rollback()
                 return 1
         else:
             return -1

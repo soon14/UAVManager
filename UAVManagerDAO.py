@@ -207,6 +207,7 @@ class DeviceDAO:
                 sql = 'select device_type, count(device_type) from tb_device group by device_type;'
 
             rs = session_uav.execute(sql).fetchall()
+            session_uav.rollback()
             ret = []
             for i in rs:
                 item = {}
@@ -908,30 +909,54 @@ class ManagerDAO:
                             if idx==1:
                                 obj = Manager(device_id=uav_id, device_ver=device.device_ver,device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                                 session_uav.add(obj)
-                                session_uav.commit()
+                                try:
+                                    session_uav.commit()
+                                except:
+                                    session_uav.rollback()
                                 session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
-                                session_uav.commit()
+                                try:
+                                    session_uav.commit()
+                                except:
+                                    session_uav.rollback()
                                 return 1
                             if idx==2:
                                 obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver, borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用', return_date=return_time)
                                 session_uav.add(obj)
-                                session_uav.commit()
+                                try:
+                                    session_uav.commit()
+                                except:
+                                    session_uav.rollback()
                                 session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
-                                session_uav.commit()
+                                try:
+                                    session_uav.commit()
+                                except:
+                                    session_uav.rollback()
                                 return 1
                             if idx==3:
                                 obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                                 session_uav.add(obj)
-                                session_uav.commit()
+                                try:
+                                    session_uav.commit()
+                                except:
+                                    session_uav.rollback()
                                 session_uav.query(Parts).filter(Parts.parts_id == uav_id).update({Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
-                                session_uav.commit()
+                                try:
+                                    session_uav.commit()
+                                except:
+                                    session_uav.rollback()
                                 return 1
                             if idx==4:
                                 obj = Manager(device_id=uav_id, device_ver=pad.device_ver,device_type=pad.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                                 session_uav.add(obj)
-                                session_uav.commit()
+                                try:
+                                    session_uav.commit()
+                                except:
+                                    session_uav.rollback()
                                 session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
-                                session_uav.commit()
+                                try:
+                                    session_uav.commit()
+                                except:
+                                    session_uav.rollback()
                                 return 1
                             #借调申请记录的处理
                             approvalDao = ApprovalDao()
@@ -949,30 +974,54 @@ class ManagerDAO:
                     if idx == 1:
                         obj = Manager(device_id=uav_id, device_ver=device.device_ver, device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                         session_uav.add(obj)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         return 1
                     if idx == 2:
                         obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                         session_uav.add(obj)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         return 1
                     if idx == 3:
                         obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                         session_uav.add(obj)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         session_uav.query(Parts).filter(Parts.parts_id == uav_id).update({Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         return 1
                     if idx == 4:
                         obj = Manager(device_id=uav_id, device_ver=pad.device_ver,device_type=pad.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                         session_uav.add(obj)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         return 1
                     return 1
                 else:
@@ -985,30 +1034,54 @@ class ManagerDAO:
                     if idx == 1:
                         obj = Manager(device_id=uav_id, device_ver=device.device_ver,device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用', return_date=return_time)
                         session_uav.add(obj)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         return 1
                     if idx == 2:
                         obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                         session_uav.add(obj)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         return 1
                     if idx == 3:
                         obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                         session_uav.add(obj)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         session_uav.query(Parts).filter(Parts.parts_id == uav_id).update({Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         return 1
                     if idx == 4:
                         obj = Manager(device_id=uav_id, device_ver=pad.device_ver, device_type=pad.device_type, approver_name=approver, borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                         session_uav.add(obj)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
-                        session_uav.commit()
+                        try:
+                            session_uav.commit()
+                        except:
+                            session_uav.rollback()
                         return 1
                 else:
                     return -1
@@ -1016,33 +1089,57 @@ class ManagerDAO:
                 if idx == 1:
                     obj = Manager(device_id=uav_id, device_ver=device.device_ver,device_type=device.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                     session_uav.add(obj)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                     if  device.device_use_number is None:
                         session_uav.query(Device).filter(Device.device_id == int(uav_id)).update({Device.device_status: '出库', Device.device_use_number: 1},synchronize_session=False)
                     else:
                         session_uav.query(Device).filter(Device.device_id == int(uav_id)).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                     return 1
                 if idx == 2:
                     obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用', return_date=return_time)
                     session_uav.add(obj)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                     session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                     return 1
                 if idx == 3:
                     obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                     session_uav.add(obj)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                     session_uav.query(Parts).filter(Parts.parts_id == uav_id).update( {Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                     return 1
                 if idx == 4:
                     obj = Manager(device_id=uav_id, device_ver=pad.device_ver,device_type=pad.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                     session_uav.add(obj)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                     session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                     return 1
             else:
                 return -1
@@ -1071,22 +1168,37 @@ class ManagerDAO:
 
             if idx!=0:
                 session_uav.query(Manager).filter(Manager.device_id == manager.device_id and Manager.manager_status=='借用').update({Manager.manager_status: '归还',Manager.return_date:return_date,Manager.return_desc:return_desc}, synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
             else:
                 return -1
 
             if idx==1:
                 session_uav.query(Device).filter(Device.device_id == manager.device_id).update({Device.device_status: '在库'},synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
             if idx==2:
                 session_uav.query(Battery).filter(Battery.battery_id == manager.device_id).update({Battery.battery_status: '在库'},synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
             if idx==3:
                 session_uav.query(Parts).filter(Parts.parts_id == manager.device_id).update({Parts.parts_status: '在库'},synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
             if idx==4:
                 session_uav.query(Pad).filter(Pad.pad_id == manager.device_id).update({Pad.pad_status: '在库'},synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
             return 1
 
     def manager_query_device(self,device_id,retruntime,approver):

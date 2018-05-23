@@ -159,8 +159,6 @@ api.add_resource(PowerLinesRoute.PowerLineTowerQueryRoute,'/gis/api/v1.0/tower/q
 api.add_resource(PowerLinesRoute.PowerLineTowerAdd,'/gis/api/v1.0/tower/add')
 
 api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/gis/api/v1.0/photo')
-#api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/gis/api/v1.0/photozip')
-#api.add_resource(PowerLinesRoute.PwoerLinePhotoTypeRoute,'/gis/api/v1.0/photo/types')
 
 
 if __name__ == '__main__':

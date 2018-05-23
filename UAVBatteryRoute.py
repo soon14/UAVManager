@@ -129,7 +129,11 @@ class UAVBatteryListPages(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
-            page_size = data['page_size']
+
+            args = parser.parse_args()
+            battery_status = args.get('battery_status')
+            battery_type   = args.get('battery_type')
+            page_size = args.get('page_size')
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
