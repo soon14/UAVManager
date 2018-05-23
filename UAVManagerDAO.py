@@ -55,6 +55,7 @@ class UserDAO:
             return False
 
         usr=session_usr.query(User).filter(User.user_id==username).first()
+        session_usr.rollback()
         if(not usr or usr.user_password!=md5_key(password)):
             return False
         else:
@@ -69,6 +70,7 @@ class UserDAO:
         except BadSignature:
             return None # invalid token
         usr=session_usr.query(User).filter(User.user_id == data['id']).first()
+        session_usr.rollback()
         return usr
 
     #insert obj into table
@@ -77,21 +79,28 @@ class UserDAO:
         if '5' in roles and '6' not in roles:
             if user.user_team==user_login.user_role:
                 session_usr.add(user)
-                rs=session_usr.commit()
+                try:
+                    session_usr.commit()
+                except:
+                    session_usr.rollback()
                 return rs
             else:
                 return -1
         elif '6' in roles:
             session_usr.add(user)
-            rs = session_usr.commit()
+            try:
+                session_usr.commit()
+            except:
+                session_usr.rollback()
             return rs
         else:
             return -1
     
     #get obj by id
     def get_user_byId(self,userid):
-        session_usr.query(User).filter(User.user_id==userid)
-        return session_usr.commit()
+        user=session_usr.query(User).filter(User.user_id==userid).first()
+        session_usr.rollback()
+        return user
 
     #get obj by name
     def get_user_byName(self,name):
@@ -99,11 +108,13 @@ class UserDAO:
             return -1
         else:
             usr=session_usr.query(User).filter(User.user_id==name).first()
+            session_usr.rollback()
             return usr
 
     #authority
     def get_role(self,user):
         rs = session_usr.query(Role).filter(Role.role_id==user.user_role).first()
+        session_usr.rollback()
         role = rs.role_basic.split(',')
         return role
 
@@ -111,6 +122,7 @@ class UserDAO:
         roles = self.get_role(user)
         if '5' in roles or '6' in roles:
             rs = session_usr.query(User).all()
+            session_usr.rollback()
             return class_to_dict(rs)
         else:
             return None
@@ -121,9 +133,11 @@ class DeviceDAO:
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
             rs=session_uav.query(Device).filter(Device.user_team==user.user_team).all()
+            session_uav.rollback()
             return class_to_dict(rs)
         elif '5' in roles:
             rs = session_uav.query(Device).all()
+            session_uav.rollback()
             return class_to_dict(rs)
         else:
             return None
@@ -147,11 +161,13 @@ class DeviceDAO:
         if '1' in roles and '5' not in roles:
             sql ='select count(*) from tb_device where user_team = '+'\'user_team\''
             rs=session_uav.query(Device).filter(Device.user_team==user.user_team).count()/page_size+1
+            session_uav.rollback()
             item = {}
             item['pages'] = rs
             return json.dumps(item)
         elif '5' in roles:
             rs=session_uav.query(Device).count()/page_size+1
+            session_uav.rollback()
             item = {}
             item['pages'] = rs
             return json.dumps(item)
@@ -180,6 +196,7 @@ class DeviceDAO:
         if device_status:
             q = q.filter(Device.device_status == device_status)
         device=q.limit(page_size).offset((page_index-1)*page_size).all()
+        session_uav.rollback()
         return  class_to_dict(device)
 
     def query_statistic(self,user,device_status):
@@ -225,6 +242,7 @@ class DeviceDAO:
         if '1' in roles and '5' not in roles:
             sql = 'select device_type from tb_device where user_team=\'' + user.user_team + '\' group by device_type;'
             rs = session_uav.execute(sql).fetchall()
+            session_uav.rollback()
             ret=[]
             for idx in rs:
                 item = {}
@@ -257,6 +275,7 @@ class DeviceDAO:
     def query_type(self,user_team):
         sql = 'select device_type from tb_device group by device_type;'
         rs = session_uav.execute(sql).fetchall()
+        session_uav.rollback()
         ret = []
         for i in rs:
             item = {}
@@ -267,6 +286,7 @@ class DeviceDAO:
     def query_ver(self):
         sql = 'select device_ver from tb_device group by device_ver;'
         rs = session_uav.execute(sql).fetchall()
+        session_uav.rollback()
         ret = []
         for i in rs:
             item = {}
@@ -277,6 +297,7 @@ class DeviceDAO:
     def query_type(self):
         sql = 'select device_type from tb_device group by device_type;'
         rs = session_uav.execute(sql).fetchall()
+        session_uav.rollback()
         ret = []
         for i in rs:
             item = {}
@@ -289,7 +310,10 @@ class DeviceDAO:
         roles=usrDao.get_role(usr)
         if '2' in roles:
             session_uav.add(device)
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
             return -1
@@ -308,10 +332,13 @@ class DeviceDAO:
             uav.uad_camera =device.uad_camera
             uav.uav_yuntai =device.uav_yuntai
             uav.uad_rcontrol =device.uad_rcontrol
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
-            return -1;
+            return -1
 
     def modify_device_status(self,usr,device_id,status):
         usrDao=UserDAO()
@@ -319,10 +346,13 @@ class DeviceDAO:
         if '3' in roles:
             uav=session_uav.query(Device).filter(Device.device_id == device_id).first()
             uav.device_status=status
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
-            return -1;
+            return -1
 
 class BatteryDAO:
     def query_all(self,user):
@@ -330,9 +360,11 @@ class BatteryDAO:
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
             rs=session_uav.query(Battery).filter(Battery.user_team==user.user_team).all()
+            session_uav.rollback()
             return class_to_dict(rs)
         elif '5' in roles:
             rs = session_uav.query(Battery).all()
+            session_uav.rollback()
             return class_to_dict(rs)
         else:
             return None
@@ -479,7 +511,10 @@ class BatteryDAO:
         roles=usrDao.get_role(usr)
         if '2' in roles:
             session_uav.add(battery)
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback())
             return 1
         else:
             return -1
@@ -494,10 +529,13 @@ class BatteryDAO:
             batteryobj.battery_fact = battery.battery_fact
             batteryobj.battery_date = battery.battery_date
             batteryobj.user_team = battery.battery_date
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
-            return -1;
+            return -1
 
     def modify_battery_status(self,usr,battery_id,status):
         usrDao=UserDAO()
@@ -505,10 +543,13 @@ class BatteryDAO:
         if '3' in roles:
             battery=session_uav.query(Battery).filter(Battery.battery_id==battery_id).first()
             battery.battery_status=status
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
-            return -1;
+            return -1
 
 class PadDao:
     def query_all(self,user):
@@ -620,7 +661,10 @@ class PadDao:
         roles=usrDao.get_role(usr)
         if '2' in roles:
             session_uav.add(pad)
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
             return -1
@@ -635,10 +679,13 @@ class PadDao:
             padtmp.pad_fact = pad.pad_fact
             padtmp.pad_date = pad.pad_date
             padtmp.user_team = pad.user_team
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
-            return -1;
+            return -1
 
     def modify_pad_status(self,usr,pad_id,status):
         usrDao=UserDAO()
@@ -646,10 +693,13 @@ class PadDao:
         if '3' in roles:
             pad=session_uav.query(Pad).filter(Pad.pad_id == pad_id).first()
             pad.pad_status=status
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
-            return -1;
+            return -1
 
 #配件
 class PartsDao:
@@ -758,7 +808,10 @@ class PartsDao:
         roles=usrDao.get_role(usr)
         if '2' in roles:
             session_uav.add(parts)
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
             return -1
@@ -773,10 +826,13 @@ class PartsDao:
             partstmp.parts_fact = parts.parts_fact
             partstmp.parts_date = parts.parts_date
             partstmp.user_team = parts.user_team
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
-            return -1;
+            return -1
 
     def modify_parts_status(self,usr,parts_id,status):
         usrDao=UserDAO()
@@ -784,10 +840,13 @@ class PartsDao:
         if '3' in roles:
             parts=session_uav.query(Parts).filter(Parts.parts_id==parts_id).first()
             parts.parts_status=status
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
-            return -1;
+            return -1
 
 #出入库管理
 class ManagerDAO:
@@ -893,6 +952,7 @@ class ManagerDAO:
 
         #判断是否是一个班组
         usr=session_usr.query(User).filter(User.user_name==borrower).first()
+        session_usr.rollback()
         #如果用户不存在
         if usr==None:
             return -1
@@ -1335,46 +1395,76 @@ class FaultDao:
         if '2' in roles and '5' not in roles:
             if device.user_team==user.user_team:
                 session_uav.add(fault)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
                 if idx == 1:
                     session_uav.query(Device).filter(Device.device_id == fault.device_id).update(
                         {Device.device_status: '维修'}, synchronize_session=False)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                 if idx == 2:
                     session_uav.query(Battery).filter(Battery.battery_id == fault.device_id).update(
                         {Battery.battery_status: '维修'}, synchronize_session=False)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                 if idx == 3:
                     session_uav.query(Parts).filter(Parts.parts_id == fault.device_id).update(
                         {Parts.parts_status: '维修'}, synchronize_session=False)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                 if idx == 4:
                     session_uav.query(Pad).filter(Pad.pad_id == fault.device_id).update({Pad.pad_status: '维修'},
                                                                                           synchronize_session=False)
-                    session_uav.commit()
+                    try:
+                        session_uav.commit()
+                    except:
+                        session_uav.rollback()
                 return 1
             else :
                 return -1
         if '5' in roles:
             session_uav.add(fault)
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
 
             if idx == 1:
                 session_uav.query(Device).filter(Device.device_id == fault.device_id).update(
                     {Device.device_status: '维修'}, synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
             if idx == 2:
                 session_uav.query(Battery).filter(Battery.battery_id == fault.device_id).update(
                     {Battery.battery_status: '维修'}, synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
             if idx == 3:
                 session_uav.query(Parts).filter(Parts.parts_id == fault.device_id).update(
                     {Parts.parts_status: '维修'}, synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
             if idx == 4:
                 session_uav.query(Pad).filter(Pad.pad_id == fault.device_id).update({Pad.pad_status: '维修'},
                                                                                     synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
             return 1
 
         return -1
@@ -1403,7 +1493,10 @@ class FaultReportDao:
             rs.fault_crash_damage = faultreport.fault_crash_damage
             rs.fault_crash_electric = faultreport.fault_crash_electric
             rs.fault_crash_around = faultreport.fault_crash_around
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
             return -1
@@ -1431,7 +1524,10 @@ class ApprovalDao:
             if user.user_team == approval.approval_team:
                 session_uav.query(Approval).filter(Approval.apply_person == approval.apply_person).update(
                     {Approval.approval_status: 1}, synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
 
     def approval_disagree(self,user,approval):
         usrDao=UserDAO()
@@ -1441,7 +1537,10 @@ class ApprovalDao:
             if user.user_team == approval.approval_team:
                 session_uav.query(Approval).filter(Approval.apply_person == approval.apply_person).update(
                     {Approval.approval_status: 2}, synchronize_session=False)
-                session_uav.commit()
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
 
     def approval_add(self,user,approval):
         usrDao=UserDAO()
@@ -1455,7 +1554,10 @@ class ApprovalDao:
                 self.approval_finished(approval.apply_person)
             
             session_uav.merge(approval)
-            session_uav.commit()
+            try:
+                session_uav.commit()
+            except:
+                session_uav.rollback()
             return 1
         else:
             return -2
@@ -1474,6 +1576,12 @@ class ApprovalDao:
         approval_db.approval_status=approval_cur.approval_status
 
         session_uav.add(approval_db)
-        session_uav.commit()
+        try:
+            session_uav.commit()
+        except:
+            session_uav.rollback()
         session_uav.delete(approval_cur)
-        session_uav.commit()
+        try:
+            session_uav.commit()
+        except:
+            session_uav.rollback()

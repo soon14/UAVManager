@@ -46,12 +46,17 @@ class LinesDao:
     def query_line_delete(self,user,lineid):
         line = session_power.query(Lines.lines_id==lineid).first()
         line.deleted=1
-        session_power.commit()
+        try:
+            session_power.commit()
+        except:
+            session_power.rollback()
 
         towers = session_power.query(Towers.tower_linename==line.lines_name).all()
         for tower in towers:
-            tower.deleted=1
-            session_power.commit()
+            try:
+                session_power.commit()
+            except:
+                session_power.rollback()
         return 1
 
     def query_line_condition(self,user,voltage,work_team,line_name,page_size,page_index):
