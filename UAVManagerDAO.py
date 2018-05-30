@@ -338,14 +338,14 @@ class DeviceDAO:
 
             #存在则修改
             uav.device_ver=device.device_ver
-            uav.device_type =device.device_type
-            uav.uad_code =device.uad_code
-            uav.device_fact =device.device_fact
-            uav.device_date =device.device_date
-            uav.user_team =device.user_team
-            uav.uad_camera =device.uad_camera
-            uav.uav_yuntai =device.uav_yuntai
-            uav.uad_rcontrol =device.uad_rcontrol
+            uav.device_type=device.device_type
+            uav.uad_code=device.uad_code
+            uav.device_fact=device.device_fact
+            uav.device_date=device.device_date
+            uav.user_team=device.user_team
+            uav.uad_camera=device.uad_camera
+            uav.uav_yuntai=device.uav_yuntai
+            uav.uad_rcontrol=device.uad_rcontrol
 
             try:
                 session_uav.commit()
@@ -429,6 +429,7 @@ class BatteryDAO:
         if bttery_status:
             q = q.filter(Battery.battery_status == bttery_status)
         battery=q.limit(page_size).offset((page_index-1)*page_size).all()
+        session_uav.rollback()
         return class_to_dict(battery)
 
     def query_statistic(self,user,bttery_status):
@@ -755,7 +756,7 @@ class PartsDao:
             item['pages'] = rs
             return json.dumps(item)
         elif '5' in roles:
-            rs=session_uav.query(Battery).count()/page_size+1
+            rs=session_uav.query(Parts).count()/page_size+1
             item = {}
             item['pages'] = rs
             return json.dumps(item)
@@ -1296,6 +1297,7 @@ class ManagerDAO:
         battery = session_uav.query(Battery).filter(Battery.battery_id == device_id).first()
         part = session_uav.query(Battery).filter(Parts.parts_id == device_id).first()
         pad = session_uav.query(Battery).filter(Pad.pad_id == device_id).first()
+        session_uav.rollback()
         idx = 0
         if device:
             idx = 1
@@ -1357,6 +1359,7 @@ class FaultDao:
         if device_ver:
             q = q.filter(Fault.device_ver == device_ver)
         allFaults = q.limit(page_size).offset((page_index-1)*page_size).all()
+        session_uav.rollback()
         return class_to_dict(allFaults)
 
     def query_pages(self,page_size):
@@ -1369,8 +1372,11 @@ class FaultDao:
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
+            #故障原因
             sql = 'select fault_reason,count(*) from tb_fault where user_team=\'' + user.user_team + '\' group by fault_reason;'
             rs = session_uav.execute(sql).fetchall()
+            session_uav.rollback()
+
             ret = []
             for i in rs:
                 item = {}

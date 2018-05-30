@@ -27,6 +27,7 @@ parser.add_argument('device_status',type=str,location='args')
 parser.add_argument('page_index',type=int,required=True,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
 
+#分页导出无人机
 class UAVDeviceList(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -45,6 +46,25 @@ class UAVDeviceList(Resource):
             page_index = args.get('page_index')
             page_size = args.get('page_size')
             return self.dao.query_condition(user, None, None, device_type, None, device_status, page_index, page_size)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class UAVDeviceAll(Resource):
+    def __init__(self):
+        self.dao = DeviceDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return self.dao.query_all(user)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
@@ -71,7 +91,7 @@ class UAVDeviceListPages(Resource):
         return self.post()
 
 #根据设备id查询无人机（设备id的参数在url中）
-class UAVDeviceManagerSearch(Resource):
+class UAVDeviceGetID(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
         self.userDao = UserDAO()
@@ -80,6 +100,7 @@ class UAVDeviceManagerSearch(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
+            device_id = data['device_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)

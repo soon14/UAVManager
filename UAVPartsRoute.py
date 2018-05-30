@@ -47,6 +47,26 @@ class UAVPartsList(Resource):
     def get(self):
         return self.post()
 
+class UAVPartsGetID(Resource):
+    def __init__(self):
+        self.dao = PartsDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            parts_id=data['parts_id']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return self.dao.query_condition(user, parts_id, None, None, None, 1, 1)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
 #查询配件总页数
 class UAVPartsListPages(Resource):
     def __init__(self):

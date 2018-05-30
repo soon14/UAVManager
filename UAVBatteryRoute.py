@@ -47,6 +47,26 @@ class UAVBatteryList(Resource):
     def get(self):
         return self.post()
 
+class UAVBatteryGetID(Resource):
+    def __init__(self):
+        self.dao = BatteryDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            battery_id = data['battery_id']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return self.dao.query_condition(user, battery_id, None, None,None,1, 1)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
 #查询所有电池装填
 class UAVBatteryStatisticsList(Resource):
     def __init__(self):

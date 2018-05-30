@@ -80,7 +80,8 @@ api.add_resource(UAVManagerRoute.ManagerListPageNum,'/uavmanager/api/v1.0/manage
 
 #device related api
 api.add_resource(UAVDeviceRoute.UAVDeviceList,'/uavmanager/api/v1.0/devices')
-api.add_resource(UAVDeviceRoute.UAVDeviceManagerSearch,'/uavmanager/api/v1.0/device/<int:id>')
+api.add_resource(UAVDeviceRoute.UAVDeviceAll,'/uavmanager/api/v1.0/devices/all')
+api.add_resource(UAVDeviceRoute.UAVDeviceGetID,'/uavmanager/api/v1.0/device/id')
 api.add_resource(UAVDeviceRoute.UAVDeviceManagerStatisticList,'/uavmanager/api/v1.0/device/statistics/all')
 api.add_resource(UAVDeviceRoute.UAVDeviceManagerStatistic,'/uavmanager/api/v1.0/device/statistic/<string:status>')
 api.add_resource(UAVDeviceRoute.UAVDeviceTypes,'/uavmanager/api/v1.0/device/types')
@@ -92,6 +93,7 @@ api.add_resource(UAVDeviceRoute.UAVDeviceModify,'/uavmanager/api/v1.0/device/mod
 
 #battery related api
 api.add_resource(UAVBatteryRoute.UAVBatteryList,'/uavmanager/api/v1.0/batteries')
+api.add_resource(UAVBatteryRoute.UAVBatteryGetID,'/uavmanager/api/v1.0/battery/id')
 api.add_resource(UAVBatteryRoute.UAVBatteryStatisticsList,'/uavmanager/api/v1.0/battery/statistics/all')
 api.add_resource(UAVBatteryRoute.UAVBatteryStatistic,'/uavmanager/api/v1.0/battery/statistic/<string:battery_status>')
 api.add_resource(UAVBatteryRoute.UAVBatteryTypes,'/uavmanager/api/v1.0/battery/types')
@@ -102,6 +104,7 @@ api.add_resource(UAVBatteryRoute.UAVBatteryModify,'/uavmanager/api/v1.0/battery/
 
 #parts related api
 api.add_resource(UAVPartsRoute.UAVPartsList,'/uavmanager/api/v1.0/parts')
+api.add_resource(UAVPartsRoute.UAVPartsGetID,'/uavmanager/api/v1.0/parts/id')
 api.add_resource(UAVPartsRoute.UAVPartsStatistic,'/uavmanager/api/v1.0/parts/statistic/<string:parts_status>')
 api.add_resource(UAVPartsRoute.UAVPartsTypes,'/uavmanager/api/v1.0/parts/types')
 api.add_resource(UAVPartsRoute.UAVPartsListPages,'/uavmanager/api/v1.0/parts/pages')
@@ -111,6 +114,7 @@ api.add_resource(UAVPartsRoute.UAVPartsModify,'/uavmanager/api/v1.0/parts/modify
 
 #pad related api
 api.add_resource(UAVPadRoute.UAVPadList,'/uavmanager/api/v1.0/pad/list')
+api.add_resource(UAVPadRoute.UAVPadGetID,'/uavmanager/api/v1.0/pad/id')
 api.add_resource(UAVPadRoute.UAVPadListPages,'/uavmanager/api/v1.0/pad/pages')
 api.add_resource(UAVPadRoute.UAVPadTypes,'/uavmanager/api/v1.0/pad/types')
 api.add_resource(UAVPadRoute.UAVPadAdd,'/uavmanager/api/v1.0/pad/add')
