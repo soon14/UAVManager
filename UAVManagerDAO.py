@@ -62,6 +62,9 @@ class UserDAO:
             return True
     #verify token
     def verify_token(self,token,password):
+        if token is None:
+            return None
+
         s=Serializer(secret_key)
         try:
             data = s.loads(token)
@@ -309,6 +312,11 @@ class DeviceDAO:
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
         if '2' in roles:
+            #首先判断无人机是否存在
+            exist = session_uav.query(Device).filter(Device.device_id==device.device_id).first()
+            if exist is not None:
+                return -2
+            #不存在则添加
             session_uav.add(device)
             try:
                 session_uav.commit()
@@ -323,6 +331,12 @@ class DeviceDAO:
         roles=usrDao.get_role(usr)
         if '3' in roles:
             uav=session_uav.query(Device).filter(Device.device_id == device.device_id).first()
+
+            #无人机不存在
+            if uav is None:
+                return  -2
+
+            #存在则修改
             uav.device_ver=device.device_ver
             uav.device_type =device.device_type
             uav.uad_code =device.uad_code
@@ -332,6 +346,7 @@ class DeviceDAO:
             uav.uad_camera =device.uad_camera
             uav.uav_yuntai =device.uav_yuntai
             uav.uad_rcontrol =device.uad_rcontrol
+
             try:
                 session_uav.commit()
             except:
@@ -510,11 +525,16 @@ class BatteryDAO:
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
         if '2' in roles:
+            #首先判断是否存在
+            exist = session_uav.query(Battery).filter(Battery.battery_id==battery.battery_id).first()
+            if exist is not None:
+                return -2
+
             session_uav.add(battery)
             try:
                 session_uav.commit()
             except:
-                session_uav.rollback())
+                session_uav.rollback()
             return 1
         else:
             return -1
@@ -524,6 +544,9 @@ class BatteryDAO:
         roles=usrDao.get_role(usr)
         if '3' in roles:
             batteryobj=session_uav.query(Battery).filter(Battery.battery_id == battery.battery_id).first()
+            if batteryobj is None:
+                return -2
+
             batteryobj.battery_ver = battery.battery_ver
             batteryobj.battery_type = battery.battery_type
             batteryobj.battery_fact = battery.battery_fact
@@ -807,6 +830,10 @@ class PartsDao:
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
         if '2' in roles:
+            exist = session_uav.query(Parts.parts_id==parts.parts_id)
+            if exist is not None:
+                return -2
+
             session_uav.add(parts)
             try:
                 session_uav.commit()
@@ -821,6 +848,9 @@ class PartsDao:
         roles=usrDao.get_role(usr)
         if '3' in roles:
             partstmp=session_uav.query(Parts).filter(Parts.parts_id==parts.parts_id).first()
+            if partstmp is None:
+                return -2
+
             partstmp.parts_ver = parts.parts_ver
             partstmp.parts_type = parts.parts_type
             partstmp.parts_fact = parts.parts_fact
@@ -1176,7 +1206,7 @@ class ManagerDAO:
                         session_uav.rollback()
                     return 1
                 if idx == 3:
-                    obj = Manager(device_id=uav_id, device_ver=part.device_ver,device_type=part.device_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
+                    obj = Manager(device_id=uav_id, device_ver=part.parts_ver,device_type=part.parts_type, approver_name=approver,borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用',return_date=return_time)
                     session_uav.add(obj)
                     try:
                         session_uav.commit()

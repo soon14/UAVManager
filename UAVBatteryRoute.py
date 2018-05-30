@@ -47,7 +47,7 @@ class UAVBatteryList(Resource):
     def get(self):
         return self.post()
 
-
+#查询所有电池装填
 class UAVBatteryStatisticsList(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -72,7 +72,7 @@ class UAVBatteryStatisticsList(Resource):
     def get(self):
         return self.post()
 
-
+#查询电池统计信息
 class UAVBatteryStatistic(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -97,7 +97,7 @@ class UAVBatteryStatistic(Resource):
     def get(self,battery_status):
         return self.post(battery_status)
 
-
+#查询电池的类型
 class UAVBatteryTypes(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -119,7 +119,7 @@ class UAVBatteryTypes(Resource):
     def get(self):
         return self.post()
 
-
+#根据电池的状态和类型查询电池分页的页数
 class UAVBatteryListPages(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -142,7 +142,7 @@ class UAVBatteryListPages(Resource):
     def get(self):
         return self.post()
 
-
+#添加电池 成功则返回1
 class UAVBatteryAdd(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -178,7 +178,7 @@ class UAVBatteryAdd(Resource):
     def get(self):
         return self.post()
 
-
+#修改电池状态
 class UAVBatteryStatus(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -205,6 +205,7 @@ class UAVBatteryStatus(Resource):
     def get(self):
         return self.post()
 
+#修改电池信息
 class UAVBatteryModify(Resource):
     def __init__(self):
         self.dao = BatteryDAO()

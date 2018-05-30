@@ -51,6 +51,7 @@ class UAVDeviceList(Resource):
     def get(self):
         return self.post()
 
+#分页查询时查询总页数
 class UAVDeviceListPages(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -69,6 +70,7 @@ class UAVDeviceListPages(Resource):
     def get(self):
         return self.post()
 
+#根据设备id查询无人机（设备id的参数在url中）
 class UAVDeviceManagerSearch(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -148,6 +150,7 @@ class UAVDeviceManagerSearch(Resource):
             else:
                 return make_response(jsonify({'error': 'Data Format Rrror'}), 401)
 
+#出无人机设备统计图（设备状态的参数在url中）
 class UAVDeviceManagerStatistic(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -172,6 +175,7 @@ class UAVDeviceManagerStatistic(Resource):
     def get(self,status):
         return self.post(status)
 
+#无人机设备统计图（统计所有设备）
 class UAVDeviceManagerStatisticList(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -196,6 +200,7 @@ class UAVDeviceManagerStatisticList(Resource):
     def get(self):
         return self.post()
 
+#获取所有无人机类型
 class UAVDeviceTypes(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -217,6 +222,7 @@ class UAVDeviceTypes(Resource):
     def get(self):
         return self.post()
 
+#获取所有无人机型号
 class UAVDeviceVers(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -238,6 +244,7 @@ class UAVDeviceVers(Resource):
     def get(self):
         return self.post()
 
+#添加无人机
 class UAVDeviceAdd(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -278,6 +285,7 @@ class UAVDeviceAdd(Resource):
     def get(self):
         return self.post()
 
+#修改无人机状态（参数早request data中）
 class UAVDeviceStatus(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -304,6 +312,7 @@ class UAVDeviceStatus(Resource):
     def get(self):
         return self.post()
 
+#修改无人机情况（参数在request data中）
 class UAVDeviceModify(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -333,9 +342,9 @@ class UAVDeviceModify(Resource):
 
             rs = self.dao.modify_device(user,device_obj)
             if rs==1:
-                return make_response(jsonify({'success': 'add device success'}), 200)
+                return make_response(jsonify({'success': 'modify device success'}), 200)
             else:
-                return make_response(jsonify({'failed': 'add device failed'}), 401)
+                return make_response(jsonify({'failed': 'modify device failed'}), 401)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 

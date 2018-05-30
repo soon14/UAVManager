@@ -47,6 +47,7 @@ class UAVPartsList(Resource):
     def get(self):
         return self.post()
 
+#查询配件总页数
 class UAVPartsListPages(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -67,6 +68,7 @@ class UAVPartsListPages(Resource):
     def get(self):
         return self.post()
 
+#查询配件类别
 class UAVPartsTypes(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -88,6 +90,7 @@ class UAVPartsTypes(Resource):
     def get(self):
         return self.post()
 
+#查询配件状态的统计信息
 class UAVPartsStatistic(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -146,6 +149,8 @@ class UAVPartsAdd(Resource):
 
     def get(self):
         return self.post()
+
+#修改配件信息
 class UAVPartsModify(Resource):
     def __init__(self):
         self.dao = PartsDao()
