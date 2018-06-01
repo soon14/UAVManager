@@ -20,8 +20,8 @@ parser.add_argument('battery_fact',type=str,location='args')
 parser.add_argument('battery_date',type=str,location='args')
 parser.add_argument('user_team',type=str,location='args')
 parser.add_argument('battery_status',type=str,location='args')
-parser.add_argument('page_index',type=int,required=True,location='args')
-parser.add_argument('page_size',type=int,required=True,location='args')
+parser.add_argument('page_index',type=int,location='args')
+parser.add_argument('page_size',type=int,location='args')
 
 class UAVBatteryList(Resource):
     def __init__(self):
@@ -41,6 +41,25 @@ class UAVBatteryList(Resource):
             page_index = args.get('page_index')
             page_size = args.get('page_size')
             return self.dao.query_condition(user, None, None, battery_type,battery_status,page_index, page_size)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class UAVBatteryAll(Resource):
+    def __init__(self):
+        self.dao = BatteryDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return self.dao.query_all(user)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
@@ -149,11 +168,7 @@ class UAVBatteryListPages(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
-
-            args = parser.parse_args()
-            battery_status = args.get('battery_status')
-            battery_type   = args.get('battery_type')
-            page_size = args.get('page_size')
+            page_size = data['page_size']
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -190,6 +205,8 @@ class UAVBatteryAdd(Resource):
             rs = self.dao.add_battery(user, battery_obj)
             if rs == 1:
                 return make_response(jsonify({'success': 'add device success'}), 200)
+            elif rs==-2:
+                return make_response(jsonify({'existed': 'add device failed'}), 404)
             else:
                 return make_response(jsonify({'failed': 'add device failed'}), 401)
         else:
@@ -234,7 +251,6 @@ class UAVBatteryModify(Resource):
     def post(self):
         if (request.data != ""):
             data = json.loads(request.data)
-            token = data['token']
             if (request.data != ""):
                 data = json.loads(request.data)
                 token = data['token']

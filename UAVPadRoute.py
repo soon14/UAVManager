@@ -41,11 +41,30 @@ class UAVPadList(Resource):
             page_index = args.get('page_index')
             page_size = args.get('page_size')
             return self.dao.query_condition(user, None, None, pad_type, pad_status, page_index, page_size)
-
+        else:
+            return
     def get(self):
         return self.post()
 
-class UAVPadGetID:
+class UAVPadAll(Resource):
+    def __init__(self):
+        self.dao = PadDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return self.dao.query_all(user)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+    def get(self):
+        return self.post()
+
+class UAVPadGetID(Resource):
     def __init__(self):
         self.dao = PadDao()
         self.userDao = UserDAO()
@@ -125,6 +144,8 @@ class UAVPadAdd(Resource):
             rs = self.dao.add_pad(user,pad_obj)
             if rs==1:
                 return make_response(jsonify({'success': 'add device success'}), 200)
+            elif rs==-2:
+                return make_response(jsonify({'existed': 'add device failed'}), 404)
             else:
                 return make_response(jsonify({'failed': 'add device failed'}), 401)
         else:

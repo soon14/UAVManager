@@ -108,10 +108,10 @@ class ManagerBorrow(Resource):
                     if rs==-2:
                         return make_response(jsonify({'error': 'device not returned'}), 404)
 
-                    ret = self.dao.manager_query_device(int(item['uav_id']),item['return_time'],item['approver'])
+                    ret = self.dao.manager_query_device(int(item['uav_id']),item['return_time'],item['borrower'])
                 return json.dumps(ret)
         else:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
 class ManagerReturn(Resource):
     def __init__(self):

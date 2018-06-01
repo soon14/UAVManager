@@ -62,10 +62,10 @@ class UAVApprovalAdd(Resource):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
             rs=self.dao.approval_add(user,approval)
-            if rs==None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if rs==1:
+                return make_response(jsonify({'success': 'Apply success'}), 200)
             else:
-                return rs
+                return make_response(jsonify({'error': 'Apply failed'}), 401)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 

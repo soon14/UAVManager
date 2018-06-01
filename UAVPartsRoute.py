@@ -47,6 +47,25 @@ class UAVPartsList(Resource):
     def get(self):
         return self.post()
 
+class UAVPartsAll(Resource):
+    def __init__(self):
+        self.dao = PartsDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return self.dao.query_all(user)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
 class UAVPartsGetID(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -162,6 +181,8 @@ class UAVPartsAdd(Resource):
             rs = self.dao.add_parts(user,parts_obj)
             if rs==1:
                 return make_response(jsonify({'success': 'add device success'}), 200)
+            elif rs==-2:
+                return make_response(jsonify({'existed': 'add device failed'}), 404)
             else:
                 return make_response(jsonify({'failed': 'add device failed'}), 401)
         else:
