@@ -141,3 +141,53 @@ class UAVApprovalDisagree(Resource):
 
     def get(self):
         return self.post()
+
+#获取自己提交的申请的状态
+class UAVApprovalListApply(Resource):
+    def __init__(self):
+        self.dao = ApprovalDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs=self.dao.approval_query_apply(user)
+            if rs==None:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+        else:
+            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+#获取待我审批的申请
+class UAVApprovalListApprove(Resource):
+    def __init__(self):
+        self.dao = ApprovalDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+            rs=self.dao.approval_query_approve(user)
+            if rs==None:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+        else:
+            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()

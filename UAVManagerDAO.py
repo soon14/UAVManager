@@ -1555,6 +1555,22 @@ class ApprovalDao:
         else:
             return None
 
+    def approval_query_apply(self,user):
+        rs=session_uav.query(Approval).filter(Approval.apply_person==user.user_name).all()
+        return class_to_dict(rs)
+
+    def approval_query_approve(self,user):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '4' in roles and  '5' not in roles:
+            rs=session_uav.query(Approval).filter(Approval.approval_team==user.user_team).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs=session_uav.query(Approval).filter(Approval.approval_status==0).all()
+            return class_to_dict(rs)
+        else:
+            return None       
+
     #批准借调
     def approval_aggree(self,user,approval):
         usrDao=UserDAO()
@@ -1584,12 +1600,21 @@ class ApprovalDao:
 
     def approval_add(self,user,approval):
         usrDao=UserDAO()
+
+        #提交的批准人无权限批准
+        userApproval=session_usr.query(User).filter(User.user_name==approval).first()
+        roleApproval = usrDao.get_role(userApproval)
+        if '4' not in roleApproval and '5' not roleApproval:
+            return -2
+
         roles=usrDao.get_role(user)
         if '4' in roles or '5' in roles:
             if user.user_team==approval.approval_team:
                 return -1
 
             approvalTmp = session_uav.query(Approval).filter(Approval.apply_person==approval.apply_person).first()
+            #提交申请后申请未审核则状态为0，审核通过则状态为1，审核未空过则状态为2
+            #在提交新的申请时首先判断原有申请是否处理，如果未处理则先处理原有申请
             if(approvalTmp !=None and approvalTmp.approval_status!=0):
                 self.approval_finished(approval.apply_person)
             
@@ -1602,6 +1627,7 @@ class ApprovalDao:
         else:
             return -2
 
+    #将申请添加到申请处理备份库中
     def approval_finished(self,apply_person):
         approval_cur = session_uav.query(Approval).filter(Approval.apply_person==apply_person).first()
         approval_db=Approval_db()

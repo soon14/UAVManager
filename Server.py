@@ -137,6 +137,10 @@ api.add_resource(UAVFaultReportRoute.FaultReportUpdate, '/uavmanager/api/v1.0/fa
 
 #approval
 api.add_resource(UAVApporvalRoute.UAVApprovalList, '/uavmanager/api/v1.0/approval/list')
+#我提交的申请
+api.add_resource(UAVApporvalRoute.UAVApprovalListApply,'/uavmanager/api/v1.0/approval/list/apply')
+#待我审批的申请
+api.add_resource(UAVApporvalRoute.UAVApprovalListApprove,'/uavmanager/api/v1.0/approval/list/approve')
 api.add_resource(UAVApporvalRoute.UAVApprovalAdd, '/uavmanager/api/v1.0/approval/add')
 api.add_resource(UAVApporvalRoute.UAVApprovalAgree, '/uavmanager/api/v1.0/approval/agree')
 api.add_resource(UAVApporvalRoute.UAVApprovalDisagree, '/uavmanager/api/v1.0/approval/disagree')
