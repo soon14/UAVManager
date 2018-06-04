@@ -24,7 +24,7 @@ parser.add_argument('uad_camera',type=str,location='args')
 parser.add_argument('uav_yuntai',type=str,location='args')
 parser.add_argument('uad_rcontrol',type=str,location='args')
 parser.add_argument('device_status',type=str,location='args')
-parser.add_argument('page_index',type=int,required=True,location='args')
+parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
 
 #分页导出无人机
@@ -81,11 +81,14 @@ class UAVDeviceListPages(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
-            page_size = data['page_size']
+            args = parser.parse_args()
+            device_status = args.get('device_status')
+            device_type   = args.get('device_type')
+            page_size = args.get('page_size')
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            return self.dao.query_pages(user,page_size)
+            return self.dao.query_pages(user,device_type,device_status,page_size)
 
     def get(self):
         return self.post()

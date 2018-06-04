@@ -48,6 +48,7 @@ class UAVApprovalAdd(Resource):
             approvaldict=data['approval']
             approval=Approval()
             approval.apply_person=approvaldict[0]['apply_person']
+            approval.approval_person = approvaldict[0]['approval_person']
             approval.approval_team = approvaldict[0]['approval_team']
             approval.device_ver = approvaldict[0]['device_ver']
             approval.device_number = approvaldict[0]['device_number']
@@ -64,8 +65,11 @@ class UAVApprovalAdd(Resource):
             rs=self.dao.approval_add(user,approval)
             if rs==1:
                 return make_response(jsonify({'success': 'Apply success'}), 200)
-            else:
+            elif rs==-1:
                 return make_response(jsonify({'error': 'Apply failed'}), 401)
+            elif rs==-2:
+                #批准人不存在
+                return make_response(jsonify({'error': 'Approver does not exist'}), 401)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 

@@ -100,6 +100,7 @@ class Parts(EntityBase):
 class Approval(EntityBase):
     __tablename__ = 'tb_approval'
     apply_person=Column(String(45),primary_key=True)
+    approval_person = Column(String(45))
     approval_team=Column(String(45))
     device_ver=Column(String(45))
     device_number=Column(Integer)
@@ -113,6 +114,7 @@ class Approval_db(EntityBase):
     __tablename__ = 'tb_approval_db'
     approval_id=Column(Integer,primary_key=True)
     apply_person=Column(String(45))
+    approval_person = Column(String(45))
     approval_team=Column(String(45))
     device_ver=Column(String(45))
     device_number=Column(Integer)

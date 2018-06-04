@@ -158,24 +158,21 @@ class DeviceDAO:
             return None
 
     #查询页数
-    def query_pages(self,user,page_size):
+    def query_pages(self,user,device_type,device_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
+        q = session_uav.query(Device)
         if '1' in roles and '5' not in roles:
-            sql ='select count(*) from tb_device where user_team = '+'\'user_team\''
-            rs=session_uav.query(Device).filter(Device.user_team==user.user_team).count()/page_size+1
-            session_uav.rollback()
-            item = {}
-            item['pages'] = rs
-            return json.dumps(item)
-        elif '5' in roles:
-            rs=session_uav.query(Device).count()/page_size+1
-            session_uav.rollback()
-            item = {}
-            item['pages'] = rs
-            return json.dumps(item)
-        else:
-            return None
+            q = q.filter(Device.user_team == user.user_team)
+        if device_type:
+            q = q.filter(Device.device_type == device_type)
+        if device_status:
+            q = q.filter(Device.device_status == device_status)
+        rs = q.count()/page_size+1
+        session_uav.rollback()
+        item = {}
+        item['pages'] = rs
+        return json.dumps(item)
 
     def query_index(self,uav_id):
         return class_to_dict(session_uav.query(Device).filter(Device.device_id==uav_id).first())
@@ -396,23 +393,23 @@ class BatteryDAO:
         else:
             return None
 
-    def query_pages(self,user,page_size):
+    def query_pages(self,user,battery_type,battery_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        q = session_uav.query(Battery)
         if '1' in roles and '5' not in roles:
-            rs=session_uav.query(Battery).filter(Battery.user_team==user.user_team).count()/page_size+1
-            session_uav.rollback()
-            item = {}
-            item['pages'] = rs
-            return json.dumps(item)
-        elif '5' in roles:
-            rs=session_uav.query(Battery).count() / page_size + 1
-            session_uav.rollback()
-            item = {}
-            item['pages'] = rs
-            return json.dumps(item)
-        else:
-            return None
+            q = q.filter(Battery.user_team == user.user_team)
+        if battery_type:
+            q = q.filter(Battery.battery_type == battery_type)
+        if battery_status:
+            q = q.filter(Battery.battery_status == battery_status)
+        rs = q.count()/page_size+1
+        session_uav.rollback()
+        item = {}
+        item['pages'] = rs
+        return json.dumps(item)
 
     def query_condition(self,user,bttery_id,bttery_ver,bttery_type,bttery_status,page_index,page_size):
         q = session_uav.query(Battery)
@@ -602,21 +599,23 @@ class PadDao:
         else:
             return None
 
-    def query_pages(self,user,page_size):
+    def query_pages(self,user,pad_type,pad_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        q = session_uav.query(Pad)
         if '1' in roles and '5' not in roles:
-            rs=session_uav.query(Pad).filter(Pad.user_team == user.user_team).count() / page_size + 1
-            item = {}
-            item['pages'] = rs
-            return json.dumps(item)
-        elif '5' in roles:
-            rs=session_uav.query(Battery).count()/page_size+1
-            item = {}
-            item['pages'] = rs
-            return json.dumps(item)
-        else:
-            return None
+            q = q.filter(Pad.user_team == user.user_team)
+        if pad_type:
+            q = q.filter(Pad.pad_type == pad_type)
+        if pad_status:
+            q = q.filter(Pad.pad_status == pad_status)
+        rs = q.count()/page_size+1
+        session_uav.rollback()
+        item = {}
+        item['pages'] = rs
+        return json.dumps(item)
 
     def query_condition(self, user, pad_id, pad_ver, pad_type, pad_status, page_index, page_size):
         q = session_uav.query(Pad)
@@ -657,9 +656,9 @@ class PadDao:
         elif '5' in roles:
             sql=''
             if(pad_status!='总数'):
-                sql='select pad_type, count(pad_type) from tb_pad where pad_status=\''+pad_status+'\' group by device_type;'
+                sql='select pad_type, count(pad_type) from tb_pad where pad_status=\''+pad_status+'\' group by pad_type;'
             else:
-                sql = 'select pad_type, count(pad_type) from tb_pad group by device_type;'
+                sql = 'select pad_type, count(pad_type) from tb_pad group by pad_type;'
 
             rs = session_uav.execute(sql).fetchall()
             ret = []
@@ -753,21 +752,23 @@ class PartsDao:
         else:
             return None
 
-    def query_pages(self,user,page_size):
+    def query_pages(self,user,parts_type,parts_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        q = session_uav.query(Parts)
         if '1' in roles and '5' not in roles:
-            rs=session_uav.query(Parts).filter(Parts.user_team==user.user_team).count()/page_size+1
-            item = {}
-            item['pages'] = rs
-            return json.dumps(item)
-        elif '5' in roles:
-            rs=session_uav.query(Parts).count()/page_size+1
-            item = {}
-            item['pages'] = rs
-            return json.dumps(item)
-        else:
-            return None
+            q = q.filter(Parts.user_team == user.user_team)
+        if parts_type:
+            q = q.filter(Parts.parts_type == parts_type)
+        if parts_status:
+            q = q.filter(Parts.parts_status == parts_status)
+        rs = q.count()/page_size+1
+        session_uav.rollback()
+        item = {}
+        item['pages'] = rs
+        return json.dumps(item)
 
     def query_statistic(self,user,part_status):
         usrDao=UserDAO()
@@ -1366,18 +1367,27 @@ class FaultDao:
         session_uav.rollback()
         return class_to_dict(allFaults)
 
-    def query_pages(self,page_size):
-        if page_size>0:
-            return session_uav.query(Fault).count()/page_size+1
+    def query_pages(self,device_ver,page_size):
+        if device_ver is not None:
+            rs= session_uav.query(Fault).filter(Fault.device_ver==device_ver).count() / page_size + 1
+            item = {}
+            item['pages'] = rs
+            return json.dumps(item)
         else:
-            return -1
+            if page_size>0:
+                rs= session_uav.query(Fault).count()/page_size+1
+                item = {}
+                item['pages'] = rs
+                return json.dumps(item)
+            else:
+                return None
 
     def query_statistics(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
             #故障原因
-            sql = 'select fault_reason,count(*) from tb_fault where user_team=\'' + user.user_team + '\' group by fault_reason;'
+            sql = 'select fault_reason,count(*) from tb_fault group by fault_reason;'
             rs = session_uav.execute(sql).fetchall()
             session_uav.rollback()
 
@@ -1602,9 +1612,11 @@ class ApprovalDao:
         usrDao=UserDAO()
 
         #提交的批准人无权限批准
-        userApproval=session_usr.query(User).filter(User.user_name==approval).first()
+        userApproval=session_usr.query(User).filter(User.user_name==approval.approval_person).first()
+        if userApproval is None:
+            return -2
         roleApproval = usrDao.get_role(userApproval)
-        if '4' not in roleApproval and '5' not roleApproval:
+        if '4' not in roleApproval and '5' not in roleApproval:
             return -2
 
         roles=usrDao.get_role(user)
@@ -1632,6 +1644,7 @@ class ApprovalDao:
         approval_cur = session_uav.query(Approval).filter(Approval.apply_person==apply_person).first()
         approval_db=Approval_db()
         approval_db.apply_person=approval_cur.apply_person
+        approval_db.approval_person=approval_cur.approval_person
         approval_db.approval_team=approval_cur.approval_team
         approval_db.device_ver=approval_cur.device_ver
         approval_db.device_number=approval_cur.device_number

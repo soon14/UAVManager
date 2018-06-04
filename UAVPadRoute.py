@@ -20,7 +20,7 @@ parser.add_argument('pad_fact',type=str,location='args')
 parser.add_argument('pad_date',type=str,location='args')
 parser.add_argument('user_team',type=str,location='args')
 parser.add_argument('pad_status',type=str,location='args')
-parser.add_argument('page_index',type=int,required=True,location='args')
+parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
 
 class UAVPadList(Resource):
@@ -91,11 +91,14 @@ class UAVPadListPages(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
-            page_size = data['page_size']
+            args = parser.parse_args()
+            pad_status = args.get('pad_status')
+            pad_type = args.get('pad_type')
+            page_size = args.get('page_size')
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            return self.dao.query_pages(user,page_size)
+            return self.dao.query_pages(user,pad_type,pad_status,page_size)
 
     def get(self):
         return self.post()

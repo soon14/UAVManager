@@ -2,16 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9c33995-67a2-44fa-950c-b400d34ac7e9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/UAVManager.iml" afterPath="$PROJECT_DIR$/.idea/UAVManager.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/PhotoUpload.py" afterPath="$PROJECT_DIR$/PhotoUpload.py" />
       <change beforePath="$PROJECT_DIR$/Server.py" afterPath="$PROJECT_DIR$/Server.py" />
       <change beforePath="$PROJECT_DIR$/UAVApporvalRoute.py" afterPath="$PROJECT_DIR$/UAVApporvalRoute.py" />
       <change beforePath="$PROJECT_DIR$/UAVBatteryRoute.py" afterPath="$PROJECT_DIR$/UAVBatteryRoute.py" />
       <change beforePath="$PROJECT_DIR$/UAVDeviceRoute.py" afterPath="$PROJECT_DIR$/UAVDeviceRoute.py" />
+      <change beforePath="$PROJECT_DIR$/UAVFaultRoute.py" afterPath="$PROJECT_DIR$/UAVFaultRoute.py" />
       <change beforePath="$PROJECT_DIR$/UAVManagerDAO.py" afterPath="$PROJECT_DIR$/UAVManagerDAO.py" />
       <change beforePath="$PROJECT_DIR$/UAVManagerEntity.py" afterPath="$PROJECT_DIR$/UAVManagerEntity.py" />
-      <change beforePath="$PROJECT_DIR$/UAVManagerRoute.py" afterPath="$PROJECT_DIR$/UAVManagerRoute.py" />
       <change beforePath="$PROJECT_DIR$/UAVPadRoute.py" afterPath="$PROJECT_DIR$/UAVPadRoute.py" />
       <change beforePath="$PROJECT_DIR$/UAVPartsRoute.py" afterPath="$PROJECT_DIR$/UAVPartsRoute.py" />
     </list>
@@ -27,8 +26,8 @@
       <file leaf-file-name="Server.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="138" column="42" lean-forward="false" selection-start-line="138" selection-start-column="42" selection-end-line="138" selection-end-column="42" />
+            <state relative-caret-position="282">
+              <caret line="74" column="42" lean-forward="false" selection-start-line="74" selection-start-column="42" selection-end-line="74" selection-end-column="42" />
               <folding>
                 <element signature="e#1443#2233#0" expanded="false" />
               </folding>
@@ -36,12 +35,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UAVApporvalRoute.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UAVApporvalRoute.py">
+      <file leaf-file-name="PhotoUpload.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PhotoUpload.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="27" column="33" lean-forward="false" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
-              <folding />
+            <state relative-caret-position="434">
+              <caret line="48" column="59" lean-forward="false" selection-start-line="48" selection-start-column="59" selection-end-line="48" selection-end-column="59" />
+              <folding>
+                <element signature="e#2151#2887#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -49,104 +50,77 @@
       <file leaf-file-name="UAVManagerEntity.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UAVManagerEntity.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="167" column="23" lean-forward="true" selection-start-line="167" selection-start-column="23" selection-end-line="167" selection-end-column="23" />
+            <state relative-caret-position="437">
+              <caret line="120" column="15" lean-forward="false" selection-start-line="120" selection-start-column="4" selection-end-line="120" selection-end-column="15" />
               <folding>
-                <element signature="e#489#749#0" expanded="false" />
                 <element signature="e#1193#1637#0" expanded="false" />
                 <element signature="e#1669#2142#0" expanded="false" />
                 <element signature="e#2175#2509#0" expanded="false" />
                 <element signature="e#2538#2839#0" expanded="false" />
-                <element signature="e#3221#3580#0" expanded="false" />
-                <element signature="e#3617#4011#0" expanded="false" />
-                <element signature="e#6162#6544#0" expanded="false" />
+                <element signature="e#6244#6626#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sqltypes.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../code/venv/Lib/site-packages/sqlalchemy/sql/sqltypes.py">
+      <file leaf-file-name="UAVPartsRoute.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UAVPartsRoute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="393" column="13" lean-forward="false" selection-start-line="393" selection-start-column="6" selection-end-line="393" selection-end-column="13" />
-              <folding />
+            <state relative-caret-position="-426">
+              <caret line="22" column="58" lean-forward="true" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
+              <folding>
+                <element signature="e#1804#1822#0" expanded="false" />
+                <element signature="e#1857#2425#0" expanded="false" />
+                <element signature="e#2407#2425#0" expanded="false" />
+                <element signature="e#2462#3108#0" expanded="false" />
+                <element signature="e#3994#4580#0" expanded="false" />
+                <element signature="e#4634#5410#0" expanded="false" />
+                <element signature="e#5445#6915#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UAVManagerRoute.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="UAVManagerRoute.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/UAVManagerRoute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="88" column="6" lean-forward="false" selection-start-line="88" selection-start-column="6" selection-end-line="88" selection-end-column="6" />
+            <state relative-caret-position="505">
+              <caret line="58" column="37" lean-forward="false" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="37" />
               <folding>
                 <element signature="e#946#1352#0" expanded="false" />
                 <element signature="e#1420#1476#0" expanded="false" />
-                <element signature="e#2498#3182#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../code/venv/Lib/site-packages/flask_restful/__init__.py">
+      <file leaf-file-name="UAVBatteryRoute.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UAVBatteryRoute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="594" column="0" lean-forward="false" selection-start-line="594" selection-start-column="0" selection-end-line="594" selection-end-column="0" />
+            <state relative-caret-position="524">
+              <caret line="177" column="33" lean-forward="false" selection-start-line="177" selection-start-column="33" selection-end-line="177" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../code/venv/Lib/site-packages/flask/views.py">
+      <file leaf-file-name="UAVFaultRoute.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UAVFaultRoute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+            <state relative-caret-position="334">
+              <caret line="99" column="33" lean-forward="false" selection-start-line="99" selection-start-column="33" selection-end-line="99" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UAVDeviceRoute.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="211" column="6" lean-forward="false" selection-start-line="211" selection-start-column="6" selection-end-line="211" selection-end-column="6" />
-              <folding>
-                <element signature="e#3385#3440#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UAVPadRoute.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UAVPadRoute.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UAVPadRoute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
-              <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+            <state relative-caret-position="429">
+              <caret line="95" column="43" lean-forward="true" selection-start-line="95" selection-start-column="43" selection-end-line="95" selection-end-column="43" />
               <folding>
-                <element signature="e#2374#2919#0" expanded="false" />
-                <element signature="e#2958#3483#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UAVManagerDAO.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UAVManagerDAO.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="1555" column="23" lean-forward="true" selection-start-line="1555" selection-start-column="23" selection-end-line="1555" selection-end-column="23" />
-              <folding>
-                <element signature="e#1569#1638#0" expanded="false" />
-                <element signature="e#5195#5854#0" expanded="false" />
-                <element signature="e#24259#25593#0" expanded="false" />
-                <element signature="e#36814#45123#0" expanded="false" />
-                <element signature="e#45328#46164#0" expanded="false" />
-                <element signature="e#46222#47067#0" expanded="false" />
-                <element signature="e#47125#47946#0" expanded="false" />
+                <element signature="e#2360#2905#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -187,24 +161,24 @@
         <option value="$PROJECT_DIR$/venv/UAVFaultReportRoute.py" />
         <option value="$PROJECT_DIR$/PowerTowersRoute.py" />
         <option value="$PROJECT_DIR$/UAVFaultReportRoute.py" />
-        <option value="$PROJECT_DIR$/UAVFaultRoute.py" />
         <option value="$PROJECT_DIR$/PowerLinesRoute.py" />
         <option value="$PROJECT_DIR$/config.conf" />
-        <option value="$PROJECT_DIR$/PhotoUpload.py" />
         <option value="$PROJECT_DIR$/PowerLineDao.py" />
-        <option value="$PROJECT_DIR$/UAVDeviceRoute.py" />
-        <option value="$PROJECT_DIR$/UAVManagerEntity.py" />
-        <option value="$PROJECT_DIR$/UAVBatteryRoute.py" />
-        <option value="$PROJECT_DIR$/UAVPartsRoute.py" />
-        <option value="$PROJECT_DIR$/UAVPadRoute.py" />
-        <option value="$PROJECT_DIR$/Server.py" />
         <option value="$PROJECT_DIR$/UAVManagerRoute.py" />
-        <option value="$PROJECT_DIR$/UAVManagerDAO.py" />
+        <option value="$PROJECT_DIR$/Server.py" />
+        <option value="$PROJECT_DIR$/UAVManagerEntity.py" />
         <option value="$PROJECT_DIR$/UAVApporvalRoute.py" />
+        <option value="$PROJECT_DIR$/UAVBatteryRoute.py" />
+        <option value="$PROJECT_DIR$/UAVDeviceRoute.py" />
+        <option value="$PROJECT_DIR$/PhotoUpload.py" />
+        <option value="$PROJECT_DIR$/UAVPadRoute.py" />
+        <option value="$PROJECT_DIR$/UAVPartsRoute.py" />
+        <option value="$PROJECT_DIR$/UAVFaultRoute.py" />
+        <option value="$PROJECT_DIR$/UAVManagerDAO.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1376" />
@@ -341,19 +315,19 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16354166" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2217529" sideWeight="0.5104167" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2217529" sideWeight="0.48958334" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2217529" sideWeight="0.48958334" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24498416" sideWeight="0.49375" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24498416" sideWeight="0.49375" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -388,11 +362,6 @@
           <option name="timeStamp" value="190" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/PhotoUpload.py</url>
-          <line>49</line>
-          <option name="timeStamp" value="199" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/PowerLinesRoute.py</url>
           <line>240</line>
           <option name="timeStamp" value="204" />
@@ -404,36 +373,21 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/UAVManagerDAO.py</url>
-          <line>836</line>
-          <option name="timeStamp" value="228" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/UAVDeviceRoute.py</url>
-          <line>240</line>
-          <option name="timeStamp" value="243" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/UAVManagerDAO.py</url>
-          <line>1228</line>
+          <line>1229</line>
           <option name="timeStamp" value="244" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/UAVDeviceRoute.py</url>
-          <line>217</line>
-          <option name="timeStamp" value="247" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/UAVManagerDAO.py</url>
-          <line>1332</line>
+          <line>1333</line>
           <option name="timeStamp" value="251" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/UAVApporvalRoute.py</url>
-          <line>80</line>
-          <option name="timeStamp" value="260" />
+          <line>102</line>
+          <option name="timeStamp" value="263" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="262" />
+      <option name="time" value="284" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -444,12 +398,27 @@
           <caret line="398" column="8" lean-forward="false" selection-start-line="398" selection-start-column="8" selection-end-line="398" selection-end-column="8" />
           <folding>
             <element signature="e#1569#1638#0" expanded="false" />
-            <element signature="e#5195#5854#0" expanded="false" />
-            <element signature="e#24259#25593#0" expanded="false" />
-            <element signature="e#36814#45123#0" expanded="false" />
-            <element signature="e#45328#46164#0" expanded="false" />
-            <element signature="e#46222#47067#0" expanded="false" />
-            <element signature="e#47125#47946#0" expanded="false" />
+            <element signature="e#4119#13296#0" expanded="false" />
+            <element signature="e#4153#4597#0" expanded="false" />
+            <element signature="e#4659#5133#0" expanded="false" />
+            <element signature="e#5779#5867#0" expanded="false" />
+            <element signature="e#5990#6788#0" expanded="false" />
+            <element signature="e#6848#8277#0" expanded="false" />
+            <element signature="e#8327#10417#0" expanded="false" />
+            <element signature="e#10463#10765#0" expanded="false" />
+            <element signature="e#10800#11099#0" expanded="false" />
+            <element signature="e#11135#11430#0" expanded="false" />
+            <element signature="e#11477#11961#0" expanded="false" />
+            <element signature="e#12011#12858#0" expanded="false" />
+            <element signature="e#12925#13296#0" expanded="false" />
+            <element signature="e#13354#13801#0" expanded="false" />
+            <element signature="e#21925#22290#0" expanded="false" />
+            <element signature="e#32965#57480#0" expanded="false" />
+            <element signature="e#36869#45178#0" expanded="false" />
+            <element signature="e#45383#46219#0" expanded="false" />
+            <element signature="e#46277#47122#0" expanded="false" />
+            <element signature="e#47180#48001#0" expanded="false" />
+            <element signature="e#63755#65284#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -501,14 +470,11 @@
         <state relative-caret-position="2147">
           <caret line="133" column="17" lean-forward="false" selection-start-line="133" selection-start-column="6" selection-end-line="133" selection-end-column="17" />
           <folding>
-            <element signature="e#489#749#0" expanded="false" />
             <element signature="e#1193#1637#0" expanded="false" />
             <element signature="e#1669#2142#0" expanded="false" />
             <element signature="e#2175#2509#0" expanded="false" />
             <element signature="e#2538#2839#0" expanded="false" />
-            <element signature="e#3221#3580#0" expanded="false" />
-            <element signature="e#3617#4011#0" expanded="false" />
-            <element signature="e#6162#6544#0" expanded="false" />
+            <element signature="e#6244#6626#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -520,7 +486,6 @@
           <folding>
             <element signature="e#946#1352#0" expanded="false" />
             <element signature="e#1420#1476#0" expanded="false" />
-            <element signature="e#2498#3182#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -531,12 +496,27 @@
           <caret line="152" column="19" lean-forward="false" selection-start-line="152" selection-start-column="8" selection-end-line="152" selection-end-column="19" />
           <folding>
             <element signature="e#1569#1638#0" expanded="false" />
-            <element signature="e#5195#5854#0" expanded="false" />
-            <element signature="e#24259#25593#0" expanded="false" />
-            <element signature="e#36814#45123#0" expanded="false" />
-            <element signature="e#45328#46164#0" expanded="false" />
-            <element signature="e#46222#47067#0" expanded="false" />
-            <element signature="e#47125#47946#0" expanded="false" />
+            <element signature="e#4119#13296#0" expanded="false" />
+            <element signature="e#4153#4597#0" expanded="false" />
+            <element signature="e#4659#5133#0" expanded="false" />
+            <element signature="e#5779#5867#0" expanded="false" />
+            <element signature="e#5990#6788#0" expanded="false" />
+            <element signature="e#6848#8277#0" expanded="false" />
+            <element signature="e#8327#10417#0" expanded="false" />
+            <element signature="e#10463#10765#0" expanded="false" />
+            <element signature="e#10800#11099#0" expanded="false" />
+            <element signature="e#11135#11430#0" expanded="false" />
+            <element signature="e#11477#11961#0" expanded="false" />
+            <element signature="e#12011#12858#0" expanded="false" />
+            <element signature="e#12925#13296#0" expanded="false" />
+            <element signature="e#13354#13801#0" expanded="false" />
+            <element signature="e#21925#22290#0" expanded="false" />
+            <element signature="e#32965#57480#0" expanded="false" />
+            <element signature="e#36869#45178#0" expanded="false" />
+            <element signature="e#45383#46219#0" expanded="false" />
+            <element signature="e#46277#47122#0" expanded="false" />
+            <element signature="e#47180#48001#0" expanded="false" />
+            <element signature="e#63755#65284#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -582,12 +562,27 @@
           <caret line="475" column="13" lean-forward="false" selection-start-line="475" selection-start-column="13" selection-end-line="475" selection-end-column="13" />
           <folding>
             <element signature="e#1569#1638#0" expanded="false" />
-            <element signature="e#5195#5854#0" expanded="false" />
-            <element signature="e#24259#25593#0" expanded="false" />
-            <element signature="e#36814#45123#0" expanded="false" />
-            <element signature="e#45328#46164#0" expanded="false" />
-            <element signature="e#46222#47067#0" expanded="false" />
-            <element signature="e#47125#47946#0" expanded="false" />
+            <element signature="e#4119#13296#0" expanded="false" />
+            <element signature="e#4153#4597#0" expanded="false" />
+            <element signature="e#4659#5133#0" expanded="false" />
+            <element signature="e#5779#5867#0" expanded="false" />
+            <element signature="e#5990#6788#0" expanded="false" />
+            <element signature="e#6848#8277#0" expanded="false" />
+            <element signature="e#8327#10417#0" expanded="false" />
+            <element signature="e#10463#10765#0" expanded="false" />
+            <element signature="e#10800#11099#0" expanded="false" />
+            <element signature="e#11135#11430#0" expanded="false" />
+            <element signature="e#11477#11961#0" expanded="false" />
+            <element signature="e#12011#12858#0" expanded="false" />
+            <element signature="e#12925#13296#0" expanded="false" />
+            <element signature="e#13354#13801#0" expanded="false" />
+            <element signature="e#21925#22290#0" expanded="false" />
+            <element signature="e#32965#57480#0" expanded="false" />
+            <element signature="e#36869#45178#0" expanded="false" />
+            <element signature="e#45383#46219#0" expanded="false" />
+            <element signature="e#46277#47122#0" expanded="false" />
+            <element signature="e#47180#48001#0" expanded="false" />
+            <element signature="e#63755#65284#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -639,14 +634,14 @@
         <state relative-caret-position="513">
           <caret line="49" column="34" lean-forward="false" selection-start-line="49" selection-start-column="34" selection-end-line="49" selection-end-column="34" />
           <folding>
-            <element signature="e#968#1836#0" expanded="false" />
-            <element signature="e#1818#1836#0" expanded="false" />
-            <element signature="e#1871#2439#0" expanded="false" />
-            <element signature="e#2421#2439#0" expanded="false" />
-            <element signature="e#2476#3122#0" expanded="false" />
-            <element signature="e#3839#4425#0" expanded="false" />
-            <element signature="e#4479#5255#0" expanded="false" />
-            <element signature="e#5290#6760#0" expanded="false" />
+            <element signature="e#954#1822#0" expanded="false" />
+            <element signature="e#1804#1822#0" expanded="false" />
+            <element signature="e#1857#2425#0" expanded="false" />
+            <element signature="e#2407#2425#0" expanded="false" />
+            <element signature="e#2462#3108#0" expanded="false" />
+            <element signature="e#3994#4580#0" expanded="false" />
+            <element signature="e#4634#5410#0" expanded="false" />
+            <element signature="e#5445#6915#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -657,12 +652,27 @@
           <caret line="1118" column="36" lean-forward="true" selection-start-line="1118" selection-start-column="36" selection-end-line="1118" selection-end-column="36" />
           <folding>
             <element signature="e#1569#1638#0" expanded="false" />
-            <element signature="e#5195#5854#0" expanded="false" />
-            <element signature="e#24259#25593#0" expanded="false" />
-            <element signature="e#36814#45123#0" expanded="false" />
-            <element signature="e#45328#46164#0" expanded="false" />
-            <element signature="e#46222#47067#0" expanded="false" />
-            <element signature="e#47125#47946#0" expanded="false" />
+            <element signature="e#4119#13296#0" expanded="false" />
+            <element signature="e#4153#4597#0" expanded="false" />
+            <element signature="e#4659#5133#0" expanded="false" />
+            <element signature="e#5779#5867#0" expanded="false" />
+            <element signature="e#5990#6788#0" expanded="false" />
+            <element signature="e#6848#8277#0" expanded="false" />
+            <element signature="e#8327#10417#0" expanded="false" />
+            <element signature="e#10463#10765#0" expanded="false" />
+            <element signature="e#10800#11099#0" expanded="false" />
+            <element signature="e#11135#11430#0" expanded="false" />
+            <element signature="e#11477#11961#0" expanded="false" />
+            <element signature="e#12011#12858#0" expanded="false" />
+            <element signature="e#12925#13296#0" expanded="false" />
+            <element signature="e#13354#13801#0" expanded="false" />
+            <element signature="e#21925#22290#0" expanded="false" />
+            <element signature="e#32965#57480#0" expanded="false" />
+            <element signature="e#36869#45178#0" expanded="false" />
+            <element signature="e#45383#46219#0" expanded="false" />
+            <element signature="e#46277#47122#0" expanded="false" />
+            <element signature="e#47180#48001#0" expanded="false" />
+            <element signature="e#63755#65284#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -672,14 +682,11 @@
         <state relative-caret-position="2109">
           <caret line="111" column="52" lean-forward="true" selection-start-line="111" selection-start-column="52" selection-end-line="111" selection-end-column="52" />
           <folding>
-            <element signature="e#489#749#0" expanded="false" />
             <element signature="e#1193#1637#0" expanded="false" />
             <element signature="e#1669#2142#0" expanded="false" />
             <element signature="e#2175#2509#0" expanded="false" />
             <element signature="e#2538#2839#0" expanded="false" />
-            <element signature="e#3221#3580#0" expanded="false" />
-            <element signature="e#3617#4011#0" expanded="false" />
-            <element signature="e#6162#6544#0" expanded="false" />
+            <element signature="e#6244#6626#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -691,7 +698,6 @@
           <folding>
             <element signature="e#946#1352#0" expanded="false" />
             <element signature="e#1420#1476#0" expanded="false" />
-            <element signature="e#2498#3182#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -726,13 +732,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PhotoUpload.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1520">
-          <caret line="81" column="72" lean-forward="false" selection-start-line="81" selection-start-column="72" selection-end-line="81" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/UAVFaultReportRoute.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="874">
@@ -747,10 +746,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UAVFaultRoute.py">
+    <entry file="file://$PROJECT_DIR$/PowerLineDao.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="97" column="31" lean-forward="true" selection-start-line="97" selection-start-column="31" selection-end-line="97" selection-end-column="31" />
+        <state relative-caret-position="255">
+          <caret line="110" column="72" lean-forward="false" selection-start-line="110" selection-start-column="59" selection-end-line="110" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../code/venv/Lib/site-packages/sqlalchemy/sql/sqltypes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7144">
+          <caret line="393" column="13" lean-forward="false" selection-start-line="393" selection-start-column="6" selection-end-line="393" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -758,46 +765,32 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UAVPartsRoute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-56">
-          <caret line="49" column="28" lean-forward="false" selection-start-line="49" selection-start-column="28" selection-end-line="49" selection-end-column="28" />
-          <folding>
-            <element signature="e#968#1836#0" expanded="false" />
-            <element signature="e#1818#1836#0" expanded="false" />
-            <element signature="e#1871#2439#0" expanded="false" />
-            <element signature="e#2421#2439#0" expanded="false" />
-            <element signature="e#2476#3122#0" expanded="false" />
-            <element signature="e#3839#4425#0" expanded="false" />
-            <element signature="e#4479#5255#0" expanded="false" />
-            <element signature="e#5290#6760#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UAVBatteryRoute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="61" column="43" lean-forward="false" selection-start-line="61" selection-start-column="43" selection-end-line="61" selection-end-column="43" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PowerLineDao.py">
+    <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="110" column="72" lean-forward="false" selection-start-line="110" selection-start-column="59" selection-end-line="110" selection-end-column="72" />
+        <state relative-caret-position="220">
+          <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding>
+            <element signature="e#3546#3601#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVApporvalRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="70" column="23" lean-forward="false" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PowerLinesRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1083">
-          <caret line="172" column="6" lean-forward="false" selection-start-line="172" selection-start-column="6" selection-end-line="172" selection-end-column="6" />
+        <state relative-caret-position="263">
+          <caret line="409" column="49" lean-forward="false" selection-start-line="409" selection-start-column="49" selection-end-line="409" selection-end-column="49" />
           <folding>
             <element signature="e#3463#4272#0" expanded="false" />
             <element signature="e#5067#5776#0" expanded="false" />
@@ -809,27 +802,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../code/venv/Lib/site-packages/sqlalchemy/sql/sqltypes.py">
+    <entry file="file://$PROJECT_DIR$/PhotoUpload.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="393" column="13" lean-forward="false" selection-start-line="393" selection-start-column="6" selection-end-line="393" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UAVDeviceRoute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="211" column="6" lean-forward="false" selection-start-line="211" selection-start-column="6" selection-end-line="211" selection-end-column="6" />
+        <state relative-caret-position="434">
+          <caret line="48" column="59" lean-forward="false" selection-start-line="48" selection-start-column="59" selection-end-line="48" selection-end-column="59" />
           <folding>
-            <element signature="e#3385#3440#0" expanded="false" />
+            <element signature="e#2151#2887#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../code/venv/Lib/site-packages/flask/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
+        <state relative-caret-position="648">
           <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
           <folding />
         </state>
@@ -837,82 +822,116 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../code/venv/Lib/site-packages/flask_restful/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
+        <state relative-caret-position="391">
           <caret line="594" column="0" lean-forward="false" selection-start-line="594" selection-start-column="0" selection-end-line="594" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/UAVBatteryRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="524">
+          <caret line="177" column="33" lean-forward="false" selection-start-line="177" selection-start-column="33" selection-end-line="177" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVPartsRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-426">
+          <caret line="22" column="58" lean-forward="true" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
+          <folding>
+            <element signature="e#1804#1822#0" expanded="false" />
+            <element signature="e#1857#2425#0" expanded="false" />
+            <element signature="e#2407#2425#0" expanded="false" />
+            <element signature="e#2462#3108#0" expanded="false" />
+            <element signature="e#3994#4580#0" expanded="false" />
+            <element signature="e#4634#5410#0" expanded="false" />
+            <element signature="e#5445#6915#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/UAVManagerEntity.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="167" column="23" lean-forward="true" selection-start-line="167" selection-start-column="23" selection-end-line="167" selection-end-column="23" />
+        <state relative-caret-position="437">
+          <caret line="120" column="15" lean-forward="false" selection-start-line="120" selection-start-column="4" selection-end-line="120" selection-end-column="15" />
           <folding>
-            <element signature="e#489#749#0" expanded="false" />
             <element signature="e#1193#1637#0" expanded="false" />
             <element signature="e#1669#2142#0" expanded="false" />
             <element signature="e#2175#2509#0" expanded="false" />
             <element signature="e#2538#2839#0" expanded="false" />
-            <element signature="e#3221#3580#0" expanded="false" />
-            <element signature="e#3617#4011#0" expanded="false" />
-            <element signature="e#6162#6544#0" expanded="false" />
+            <element signature="e#6244#6626#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UAVManagerRoute.py">
+    <entry file="file://$PROJECT_DIR$/UAVFaultRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="88" column="6" lean-forward="false" selection-start-line="88" selection-start-column="6" selection-end-line="88" selection-end-column="6" />
-          <folding>
-            <element signature="e#946#1352#0" expanded="false" />
-            <element signature="e#1420#1476#0" expanded="false" />
-            <element signature="e#2498#3182#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="138" column="42" lean-forward="false" selection-start-line="138" selection-start-column="42" selection-end-line="138" selection-end-column="42" />
-          <folding>
-            <element signature="e#1443#2233#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UAVApporvalRoute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="27" column="33" lean-forward="false" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+        <state relative-caret-position="334">
+          <caret line="99" column="33" lean-forward="false" selection-start-line="99" selection-start-column="33" selection-end-line="99" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/UAVManagerDAO.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="1555" column="23" lean-forward="true" selection-start-line="1555" selection-start-column="23" selection-end-line="1555" selection-end-column="23" />
+        <state relative-caret-position="220">
+          <caret line="1390" column="0" lean-forward="false" selection-start-line="1390" selection-start-column="0" selection-end-line="1390" selection-end-column="0" />
           <folding>
             <element signature="e#1569#1638#0" expanded="false" />
-            <element signature="e#5195#5854#0" expanded="false" />
-            <element signature="e#24259#25593#0" expanded="false" />
-            <element signature="e#36814#45123#0" expanded="false" />
-            <element signature="e#45328#46164#0" expanded="false" />
-            <element signature="e#46222#47067#0" expanded="false" />
-            <element signature="e#47125#47946#0" expanded="false" />
+            <element signature="e#4119#13296#0" expanded="false" />
+            <element signature="e#4153#4597#0" expanded="false" />
+            <element signature="e#4659#5133#0" expanded="false" />
+            <element signature="e#5779#5867#0" expanded="false" />
+            <element signature="e#5990#6788#0" expanded="false" />
+            <element signature="e#6848#8277#0" expanded="false" />
+            <element signature="e#8327#10417#0" expanded="false" />
+            <element signature="e#10463#10765#0" expanded="false" />
+            <element signature="e#10800#11099#0" expanded="false" />
+            <element signature="e#11135#11430#0" expanded="false" />
+            <element signature="e#11477#11961#0" expanded="false" />
+            <element signature="e#12011#12858#0" expanded="false" />
+            <element signature="e#12925#13296#0" expanded="false" />
+            <element signature="e#13354#13801#0" expanded="false" />
+            <element signature="e#21925#22290#0" expanded="false" />
+            <element signature="e#32965#57480#0" expanded="false" />
+            <element signature="e#36869#45178#0" expanded="false" />
+            <element signature="e#45383#46219#0" expanded="false" />
+            <element signature="e#46277#47122#0" expanded="false" />
+            <element signature="e#47180#48001#0" expanded="false" />
+            <element signature="e#63755#65284#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/UAVPadRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+        <state relative-caret-position="429">
+          <caret line="95" column="43" lean-forward="true" selection-start-line="95" selection-start-column="43" selection-end-line="95" selection-end-column="43" />
           <folding>
-            <element signature="e#2374#2919#0" expanded="false" />
-            <element signature="e#2958#3483#0" expanded="false" />
+            <element signature="e#2360#2905#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="74" column="42" lean-forward="false" selection-start-line="74" selection-start-column="42" selection-end-line="74" selection-end-column="42" />
+          <folding>
+            <element signature="e#1443#2233#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UAVManagerRoute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="58" column="37" lean-forward="false" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="37" />
+          <folding>
+            <element signature="e#946#1352#0" expanded="false" />
+            <element signature="e#1420#1476#0" expanded="false" />
           </folding>
         </state>
       </provider>

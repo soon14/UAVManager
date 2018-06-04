@@ -40,9 +40,10 @@ class FileUpload(Resource):
             tower_id = data['towerid']
             voltage = data['voltage']
             classify = data['classify']
+            date=data['date']
             image = request.files['image']
 
-            file_folder = save_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+classify
+            file_folder = save_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+date+'/'+classify
             if not os.path.isdir(file_folder):
                 os.makedirs(file_folder)
             if image and self.allowed_file(image.filename):
@@ -50,11 +51,6 @@ class FileUpload(Resource):
                 image.save(os.path.join(file_folder, filename))
 
             db_folder=database_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+classify
-            #photo = Photo()
-            #photo.photo_line=int(line_id)
-            #photo.photo_tower_id = int(tower_id)
-            #photo.photo_path = os.path.join(db_folder, filename)
-            #photo.photo_classify = classify
             rs = self.photoDao.add_photo(voltage,line_id,tower_id,classify,os.path.join(db_folder, filename))
             if rs == 1:
                 return make_response(jsonify({'seccess': 'upload success'}), 200)

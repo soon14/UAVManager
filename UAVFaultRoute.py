@@ -14,7 +14,7 @@ from UAVManagerEntity import Fault
 
 parser = reqparse.RequestParser()
 parser.add_argument('device_ver',type=str,location='args')
-parser.add_argument('page_index',type=int,required=True,location='args')
+parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
 
 class UAVFaultList(Resource):
@@ -50,11 +50,13 @@ class UAVFaultListPages(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
-            page_size=data['page_size']
+            args = parser.parse_args()
+            page_size = args.get('page_size')
+            device_ver = args.get('device_ver')
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            return self.dao.query_pages(page_size)
+            return self.dao.query_pages(device_ver,page_size)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
