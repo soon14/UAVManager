@@ -116,8 +116,8 @@ api.add_resource(UAVPartsRoute.UAVPartsModify,'/uavmanager/api/v1.0/parts/modify
 #pad related api
 api.add_resource(UAVPadRoute.UAVPadList,'/uavmanager/api/v1.0/pads')
 api.add_resource(UAVPadRoute.UAVPadAll,'/uavmanager/api/v1.0/pads/all')
-api.add_resource(UAVPadRoute.UAVPadGetID,'/uavmanager/api/v1.0/pad/id')
 api.add_resource(UAVPadRoute.UAVPadsStatistic,'/uavmanager/api/v1.0/pad/statistic/<string:pad_status>')
+api.add_resource(UAVPadRoute.UAVPadGetID,'/uavmanager/api/v1.0/pad/id')
 api.add_resource(UAVPadRoute.UAVPadListPages,'/uavmanager/api/v1.0/pad/pages')
 api.add_resource(UAVPadRoute.UAVPadTypes,'/uavmanager/api/v1.0/pad/types')
 api.add_resource(UAVPadRoute.UAVPadAdd,'/uavmanager/api/v1.0/pad/add')

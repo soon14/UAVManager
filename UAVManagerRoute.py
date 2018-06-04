@@ -18,7 +18,7 @@ parser.add_argument('manager_status',type=str,location='args')
 parser.add_argument('borrow_time',type=str,location='args')
 parser.add_argument('return_time',type=str,location='args')
 parser.add_argument('token',type=str,location='args')
-parser.add_argument('page_index',type=int,required=True,location='args')
+parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
 
 class ManagerList(Resource):
@@ -47,16 +47,16 @@ class ManagerListPages(Resource):
             args = parser.parse_args()
             token = data['token']
             user = self.userDao.verify_token(token, '')
-            if (not user):
+            if not user:
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:
                 args = parser.parse_args()
                 device_type=args.get('device_type')
-                manager_status=args.get('manager_status')
+                device_status=args.get('device_status')
                 device_version=args.get('device_ver')
                 page_index = args.get('page_index')
                 page_size = args.get('page_size')
-                rs=self.dao.query_condition(user,device_version,None,device_type,manager_status,None,None,page_index,page_size)
+                rs=self.dao.query_condition(user,device_version,None,device_type,device_status,None,None,page_index,page_size)
                 return json.dumps(rs)
         else:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -75,13 +75,18 @@ class ManagerListPageNum(Resource):
             token = data['token']
             page_size=data['page_size']
             user = self.userDao.verify_token(token, '')
-            if (not user):
+            if not user:
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:
-                rs=self.dao.query_pages(user,page_size)
-                return json.dumps(rs)
+                args = parser.parse_args()
+                device_type=args.get('device_type')
+                device_status=args.get('device_status')
+                device_ver=args.get('device_ver')
+                page_size = args.get('page_size')
+                rs=self.dao.query_pages(user,device_type,device_ver,device_status,page_size)
+                return rs
         else:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
     def get(self):
         return(self.post())
