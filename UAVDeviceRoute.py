@@ -40,6 +40,9 @@ class UAVDeviceList(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             args = parser.parse_args()
             device_status = args.get('device_status')
             device_type   = args.get('device_type')
@@ -64,6 +67,9 @@ class UAVDeviceAll(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             return self.dao.query_all(user)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -88,6 +94,9 @@ class UAVDeviceListPages(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             return self.dao.query_pages(user,device_type,device_status,page_size)
 
     def get(self):
@@ -111,6 +120,8 @@ class UAVDeviceGetID(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.query_condition(user,device_id,None,None,None,None,1,1)
             if rs is not None:
@@ -134,6 +145,8 @@ class UAVDeviceManagerStatistic(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             return self.dao.query_statistic(user,status)
         else:
@@ -155,6 +168,8 @@ class UAVDeviceManagerStatisticList(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs = self.dao.query_statistic_all(user)
             if rs == -1:
@@ -180,6 +195,8 @@ class UAVDeviceTypes(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.query_type()
             return rs
@@ -202,6 +219,8 @@ class UAVDeviceVers(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs = self.dao.query_ver()
             return rs
@@ -240,6 +259,8 @@ class UAVDeviceAdd(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs = self.dao.add_device(user,device_obj)
             if rs==1:
@@ -269,6 +290,8 @@ class UAVDeviceStatus(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs = self.dao.modify_device_status(user,device_id,status)
             if rs==1:
@@ -308,6 +331,8 @@ class UAVDeviceModify(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs = self.dao.modify_device(user,device_obj)
             if rs==1:

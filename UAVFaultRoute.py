@@ -29,6 +29,8 @@ class UAVFaultList(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             args = parser.parse_args()
             page_index = args.get('page_index')
@@ -56,6 +58,9 @@ class UAVFaultListPages(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             return self.dao.query_pages(device_ver,page_size)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -76,6 +81,8 @@ class UAVFaultDeviceVersion(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             return self.dao.query_types()
         else:
@@ -95,7 +102,9 @@ class UAVFaultStatistics(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.query_statistics(user)
             if rs==None:
@@ -128,6 +137,8 @@ class UAVFaultAdd(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.add_fault(user,fault)
             if rs==None:

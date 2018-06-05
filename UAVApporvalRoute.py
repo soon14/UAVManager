@@ -24,6 +24,8 @@ class UAVApprovalList(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.approval_query(user)
             if rs==None:
@@ -61,6 +63,8 @@ class UAVApprovalAdd(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.approval_add(user,approval)
             if rs==1:
@@ -69,7 +73,7 @@ class UAVApprovalAdd(Resource):
                 return make_response(jsonify({'error': 'Apply failed'}), 401)
             elif rs==-2:
                 #批准人不存在
-                return make_response(jsonify({'error': 'Approver does not exist'}), 401)
+                return make_response(jsonify({'error': 'Approver does not exist'}), 501)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
@@ -99,6 +103,8 @@ class UAVApprovalAgree(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.approval_aggree(user,approval)
             if rs==None:
@@ -134,6 +140,8 @@ class UAVApprovalDisagree(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.approval_disagree(user,approval)
             if rs==None:
@@ -159,6 +167,8 @@ class UAVApprovalListApply(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.approval_query_apply(user)
             if rs==None:
@@ -184,6 +194,8 @@ class UAVApprovalListApprove(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.approval_query_approve(user)
             if rs==None:

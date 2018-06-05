@@ -69,7 +69,7 @@ class UserDAO:
         try:
             data = s.loads(token)
         except SignatureExpired:
-            return None # valid token, but expired
+            return -1 # valid token, but expired
         except BadSignature:
             return None # invalid token
         usr=session_usr.query(User).filter(User.user_id == data['id']).first()
@@ -86,7 +86,7 @@ class UserDAO:
                     session_usr.commit()
                 except:
                     session_usr.rollback()
-                return rs
+                return 1
             else:
                 return -1
         elif '6' in roles:
@@ -95,7 +95,7 @@ class UserDAO:
                 session_usr.commit()
             except:
                 session_usr.rollback()
-            return rs
+            return 1
         else:
             return -1
     
@@ -906,105 +906,187 @@ class ManagerDAO:
 
     def query_device_manager(self,device_type,device_ver,device_status,page_index,page_size):
         ret = []
-        if device_type=='无人机':
+        if device_ver=='无人机':
             q=session_uav.query(Device)
-            if device_ver is not None:
-                q.filter(Device.device_ver==device_ver)
+            if device_type is not None:
+                q=q.filter(Device.device_type==device_type)
             if device_status is not None:
-                q.filter(Device.device_status==device_status)
+                q =q.filter(Device.device_status==device_status)
             devices = q.limit(page_size).offset((page_index-1)*page_size).all()
             session_uav.rollback()
             for item in devices:
+                tmp = {}
                 if item.device_status=='出库':
-                    mnger=session_uav.query(Manager).filter(Manager.device_id==item.device_id,Manager.manager_status=='借出').first()
-                    tmp={}
-                    tmp['device_id']=item.device_id
+                    mnger=session_uav.query(Manager).filter(Manager.device_id==item.device_id,Manager.manager_status=='借用').first()
+                    tmp['device_ver'] = item.device_ver
+                    tmp['device_type'] = item.device_type
+                    tmp['device_id'] = item.device_id
+                    tmp['user_team'] = item.user_team
+                    if mnger is not None:
+                        tmp['borrow_team']=mnger.user_team
+                        tmp['borrower']=mnger.borrower_name
+                        tmp['status']='出库'
+                    else:
+                        tmp['borrow_team']=''
+                        tmp['borrower']=''
+                        tmp['status']='出库'
                     ret.append(tmp)
-        elif device_type='电池':
+                else:
+                    tmp['device_ver'] = item.device_ver
+                    tmp['device_type'] = item.device_type
+                    tmp['device_id'] = item.device_id
+                    tmp['user_team'] = item.user_team
+                    tmp['borrow_team'] = ''
+                    tmp['borrower'] = ''
+                    tmp['status'] = '在库'
+                    ret.append(tmp)
+
+        elif device_ver=='电池':
             q=session_uav.query(Battery)
-            if device_ver is not None:
-                q.filter(Battery.battery_ver==device_ver)
+            if device_type is not None:
+                q =q.filter(Battery.battery_type==device_type)
             if device_status is not None:
-                q.filter(Battery.battery_status==device_status)
+                q =q.filter(Battery.battery_status==device_status)
             batteries = q.limit(page_size).offset((page_index-1)*page_size).all()
             session_uav.rollback()
             for item in batteries:
+                tmp = {}
                 if item.battery_status=='出库':
-                    mnger=session_uav.query(Manager).filter(Manager.device_id==item.battery_id,Manager.manager_status=='借出').first()
-                    tmp={}
-                    tmp['device_id']=item.battery_id
+                    mnger=session_uav.query(Manager).filter(Manager.device_id==item.battery_id,Manager.manager_status=='借用').first()
+                    tmp['device_ver'] = item.battery_ver
+                    tmp['device_type'] = item.battery_type
+                    tmp['device_id'] = item.battery_id
+                    tmp['user_team'] = item.user_team
+
+                    if mnger is not None:
+                        tmp['borrow_team']=mnger.user_team
+                        tmp['borrower']=mnger.borrower_name
+                        tmp['status']='出库'
+                    else:
+                        tmp['borrow_team']=''
+                        tmp['borrower']=''
+                        tmp['status']='出库'
                     ret.append(tmp)
-        elif device_type=="配件":
+                else:
+                    tmp['device_ver'] = item.battery_ver
+                    tmp['device_type'] = item.battery_type
+                    tmp['device_id'] = item.battery_id
+                    tmp['user_team'] = item.user_team
+                    tmp['borrow_team'] = ''
+                    tmp['borrower'] = ''
+                    tmp['status'] = '在库'
+                    ret.append(tmp)
+        elif device_ver=="配件":
             q=session_uav.query(Parts)
-            if device_ver is not None:
-                q.filter(Parts.parts_ver==device_ver)
+            if device_type is not None:
+                q =q.filter(Parts.parts_type==device_type)
             if device_status is not None:
-                q.filter(Parts.parts_status==device_status)
+                q =q.filter(Parts.parts_status==device_status)
             parts = q.limit(page_size).offset((page_index-1)*page_size).all()
             session_uav.rollback()
             for item in parts:
+                tmp={}
                 if item.parts_status=='出库':
-                    mnger=session_uav.query(Manager).filter(Manager.device_id==item.parts_id,Manager.manager_status=='借出').first()
-                    tmp={}
-                    tmp['device_id']=item.parts_id
+                    mnger=session_uav.query(Manager).filter(Manager.device_id==item.parts_id,Manager.manager_status=='借用').first()
+                    tmp['device_ver'] = item.parts_ver
+                    tmp['device_type'] = item.parts_type
+                    tmp['device_id'] = item.parts_id
+                    tmp['user_team'] = item.user_team
+                    if mnger is not None:
+                        tmp['borrow_team']=mnger.user_team
+                        tmp['borrower']=mnger.borrower_name
+                        tmp['status']='出库'
+                    else:
+                        tmp['borrow_team']=''
+                        tmp['borrower']=''
+                        tmp['status']='出库'
                     ret.append(tmp)
-        elif device_type=="平板":
+                else:
+                    tmp['device_ver'] = item.parts_ver
+                    tmp['device_type'] = item.parts_type
+                    tmp['device_id'] = item.parts_id
+                    tmp['user_team'] = item.user_team
+                    tmp['borrow_team'] = ''
+                    tmp['borrower'] = ''
+                    tmp['status'] = '在库'
+                    ret.append(tmp)
+
+        elif device_ver=="平板":
             q=session_uav.query(Pad)
-            if device_ver is not None:
-                q.filter(Pad.pad_ver==device_ver)
+            if device_type is not None:
+                q =q.filter(Pad.pad_type==device_type)
             if device_status is not None:
-                q.filter(Pad.pad_status==device_status)
+                q =q.filter(Pad.pad_status==device_status)
             pads = q.limit(page_size).offset((page_index-1)*page_size).all()
             session_uav.rollback()
             for item in pads:
+                tmp={}
                 if item.pad_status=='出库':
-                    mnger=session_uav.query(Manager).filter(Manager.device_id==item.pad_id,Manager.manager_status=='借出').first()
-                    tmp={}
-                    tmp['device_id']=item.pad_id
+                    mnger=session_uav.query(Manager).filter(Manager.device_id==item.pad_id,Manager.manager_status=='借用').first()
+                    tmp['device_ver'] = item.pad_ver
+                    tmp['device_type'] = item.pad_type
+                    tmp['device_id'] = item.pad_id
+                    tmp['user_team'] = item.user_team
+                    if mnger is not None:
+                        tmp['borrow_team']=mnger.user_team
+                        tmp['borrower']=mnger.borrower_name
+                        tmp['status']='出库'
+                    else:
+                        tmp['borrow_team']=''
+                        tmp['borrower']=''
+                        tmp['status']='出库'
                     ret.append(tmp)
-
-        json.dumps(ret)
+                else:
+                    tmp['device_ver'] = item.pad_ver
+                    tmp['device_type'] = item.pad_type
+                    tmp['device_id'] = item.pad_id
+                    tmp['user_team'] = item.user_team
+                    tmp['borrow_team'] = ''
+                    tmp['borrower'] = ''
+                    tmp['status'] = '在库'
+                    ret.append(tmp)
+        return json.dumps(ret)
 
     def query_pages(self,user,device_type,device_ver,device_status,page_size):
-        if device_type=='无人机':
+        if device_ver=='无人机':
             q=session_uav.query(Device)
-            if device_ver is not None:
-                q.filter(Device.device_ver==device_ver)
+            if device_type is not None:
+                q =q.filter(Device.device_type==device_type)
             if device_status is not None:
-                q.filter(Device.device_status==device_status)
+                q =q.filter(Device.device_status==device_status)
             rs= q.count()/page_size+1
             session_uav.rollback()
             item = {}
             item['pages'] = rs
             return json.dumps(item)
-        elif device_type='电池':
+        elif device_ver=='电池':
             q=session_uav.query(Battery)
-            if device_ver is not None:
-                q.filter(Battery.battery_ver==device_ver)
+            if device_type is not None:
+                q =q.filter(Battery.battery_type==device_type)
             if device_status is not None:
-                q.filter(Battery.battery_status==device_status)
+                q =q.filter(Battery.battery_status==device_status)
             rs= q.count()/page_size+1
             session_uav.rollback()
             item = {}
             item['pages'] = rs
             return json.dumps(item)
-        elif device_type=="配件":
+        elif device_ver=="配件":
             q=session_uav.query(Parts)
-            if device_ver is not None:
-                q.filter(Parts.parts_ver==device_ver)
+            if device_type is not None:
+                q =q.filter(Parts.parts_type==device_type)
             if device_status is not None:
-                q.filter(Parts.parts_status==device_status)
+                q =q.filter(Parts.parts_status==device_status)
             rs= q.count()/page_size+1
             session_uav.rollback()
             item = {}
             item['pages'] = rs
             return json.dumps(item)
-        elif device_type=="平板":
+        elif device_ver=="平板":
             q=session_uav.query(Pad)
-            if device_ver is not None:
-                q.filter(Pad.pad_ver==device_ver)
+            if device_type is not None:
+                q =q.filter(Pad.pad_type==device_type)
             if device_status is not None:
-                q.filter(Pad.pad_status==device_status)
+                q =q.filter(Pad.pad_status==device_status)
             rs= q.count()/page_size+1
             session_uav.rollback()
             item = {}

@@ -14,6 +14,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('device_id', type=int, location='args')
 parser.add_argument('device_ver',type=str,location='args')
 parser.add_argument('device_type',type=str,location='args')
+parser.add_argument('device_status',type=str,location='args')
 parser.add_argument('manager_status',type=str,location='args')
 parser.add_argument('borrow_time',type=str,location='args')
 parser.add_argument('return_time',type=str,location='args')
@@ -32,6 +33,8 @@ class ManagerList(Resource):
         user = self.userDao.verify_token(token, '')
         if (not user):
              return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        elif user == -1:
+            return make_response(jsonify({'error': 'token expired'}), 399)
         else:
             rs=self.dao.query_all(user)
             return rs
@@ -49,6 +52,8 @@ class ManagerListPages(Resource):
             user = self.userDao.verify_token(token, '')
             if not user:
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            elif user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
             else:
                 args = parser.parse_args()
                 device_type=args.get('device_type')
@@ -56,8 +61,8 @@ class ManagerListPages(Resource):
                 device_version=args.get('device_ver')
                 page_index = args.get('page_index')
                 page_size = args.get('page_size')
-                rs=self.dao.query_condition(user,device_version,None,device_type,device_status,None,None,page_index,page_size)
-                return json.dumps(rs)
+                rs=self.dao.query_device_manager(device_type,device_version,device_status,page_index,page_size)
+                return rs
         else:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
@@ -73,10 +78,11 @@ class ManagerListPageNum(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
-            page_size=data['page_size']
             user = self.userDao.verify_token(token, '')
             if not user:
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            elif user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
             else:
                 args = parser.parse_args()
                 device_type=args.get('device_type')
@@ -104,6 +110,8 @@ class ManagerBorrow(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            elif user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
             else:
                 ret=[]
                 for item in borrowList:
@@ -131,6 +139,8 @@ class ManagerReturn(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            elif user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
             else:
 
                 for item in borrowList:

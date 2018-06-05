@@ -25,6 +25,9 @@ class FaultReportQuery(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             return self.dao.query(fpid)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -49,6 +52,9 @@ class FaultReportUpdate(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             if self.dao.update(user,report)==1:
                 return make_response(jsonify({'success': 'Update success'}), 200)
             else:

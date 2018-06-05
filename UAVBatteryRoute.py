@@ -35,6 +35,9 @@ class UAVBatteryList(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             args = parser.parse_args()
             battery_status = args.get('battery_status')
             battery_type   = args.get('battery_type')
@@ -59,6 +62,9 @@ class UAVBatteryAll(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             return self.dao.query_all(user)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -79,6 +85,9 @@ class UAVBatteryGetID(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             return self.dao.query_condition(user, battery_id, None, None,None,1, 1)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -99,6 +108,8 @@ class UAVBatteryStatisticsList(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs = self.dao.query_statistic_all(user)
             if rs == -1:
@@ -124,6 +135,8 @@ class UAVBatteryStatistic(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.query_statistic(user,battery_status)
             if rs==-1:
@@ -149,6 +162,8 @@ class UAVBatteryTypes(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.query_type()
             return rs
@@ -175,6 +190,9 @@ class UAVBatteryListPages(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
             return self.dao.query_pages(user,battery_type,battery_status,page_size)
 
     def get(self):
@@ -204,6 +222,8 @@ class UAVBatteryAdd(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs = self.dao.add_battery(user, battery_obj)
             if rs == 1:
@@ -233,6 +253,8 @@ class UAVBatteryStatus(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs = self.dao.modify_battery_status(user, battery_id, status)
             if rs == 1:
@@ -269,6 +291,8 @@ class UAVBatteryModify(Resource):
                 user = self.userDao.verify_token(token, '')
                 if (not user):
                     return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                if user == -1:
+                    return make_response(jsonify({'error': 'token expired'}), 399)
 
                 rs = self.dao.modify_battery(user, battery_obj)
                 if rs == 1:
@@ -280,6 +304,8 @@ class UAVBatteryModify(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs = self.dao.modify_battery_status(user, battery_id, status)
             if rs == 1:
