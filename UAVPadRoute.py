@@ -11,6 +11,7 @@ from flask import Flask, request ,jsonify
 from flask import Response,make_response
 from UAVManagerDAO import PadDao,UserDAO
 from UAVManagerEntity import Pad
+from datetime import datetime,date,time
 
 parser = reqparse.RequestParser()
 parser.add_argument('pad_id', type=int, location='args')
@@ -136,7 +137,7 @@ class UAVPadAdd(Resource):
             pad_obj.pad_ver = pad_dict[0]['pad_ver']
             pad_obj.pad_type = pad_dict[0]['pad_type']
             pad_obj.pad_fact = pad_dict[0]['pad_fact']
-            pad_obj.pad_date = pad_dict[0]['pad_date']
+            pad_obj.pad_date = datetime.strptime(pad_dict[0]['pad_date'],'%Y-%m-%d').date()
             pad_obj.user_team = pad_dict[0]['user_team']
             pad_obj.pad_status = '在库'
             pad_obj.pad_use_number = 0
@@ -173,7 +174,7 @@ class UAVPadModify(Resource):
             pad_obj.pad_ver = pad_dict[0]['pad_ver']
             pad_obj.pad_type = pad_dict[0]['pad_type']
             pad_obj.pad_fact = pad_dict[0]['pad_fact']
-            pad_obj.pad_date = pad_dict[0]['pad_date']
+            pad_obj.pad_date = datetime.strptime(pad_dict[0]['pad_date'],'%Y-%m-%d').date()
             pad_obj.user_team = pad_dict[0]['user_team']
             user = self.userDao.verify_token(token, '')
             if (not user):

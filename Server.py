@@ -14,7 +14,7 @@ from flask_restful import Api
 from flask_httpauth import HTTPBasicAuth
 from flask import Flask, render_template
 
-import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute,PhotoUpload,PowerLinesRoute,UserManagerRoute
+import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute,PhotoUpload,PowerLinesRoute,UserManagerRoute,DefectRoute
 import UAVManagerDAO
 
 auth = HTTPBasicAuth()
@@ -66,7 +66,13 @@ def login():
 
 ##########################################用户权限管理模块
 api.add_resource(UserManagerRoute.UserList,'/usermanager/api/v1.0/user/list')
-api.add_resource(UserManagerRoute.UserAdd,'/usermanager/api/v1.0/user/Add')
+api.add_resource(UserManagerRoute.UserGetID,'/usermanager/api/v1.0/user/id')
+api.add_resource(UserManagerRoute.UserPages,'/usermanager/api/v1.0/user/pages')
+api.add_resource(UserManagerRoute.UserAdd,'/usermanager/api/v1.0/user/add')
+api.add_resource(UserManagerRoute.UserModify,'/usermanager/api/v1.0/user/modify')
+api.add_resource(UserManagerRoute.UserRole,'/usermanager/api/v1.0/user/role')
+api.add_resource(UserManagerRoute.UserDepartment,'/usermanager/api/v1.0/user/department')
+api.add_resource(UserManagerRoute.UserTeam,'/usermanager/api/v1.0/user/team')
 #api.add_resource(UserManagerRoute.AuthorityAdd,'/usermanager/api/v1.0/user/AddAuthority')
 
 
@@ -130,11 +136,11 @@ api.add_resource(UAVFaultRoute.UAVFaultList,'/uavmanager/api/v1.0/fault/list')
 api.add_resource(UAVFaultRoute.UAVFaultDeviceVersion,'/uavmanager/api/v1.0/fault/device_ver')
 api.add_resource(UAVFaultRoute.UAVFaultListPages,'/uavmanager/api/v1.0/fault/pages')
 api.add_resource(UAVFaultRoute.UAVFaultAdd,'/uavmanager/api/v1.0/fault/add')
+api.add_resource(UAVFaultRoute.UAVFaultFinished,'/uavmanager/api/v1.0/fault/finished')
 
 #fault report api
 api.add_resource(UAVFaultReportRoute.FaultReportQuery, '/uavmanager/api/v1.0/faultreport')
 api.add_resource(UAVFaultReportRoute.FaultReportUpdate, '/uavmanager/api/v1.0/faultreport/update')
-
 
 #approval
 api.add_resource(UAVApporvalRoute.UAVApprovalList, '/uavmanager/api/v1.0/approval/list')
@@ -147,7 +153,7 @@ api.add_resource(UAVApporvalRoute.UAVApprovalAgree, '/uavmanager/api/v1.0/approv
 api.add_resource(UAVApporvalRoute.UAVApprovalDisagree, '/uavmanager/api/v1.0/approval/disagree')
 
 ###################################################################文件上传模块
-api.add_resource(PhotoUpload.FileUpload,'/gis/api/v1.0/FileUpload')
+api.add_resource(PhotoUpload.FileUpload,'/gis/api/v1.0/fileupload')
 api.add_resource(PhotoUpload.ImageUpload,'/gis/api/v1.0/imageupload')
 
 ###################################################################电力线路杆塔查询模块
@@ -169,8 +175,11 @@ api.add_resource(PowerLinesRoute.PowerLineTowerDeleteRoute,'/gis/api/v1.0/towerD
 api.add_resource(PowerLinesRoute.PowerLineTowerQueryRoute,'/gis/api/v1.0/tower/query')
 api.add_resource(PowerLinesRoute.PowerLineTowerAdd,'/gis/api/v1.0/tower/add')
 
-api.add_resource(PowerLinesRoute.PwoerLinePhotoIdxRoute,'/gis/api/v1.0/photo')
-
+api.add_resource(PowerLinesRoute.PowerPhotoSearch,'/gis/api/v1.0/photo/search')
+api.add_resource(PowerLinesRoute.PowerLinePhotoIdxRoute,'/gis/api/v1.0/line/photo')
+api.add_resource(PowerLinesRoute.PowerTowerPhotoIdxRoute,'/gis/api/v1.0/tower/photo')
+api.add_resource(DefectRoute.DefectLevel, '/gis/api/v1.0/defectlevel')
+api.add_resource(DefectRoute.DefectPart, '/gis/api/v1.0/defectPart')
 
 if __name__ == '__main__':
     app.run()

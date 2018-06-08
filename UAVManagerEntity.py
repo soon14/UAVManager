@@ -4,13 +4,24 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer,String,DateTime,FLOAT
+from sqlalchemy import Column, Integer,String,DateTime,FLOAT,Date
+import json
+from datetime import date
+
+
 
 #use orm
 EntityBase = declarative_base()
 def to_dict(self):
     return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
 EntityBase.to_dict=to_dict
+
+
+def convert(obj):
+    if(isinstance(obj,date)):
+        return obj.strftime('%Y-%m-%d')
+    else:
+        return obj
 
 #########################################################################用户管理
 class User(EntityBase):
@@ -20,6 +31,8 @@ class User(EntityBase):
     user_password = Column(String(32))
     user_name= Column(String(45))
     user_phone=Column(String(11))
+    user_number=Column(String(45))
+    user_department=Column(String(45))
     user_team =Column(String(45))
     user_role =Column(Integer)
 
@@ -43,10 +56,10 @@ class Manager(EntityBase):
     device_type = Column(String(50))
     user_team = Column(String(50))
     borrower_name = Column(String(45))
-    borrow_date = Column(DateTime)
+    borrow_date = Column(Date)
     approver_name = Column(String(45))
     manager_status = Column(String(10))
-    return_date = Column(DateTime)
+    return_date = Column(Date)
     return_desc = Column(String(1024))
 
 class Device(EntityBase):
@@ -56,7 +69,7 @@ class Device(EntityBase):
     device_type = Column(String(45))
     uad_code = Column(String(45))
     device_fact = Column(String(45))
-    device_date = Column(String(45))
+    device_date = Column(Date)
     user_team = Column(String(45))
     uad_camera= Column(String(45))
     uav_yuntai=Column(String(45))
@@ -70,7 +83,7 @@ class Battery(EntityBase):
     battery_ver = Column(String(45))
     battery_type=Column(String(45))
     battery_fact=Column(String(45))
-    battery_date=Column(String(45))
+    battery_date=Column(Date)
     user_team=Column(String(45))
     battery_status=Column(String(10))
     battery_use_number=Column(Integer)
@@ -81,7 +94,7 @@ class Pad(EntityBase):
     pad_ver=Column(String(45))
     pad_type=Column(String(45))
     pad_fact=Column(String(45))
-    pad_date=Column(String(45))
+    pad_date=Column(Date)
     user_team = Column(String(45))
     pad_status=Column(String(45))
     pad_use_number=Column(Integer)
@@ -92,7 +105,7 @@ class Parts(EntityBase):
     parts_ver=Column(String(45))
     parts_type=Column(String(45))
     parts_fact=Column(String(45))
-    parts_date=Column(String(45))
+    parts_date=Column(Date)
     user_team = Column(String(45))
     parts_status=Column(String(45))
     parts_use_number=Column(Integer)
@@ -129,7 +142,7 @@ class Fault(EntityBase):
     fault_id = Column(Integer, primary_key=True)
     device_id = Column(Integer)
     device_ver=Column(String(45))
-    fault_date = Column(String(45))
+    fault_date = Column(Date)
     fault_reason=Column(String(45))
     fault_deal = Column(String(45))
     fault_finished = Column(Integer)
@@ -140,7 +153,7 @@ class FaultReport(EntityBase):
     fault_report_device_id = Column(Integer)
     fault_report_line_name = Column(String(45))
     fault_report_towerRange=Column(String(45))
-    fault_report_date = Column(String(45))
+    fault_report_date = Column(Date)
     fault_report_flyer=Column(String(45))
     fault_report_wether=Column(String(45))
     fault_report_observer=Column(String(45))
@@ -157,7 +170,7 @@ class Lines(EntityBase):
     __tablename__='tb_lines'
     lines_id = Column(Integer,primary_key=True)
     lines_name=Column(String(45))
-    lines_construct_date = Column(String(45))
+    lines_construct_date = Column(Date)
     lines_voltage = Column(String(45))
     lines_work_team = Column(String(45))
     lines_incharge = Column(String(45))
@@ -180,9 +193,34 @@ class Photo(EntityBase):
     photo_id = Column(Integer,primary_key=True)
     photo_line = Column(Integer)
     photo_tower_id = Column(Integer)
-    photo_tower_part_id = Column(Integer)
     photo_path=Column(String(256))
     photo_classify=Column(String(45))
+    photo_date = Column(Date)
+
+class TowerPart(EntityBase):
+    __tablename__="tb_part_dict"
+    tb_partid = Column(Integer,primary_key=True)
+    tb_partname = Column(Integer)
+
+class DefectLevel(EntityBase):
+    __tablename__="tb_defect_level"
+    tb_defect_level_id = Column(Integer,primary_key=True)
+    tb_defect_level = Column(String(45))
+
+class DefectPart(EntityBase):
+    __tablename__="tb_defect_part"
+    tb_defect_part_id = Column(Integer,primary_key=True)
+    tb_defect_part_name = Column(String(45))
+
+class Defect(EntityBase):
+    __tablename__="tb_defect"
+    tb_defect_id = Column(Integer,primary_key=True)
+    tb_defect_towerid = Column(Integer)
+    tb_defect_lineid = Column(Integer)
+    tb_defect_photoid=Column(Integer)
+    tb_defect_level=Column(Integer)
+    tb_defect_part = Column(String(45))
+    tb_defect_desc = Column(String(256))
 
 def class_to_dict(obj):
     is_list = obj.__class__ == [].__class__
@@ -192,10 +230,18 @@ def class_to_dict(obj):
         for o in obj:
             #trans obj to dict
             dict = {}
-            dict.update(o.to_dict())
+            tmpdict=o.to_dict()
+            for key in tmpdict:
+                dict[key]=convert(tmpdict[key])
+
+            #tmp=json.dumps(tmpdict,default=ComplexEncoder)
+           # jtmp=json.loads(tmp)
+            #dict.update(json.loads(tmp))
             obj_arr.append(dict)
         return obj_arr
     else:
         dict = {}
-        dict.update(obj.__dict__)
+        tmpdict = obj.to_dict()
+        for key in tmpdict:
+            dict[key] = convert(tmpdict[key])
         return dict

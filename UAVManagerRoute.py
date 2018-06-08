@@ -9,6 +9,7 @@ from flask_restful import reqparse
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
 from UAVManagerDAO import ManagerDAO,UserDAO,DeviceDAO
+from datetime import datetime,date,time
 
 parser = reqparse.RequestParser()
 parser.add_argument('device_id', type=int, location='args')
@@ -115,13 +116,19 @@ class ManagerBorrow(Resource):
             else:
                 ret=[]
                 for item in borrowList:
-                    rs=self.dao.manager_borrow(user,item['approver'],item['borrower'],item['borrow_team'],item['uav_id'],item['borrow_time'],item['return_time'])
+                    borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
+                    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
+                    rs=self.dao.manager_borrow(user,item['approver'],item['borrower'],item['borrow_team'],item['uav_id'],borrowtime,returntime)
                     if rs==-1:
-                        return make_response(jsonify({'error': 'borrower not exist'}), 401)
+                        return make_response(jsonify({'error': 'device not exist'}), 401)
                     if rs==-2:
                         return make_response(jsonify({'error': 'device not returned'}), 404)
+                    if rs == -3:
+                        return make_response(jsonify({'error': 'borrower not returned'}), 405)
+                    if rs == -4:
+                        return make_response(jsonify({'error': 'approver not exist'}), 406)
 
-                    ret = self.dao.manager_query_device(int(item['uav_id']),item['return_time'],item['borrower'])
+                    ret = self.dao.manager_query_device(int(item['uav_id']),returntime.strftime('%Y-%m-%d'),item['borrower'])
                 return json.dumps(ret)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -144,10 +151,11 @@ class ManagerReturn(Resource):
             else:
 
                 for item in borrowList:
-                    rs=self.dao.manager_return(user,item['device_id'],item['return_date'],item['return_desc'])
+                    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
+                    rs=self.dao.manager_return(user,item['device_id'],returntime,item['return_desc'])
                     if rs!=1:
                         return make_response(jsonify({'error': 'return deivce failed'}), 401)
-                    ret = self.dao.manager_query_device(int(item['device_id']), item['return_date'],"")
+                    ret = self.dao.manager_query_device(int(item['device_id']),returntime.strftime('%Y-%m-%d'),"")
                 return json.dumps(ret)
         else:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)

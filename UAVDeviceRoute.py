@@ -11,6 +11,7 @@ from flask import Flask, request ,jsonify
 from flask import Response,make_response
 from UAVManagerDAO import DeviceDAO,UserDAO
 from UAVManagerEntity import Device
+from datetime import datetime
 
 parser = reqparse.RequestParser()
 parser.add_argument('device_id', type=int, location='args')
@@ -26,6 +27,7 @@ parser.add_argument('uad_rcontrol',type=str,location='args')
 parser.add_argument('device_status',type=str,location='args')
 parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
+
 
 #分页导出无人机
 class UAVDeviceList(Resource):
@@ -248,7 +250,7 @@ class UAVDeviceAdd(Resource):
             device_obj.device_type = device_dict[0]['device_type']
             device_obj.uad_code = device_dict[0]['uad_code']
             device_obj.device_fact = device_dict[0]['device_fact']
-            device_obj.device_date = device_dict[0]['device_date']
+            device_obj.device_date = datetime.strptime(device_dict[0]['device_date'],'%Y-%m-%d').date()
             device_obj.user_team = device_dict[0]['user_team']
             device_obj.uad_camera = device_dict[0]['uad_camera']
             device_obj.uav_yuntai = device_dict[0]['uav_yuntai']
@@ -322,7 +324,7 @@ class UAVDeviceModify(Resource):
             device_obj.device_type = device_dict[0]['device_type']
             device_obj.uad_code = device_dict[0]['uad_code']
             device_obj.device_fact = device_dict[0]['device_fact']
-            device_obj.device_date = device_dict[0]['device_date']
+            device_obj.device_date = datetime.strptime(device_dict[0]['device_date'],'%Y-%m-%d').date()
             device_obj.user_team = device_dict[0]['user_team']
             device_obj.uad_camera = device_dict[0]['uad_camera']
             device_obj.uav_yuntai = device_dict[0]['uav_yuntai']

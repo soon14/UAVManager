@@ -11,7 +11,7 @@ from flask import Flask, request ,jsonify
 from flask import Response,make_response
 from UAVManagerDAO import PartsDao,UserDAO
 from UAVManagerEntity import Parts
-
+from datetime import datetime,date,time
 parser = reqparse.RequestParser()
 parser.add_argument('parts_id', type=int, location='args')
 parser.add_argument('parts_ver',type=str,location='args')
@@ -173,7 +173,7 @@ class UAVPartsAdd(Resource):
             parts_obj.parts_ver = parts_dict[0]['parts_ver']
             parts_obj.parts_type = parts_dict[0]['parts_type']
             parts_obj.parts_fact = parts_dict[0]['parts_fact']
-            parts_obj.parts_date = parts_dict[0]['parts_date']
+            parts_obj.parts_date = datetime.strptime(parts_dict[0]['parts_date'],'%Y-%m-%d').date()
             parts_obj.user_team = parts_dict[0]['user_team']
             parts_obj.parts_status = '在库'
             parts_obj.parts_use_number = 0
@@ -211,7 +211,7 @@ class UAVPartsModify(Resource):
             parts_obj.parts_ver = parts_dict[0]['parts_ver']
             parts_obj.parts_type = parts_dict[0]['parts_type']
             parts_obj.parts_fact = parts_dict[0]['parts_fact']
-            parts_obj.parts_date = parts_dict[0]['parts_date']
+            parts_obj.parts_date = datetime.strptime(parts_dict[0]['parts_date'],'%Y-%m-%d').date()
             parts_obj.user_team = parts_dict[0]['user_team']
             user = self.userDao.verify_token(token, '')
             if (not user):

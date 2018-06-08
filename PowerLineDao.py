@@ -10,7 +10,7 @@ import ConfigParser
 import json
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,query
-from UAVManagerEntity import User, Lines, Towers,Photo, class_to_dict
+from UAVManagerEntity import User, Lines, Towers,Photo,DefectLevel,DefectPart,Defect, class_to_dict
 from UAVManagerDAO import UserDAO
 
 cf = ConfigParser.ConfigParser()
@@ -215,6 +215,9 @@ class PhotoDao:
         rs = session_power.query(Photo).filter(Photo.photo_tower_id==towerIdx).all()
         return class_to_dict(rs)
 
+    def query_photo_condition(self,start_date,end_date,tower_id):
+        return 1
+
     def add_photo(self,user,photo):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -228,10 +231,10 @@ class PhotoDao:
         else:
             return -1
 
-    def add_photo(self,voltage,line_id,tower_id,classify,path):
+    def add_photo(self,voltage,line_id,tower_id,classify,path,date):
         #是否进行判断
         line = session_power.query(Lines).filter(Lines.lines_id==line_id).first()
-        photo = Photo(photo_line=line_id,photo_tower_id=tower_id,photo_path=path,photo_classify=classify)
+        photo = Photo(photo_line=line_id,photo_tower_id=tower_id,photo_path=path,photo_classify=classify,photo_date=date)
         session_power.add(photo)
         try:
             session_power.commit()
@@ -252,3 +255,28 @@ class PhotoDao:
                 return 1
         else:
             return -1
+
+class DefectLevelDao:
+    def query_defect_level(self,user):
+        defectLevels = session_power.query(DefectLevel).all()
+        session_power.rollback()
+        return class_to_dict(defectLevels)
+
+class DefectPartDao:
+    def query_defect_part(self,user):
+        defectParts= session_power.query(DefectPart).all()
+        session_power.rollback()
+        return class_to_dict(defectParts)
+
+class DefectDao:
+    #查询杆塔对应的缺陷的照片
+    def query_defect_photo(self,user,tower_id):
+        defects = session_power.query(Defect).filter(Defect.tb_defect_towerid==tower_id).all()
+        session_power.rollback()
+        photoids=[]
+        for defect in defects:
+            photoids.append(defect.tb_defect_photoid)
+
+        photo = session_power.query(Photo).filter(Photo.photo_id.in_(photoids)).all()
+        session_power.rollback()
+        return class_to_dict(photo)

@@ -22,6 +22,11 @@ parser.add_argument('line_name', type=str, location='args')
 parser.add_argument('page_size', type=int, location='args')
 parser.add_argument('page_index', type=int, location='args')
 
+
+parser.add_argument('start_time', type=str, location='args')
+parser.add_argument('end_time', type=str, location='args')
+
+
 class PowerLineListRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -395,9 +400,7 @@ class PowerLineTowerPagesRoute(Resource):
 
 ######################################################
 
-
-
-class PwoerLinePhotoIdxRoute(Resource):
+class PowerLinePhotoIdxRoute(Resource):
     def __init__(self):
         self.dao = PhotoDao()
         self.userDao = UserDAO()
@@ -413,6 +416,60 @@ class PwoerLinePhotoIdxRoute(Resource):
         args = parser.parse_args()
         lineidx = args.get('towerid')
         rs=self.dao.query_photos(lineidx)
+        if rs==None:
+             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        else:
+             return rs
+        # else:
+        #     return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class PowerTowerPhotoIdxRoute(Resource):
+    def __init__(self):
+        self.dao = PhotoDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        # if (request.data != ""):
+        #     data = json.loads(request.data)
+        #     token = data['token']
+        #     toweridx = data['toweridx']
+        #     user = self.userDao.verify_token(token, '')
+        #     if (not user):
+        #          return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        args = parser.parse_args()
+        toweridx = args.get('towerid')
+        rs=self.dao.query_photos(toweridx)
+        if rs==None:
+             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        else:
+             return rs
+        # else:
+        #     return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class PowerPhotoSearch(Resource):
+    def __init__(self):
+        self.dao = PhotoDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        # if (request.data != ""):
+        #     data = json.loads(request.data)
+        #     token = data['token']
+        #     toweridx = data['toweridx']
+        #     user = self.userDao.verify_token(token, '')
+        #     if (not user):
+        #          return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        args = parser.parse_args()
+        toweridx = args.get('towerid')
+        start_time = args.get('start_time')
+        end_time = args.get('end_time')
+        rs=self.dao.query_photos(toweridx)
         if rs==None:
              return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         else:

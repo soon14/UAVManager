@@ -11,6 +11,7 @@ from flask import Flask, request ,jsonify
 from flask import Response,make_response
 from UAVManagerDAO import BatteryDAO,UserDAO
 from UAVManagerEntity import Battery
+from datetime import datetime
 
 parser = reqparse.RequestParser()
 parser.add_argument('battery_id', type=int, location='args')
@@ -215,7 +216,7 @@ class UAVBatteryAdd(Resource):
             battery_obj.battery_ver = battery_dict[0]['battery_ver']
             battery_obj.battery_type = battery_dict[0]['battery_type']
             battery_obj.battery_fact = battery_dict[0]['battery_fact']
-            battery_obj.battery_date = battery_dict[0]['battery_date']
+            battery_obj.battery_date = datetime.strptime(battery_dict[0]['battery_date'],'%Y-%m-%d').date()
             battery_obj.user_team = battery_dict[0]['user_team']
             battery_obj.battery_status = '在库'
             battery_obj.battery_use_number = 0
@@ -286,7 +287,7 @@ class UAVBatteryModify(Resource):
                 battery_obj.battery_ver = battery_dict[0]['battery_ver']
                 battery_obj.battery_type = battery_dict[0]['battery_type']
                 battery_obj.battery_fact = battery_dict[0]['battery_fact']
-                battery_obj.battery_date = battery_dict[0]['battery_date']
+                battery_obj.battery_date = datetime.strptime(battery_dict[0]['battery_date'],'%Y-%m-%d').date()
                 battery_obj.user_team = battery_dict[0]['user_team']
                 user = self.userDao.verify_token(token, '')
                 if (not user):
