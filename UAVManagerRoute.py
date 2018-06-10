@@ -151,7 +151,7 @@ class ManagerReturn(Resource):
             else:
 
                 for item in borrowList:
-                    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
+                    returntime = datetime.strptime(item['return_time'],'%Y-%m-%d').date()
                     rs=self.dao.manager_return(user,item['device_id'],returntime,item['return_desc'])
                     if rs!=1:
                         return make_response(jsonify({'error': 'return deivce failed'}), 401)

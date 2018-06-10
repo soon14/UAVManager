@@ -1338,7 +1338,7 @@ class ManagerDAO:
             #是否经过审批流程
             approve=session_uav.query(Approval).filter(Approval.apply_person==usr.user_name).first()
             if(approve != None):
-                if(Approval.approval_status==1):
+                if(approve.approval_status==1):
                     if '4' in roles:
                         #审批人是否有权限审批借出
                         if user.user_team==user_team: #有
@@ -1347,19 +1347,27 @@ class ManagerDAO:
                                 session_uav.add(obj)
                                 try:
                                     session_uav.commit()
+                                    # 借调申请记录的处理
+                                    approvalDao = ApprovalDao()
+                                    approvalDao.approval_finished(approve.apply_person)
                                 except:
                                     session_uav.rollback()
                                 session_uav.query(Device).filter(Device.device_id == uav_id).update({Device.device_status: '出库', Device.device_use_number: device.device_use_number + 1},synchronize_session=False)
                                 try:
                                     session_uav.commit()
+
                                 except:
                                     session_uav.rollback()
+
                                 return 1
                             if idx==2:
                                 obj = Manager(device_id=uav_id, device_ver=battery.device_ver,device_type=battery.device_type, approver_name=approver, borrower_name=borrower,borrow_date=borrow_time, user_team=borrow_team, manager_status='借用', return_date=return_time)
                                 session_uav.add(obj)
                                 try:
                                     session_uav.commit()
+                                    # 借调申请记录的处理
+                                    approvalDao = ApprovalDao()
+                                    approvalDao.approval_finished(approve.apply_person)
                                 except:
                                     session_uav.rollback()
                                 session_uav.query(Battery).filter(Battery.battery_id == uav_id).update({Battery.battery_status: '出库', Battery.battery_use_number: battery.device_use_number + 1},synchronize_session=False)
@@ -1373,6 +1381,9 @@ class ManagerDAO:
                                 session_uav.add(obj)
                                 try:
                                     session_uav.commit()
+                                    # 借调申请记录的处理
+                                    approvalDao = ApprovalDao()
+                                    approvalDao.approval_finished(approve.apply_person)
                                 except:
                                     session_uav.rollback()
                                 session_uav.query(Parts).filter(Parts.parts_id == uav_id).update({Parts.parts_status: '出库', Parts.parts_use_number: part.parts_use_number + 1},synchronize_session=False)
@@ -1386,6 +1397,9 @@ class ManagerDAO:
                                 session_uav.add(obj)
                                 try:
                                     session_uav.commit()
+                                    # 借调申请记录的处理
+                                    approvalDao = ApprovalDao()
+                                    approvalDao.approval_finished(approve.apply_person)
                                 except:
                                     session_uav.rollback()
                                 session_uav.query(Pad).filter(Pad.pad_id == uav_id).update({Pad.pad_status: '出库', Pad.pad_use_number: pad.pad_use_number + 1},synchronize_session=False)
@@ -1394,9 +1408,7 @@ class ManagerDAO:
                                 except:
                                     session_uav.rollback()
                                 return 1
-                            #借调申请记录的处理
-                            approvalDao = ApprovalDao()
-                            approvalDao.approval_finished(approve.apply_person)
+
                         else:#无
                             return -1
                     elif(Approval.approval_status==0):
@@ -1725,7 +1737,7 @@ class FaultDao:
         roles=usrDao.get_role(user)
         if '1' in roles and '5' not in roles:
             #故障原因
-            sql = 'select fault_reason,count(*) from tb_fault group by fault_reason;'
+            sql = 'select fault_reason,count(*) from tb_fault where fault_finished=0 group by fault_reason;'
             rs = session_uav.execute(sql).fetchall()
             session_uav.rollback()
 
@@ -1737,7 +1749,7 @@ class FaultDao:
                 ret.append(item)
             return json.dumps(ret)
         elif '5' in roles:
-            sql = 'select fault_reason, count(*) from tb_fault group by fault_reason;'
+            sql = 'select fault_reason,count(*) from tb_fault where fault_finished=0 group by fault_reason;'
             rs = session_uav.execute(sql).fetchall()
             ret = []
             for i in rs:
@@ -1750,7 +1762,7 @@ class FaultDao:
             return None
 
     def query_types(self):
-        sql = 'select device_ver from tb_fault group by device_ver;'
+        sql = 'select device_ver from tb_fault where fault_finished=0 group by device_ver;'
         rs = session_uav.execute(sql).fetchall()
         ret = []
         for i in rs:
@@ -2034,7 +2046,7 @@ class ApprovalDao:
                     session_uav.commit()
                 except:
                     session_uav.rollback()
-
+                return 1
     def approval_disagree(self,user,approval):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -2052,14 +2064,14 @@ class ApprovalDao:
         usrDao=UserDAO()
 
         #提交的批准人无权限批准
-        userApproval=session_usr.query(User).filter(User.user_name==approval.approval_person).first()
+        userApproval=session_usr.query(User).filter(User.user_id==approval.approval_person).first()
         if userApproval is None:
             return -2
         roleApproval = usrDao.get_role(userApproval)
         if '4' not in roleApproval and '5' not in roleApproval:
             return -2
 
-        roles=usrDao.get_role(user)
+        roles=usrDao.get_role(userApproval)
         if '4' in roles or '5' in roles:
             if user.user_team==approval.approval_team:
                 return -1
