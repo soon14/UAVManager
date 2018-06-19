@@ -23,7 +23,7 @@ power_name = cf.get("power_account","db_name")
 
 secret_key = cf.get('token','SECRET_KEY')
 
-engine_power = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(power_port) + '/' + power_name+'?charset=utf8')
+engine_power = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(power_port) + '/' + power_name+'?charset=utf8',pool_size=100, pool_recycle=3600)
 Session_Power= sessionmaker(bind=engine_power)
 session_power = Session_Power()
 
@@ -280,3 +280,6 @@ class DefectDao:
         photo = session_power.query(Photo).filter(Photo.photo_id.in_(photoids)).all()
         session_power.rollback()
         return class_to_dict(photo)
+		
+dao = LinesDao()
+print dao.query_lines()

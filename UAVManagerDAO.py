@@ -35,8 +35,8 @@ usr_name = cf.get("db_usr","db_name")
 
 secret_key = cf.get('token','SECRET_KEY')
 
-engine_uav = create_engine('mysql+mysqldb://' + db_user + ':' + db_pass + '@' + db_host + ':' + str(db_port) + '/' + db_name+'?charset=utf8')
-engine_usr = create_engine('mysql+mysqldb://' + usr_user + ':' + usr_pass + '@' + usr_host + ':' + str(usr_port) + '/' + usr_name+'?charset=utf8')
+engine_uav = create_engine('mysql+mysqldb://' + db_user + ':' + db_pass + '@' + db_host + ':' + str(db_port) + '/' + db_name+'?charset=utf8',pool_size=100, pool_recycle=3600)
+engine_usr = create_engine('mysql+mysqldb://' + usr_user + ':' + usr_pass + '@' + usr_host + ':' + str(usr_port) + '/' + usr_name+'?charset=utf8',pool_size=100, pool_recycle=3600)
 Session_UAV = sessionmaker(bind=engine_uav)
 session_uav = Session_UAV()
 Session_User = sessionmaker(bind=engine_usr)
@@ -474,13 +474,17 @@ class DeviceDAO:
             exist = session_uav.query(Device).filter(Device.device_id==device.device_id).first()
             if exist is not None:
                 return -2
+
             #不存在则添加
-            session_uav.add(device)
-            try:
-                session_uav.commit()
-            except:
-                session_uav.rollback()
-            return 1
+            if '5' in roles or device.user_team==usr.user_team:
+                session_uav.add(device)
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
+                return 1
+            else:
+                return -1
         else:
             return -1
 
@@ -687,16 +691,18 @@ class BatteryDAO:
         roles=usrDao.get_role(usr)
         if '2' in roles:
             #首先判断是否存在
-            exist = session_uav.query(Battery).filter(Battery.battery_id==battery.battery_id).first()
+            exist = session_uav.query(Battery).filter(Battery.battery_id == battery.battery_id).first()
             if exist is not None:
                 return -2
-
-            session_uav.add(battery)
-            try:
-                session_uav.commit()
-            except:
-                session_uav.rollback()
-            return 1
+            if '5' in roles or battery.user_team == usr.user_team:
+                session_uav.add(battery)
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
+                return 1
+            else:
+                return -1
         else:
             return -1
 
@@ -850,12 +856,15 @@ class PadDao:
             #session_uav.rollback()
             if(existed is not None):
                 return -2
-            session_uav.add(pad)
-            try:
-                session_uav.commit()
-            except:
-                session_uav.rollback()
-            return 1
+            if '5' in roles or pad.user_team==usr.user_team:
+                session_uav.add(pad)
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
+                return 1
+            else:
+                return -1
         else:
             return -1
 
@@ -896,8 +905,12 @@ class PartsDao:
     def query_all(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
-        if '1' in roles:
-            return class_to_dict(session_uav.query(Parts).all())
+        if '1' in roles and '5' not in roles:
+            rs=session_uav.query(Parts).filter(Parts.user_team==user.user_team).all()
+            return class_to_dict(rs)
+        elif '5' in roles:
+            rs = session_uav.query(Parts).all()
+            return class_to_dict(rs)
         else:
             return None
 
@@ -1002,13 +1015,15 @@ class PartsDao:
             exist = session_uav.query(Parts).filter(Parts.parts_id==parts.parts_id).first()
             if exist is not None:
                 return -2
-
-            session_uav.add(parts)
-            try:
-                session_uav.commit()
-            except:
-                session_uav.rollback()
-            return 1
+            if '5' in roles or parts.user_team==usr.user_team:
+                session_uav.add(parts)
+                try:
+                    session_uav.commit()
+                except:
+                    session_uav.rollback()
+                return 1
+            else:
+                return -1
         else:
             return -1
 
@@ -1828,7 +1843,7 @@ class FaultDao:
                     except:
                         session_uav.rollback()
                 return 1
-            else :
+            else:
                 return -1
         if '5' in roles:
             session_uav.add(fault)
