@@ -180,6 +180,10 @@ api.add_resource(PowerLinesRoute.PowerLinePhotoIdxRoute,'/gis/api/v1.0/line/phot
 api.add_resource(PowerLinesRoute.PowerTowerPhotoIdxRoute,'/gis/api/v1.0/tower/photo')
 api.add_resource(DefectRoute.DefectLevel, '/gis/api/v1.0/defectlevel')
 api.add_resource(DefectRoute.DefectPart, '/gis/api/v1.0/defectPart')
+api.add_resource(DefectRoute.DefectTowerID,'/gis/api/v1.0/searchdefect/towerid')
+api.add_resource(DefectRoute.DefectPhotoID,'/gis/api/v1.0/searchdefect/photoid')
+api.add_resource(DefectRoute.DefectAdd,'/gis/api/v1.0/defectadd')
+
 
 if __name__ == '__main__':
     app.run()

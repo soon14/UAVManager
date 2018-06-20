@@ -35,8 +35,8 @@ usr_name = cf.get("db_usr","db_name")
 
 secret_key = cf.get('token','SECRET_KEY')
 
-engine_uav = create_engine('mysql+mysqldb://' + db_user + ':' + db_pass + '@' + db_host + ':' + str(db_port) + '/' + db_name+'?charset=utf8')
-engine_usr = create_engine('mysql+mysqldb://' + usr_user + ':' + usr_pass + '@' + usr_host + ':' + str(usr_port) + '/' + usr_name+'?charset=utf8')
+engine_uav = create_engine('mysql+mysqldb://' + db_user + ':' + db_pass + '@' + db_host + ':' + str(db_port) + '/' + db_name+'?charset=utf8',pool_size=100,pool_recycle=3600)
+engine_usr = create_engine('mysql+mysqldb://' + usr_user + ':' + usr_pass + '@' + usr_host + ':' + str(usr_port) + '/' + usr_name+'?charset=utf8',pool_size=100,pool_recycle=3600)
 Session_UAV = sessionmaker(bind=engine_uav)
 Session_User = sessionmaker(bind=engine_usr)
 
@@ -1005,7 +1005,6 @@ class PartsDao:
         q = self.session_uav.query(Parts)
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
-        sql = 'select * from tb_device where '
         if '1' not in roles:
             return None
         if '1' in roles and '5' not in roles:

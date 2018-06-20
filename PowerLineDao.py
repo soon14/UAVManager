@@ -23,7 +23,7 @@ power_name = cf.get("power_account","db_name")
 
 secret_key = cf.get('token','SECRET_KEY')
 
-engine_power = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(power_port) + '/' + power_name+'?charset=utf8')
+engine_power = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(power_port) + '/' + power_name+'?charset=utf8',pool_size=100,pool_recycle=3600)
 Session_Power= sessionmaker(bind=engine_power)
 
 class LinesDao:
@@ -230,7 +230,15 @@ class PhotoDao:
         return class_to_dict(rs)
 
     def query_photo_condition(self,start_date,end_date,tower_id):
-        return 1
+        q=self.session_power.query(Photo)
+        if start_date!=None:
+            q=q.filter(Photo.photo_date>=start_date)
+        if end_date != None:
+            q=q.filter(Photo.photo_date<=end_date)
+        if tower_id != None:
+            q=q.filter(Photo.photo_tower_id==tower_id)
+        photos = q.all()
+        return class_to_dict(photos)
 
     def add_photo(self,user,photo):
         usrDao=UserDAO()
@@ -299,7 +307,7 @@ class DefectDao:
         self.session_power.close()
 
     #查询杆塔对应的缺陷的照片
-    def query_defect_photo(self,user,tower_id):
+    def query_defect_tower(self,user,tower_id):
         defects = self.session_power.query(Defect).filter(Defect.tb_defect_towerid==tower_id).all()
         self.session_power.rollback()
         photoids=[]
@@ -309,3 +317,28 @@ class DefectDao:
         photo = self.session_power.query(Photo).filter(Photo.photo_id.in_(photoids)).all()
         self.session_power.rollback()
         return class_to_dict(photo)
+
+    def query_defect_photo(self,user,photo_id):
+        defects = self.session_power.query(Defect).filter(Defect.tb_defect_photoid==photo_id).all()
+        self.session_power.rollback()
+        photoids=[]
+        for defect in defects:
+            photoids.append(defect.tb_defect_photoid)
+
+        photo = self.session_power.query(Photo).filter(Photo.photo_id.in_(photoids)).all()
+        self.session_power.rollback()
+        return class_to_dict(photo)
+
+    def defect_add(self,defect):
+        self.session_power.add(defect)
+        isAdd = False
+        try:
+            self.session_power.commit()
+            isAdd = True
+        except:
+            self.session_power.rollback()
+            isAdd = False
+        if isAdd:
+            return 1
+        else:
+            return -1

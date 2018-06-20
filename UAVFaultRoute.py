@@ -142,10 +142,10 @@ class UAVFaultAdd(Resource):
                 return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.add_fault(user,fault)
-            if rs==None:
+            if rs==-1:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:
-                return rs
+                return make_response(jsonify({'success': 'Fault add success'}), 200)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
@@ -169,10 +169,10 @@ class UAVFaultFinished(Resource):
                 return make_response(jsonify({'error': 'token expired'}), 399)
 
             rs=self.dao.finished_fault(user,fault_id)
-            if rs==None:
+            if rs==-1:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:
-                return rs
+                return make_response(jsonify({'success': 'Fault finished success'}), 401)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 

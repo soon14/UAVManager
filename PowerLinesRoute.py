@@ -12,6 +12,8 @@ from flask import Response,make_response
 from PowerLineDao import LinesDao, TowerDao,PhotoDao
 from UAVManagerDAO import UserDAO
 from UAVManagerEntity import User,Lines,Towers
+from datetime import datetime
+
 parser = reqparse.RequestParser()
 parser.add_argument('linename', type=str, location='args')
 parser.add_argument('lineid', type=int, location='args')
@@ -467,9 +469,9 @@ class PowerPhotoSearch(Resource):
         #          return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         args = parser.parse_args()
         toweridx = args.get('towerid')
-        start_time = args.get('start_time')
-        end_time = args.get('end_time')
-        rs=self.dao.query_photos(toweridx)
+        start_time = datetime.strptime(args.get('start_time'),'%Y-%m-%d').date()
+        end_time = datetime.strptime(args.get('end_time'),'%Y-%m-%d').date()
+        rs=self.dao.query_photo_condition(start_time,end_time,toweridx)
         if rs==None:
              return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         else:
