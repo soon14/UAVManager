@@ -169,11 +169,13 @@ api.add_resource(PowerLinesRoute.PowerLineTypeRoute,'/gis/api/v1.0/lines/type/vo
 api.add_resource(PowerLinesRoute.PowerLineWorkteamRoute,'/gis/api/v1.0/lines/type/workteam')
 
 api.add_resource(PowerLinesRoute.PowerLineTowerRoute,'/gis/api/v1.0/tower')
+api.add_resource(PowerLinesRoute.PowerLineTowerIDRoute,'/gis/api/v1.0/tower/id')
 api.add_resource(PowerLinesRoute.PowerLineTowerPagesRoute,'/gis/api/v1.0/tower/pages')
 api.add_resource(PowerLinesRoute.PowerLineTowerDeleteRoute,'/gis/api/v1.0/towerDelete')
 
 api.add_resource(PowerLinesRoute.PowerLineTowerQueryRoute,'/gis/api/v1.0/tower/query')
 api.add_resource(PowerLinesRoute.PowerLineTowerAdd,'/gis/api/v1.0/tower/add')
+api.add_resource(PowerLinesRoute.PowerLineTowerUpdate,'/gis/api/v1.0/tower/Update')
 
 api.add_resource(PowerLinesRoute.PowerPhotoSearch,'/gis/api/v1.0/photo/search')
 api.add_resource(PowerLinesRoute.PowerLinePhotoIdxRoute,'/gis/api/v1.0/line/photo')

@@ -172,6 +172,10 @@ class TowerDao:
         rs = self.session_power.query(Towers).filter(Towers.deleted==0).all()
         return class_to_dict(rs)
 
+    def query_tower_id(self,tower_id):
+        rs = self.session_power.query(Towers).filter(Towers.tower_id==tower_id,Towers.deleted==0).all()
+        return class_to_dict(rs)
+
     def query_towers(self,linename):
         if linename is not None:
             rs = self.session_power.query(Towers).filter(Towers.tower_linename==linename,Towers.deleted==0).all()
@@ -184,6 +188,19 @@ class TowerDao:
         roles=usrDao.get_role(user)
         if '3' in roles:
             self.session_power.add(tower)
+            try:
+                self.session_power.commit()
+            except:
+                self.session_power.rollback()
+            return 1
+        else:
+            return -1
+
+    def update_tower(self,user,tower):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '3' in roles:
+            self.session_power.merge(tower)
             try:
                 self.session_power.commit()
             except:

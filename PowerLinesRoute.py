@@ -313,6 +313,33 @@ class PowerLineTowerRoute(Resource):
     def get(self):
         return self.post()
 
+class PowerLineTowerIDRoute(Resource):
+    def __init__(self):
+        self.dao = TowerDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        # if (request.data != ""):
+        #     data = json.loads(request.data)
+        #     token = data['token']
+        #     user = self.userDao.verify_token(token, '')
+        #     if (not user):
+        #          return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        args = parser.parse_args()
+        tower_id = args.get('towerid')
+        rs=self.dao.query_tower_id(tower_id)
+        if rs==None:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        else:
+            return rs
+        #     else:
+        #         return rs
+        # else:
+        #     return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
 class PowerLineTowerAdd(Resource):
     def __init__(self):
         self.dao = TowerDao()
@@ -335,6 +362,38 @@ class PowerLineTowerAdd(Resource):
             tower.tower_lng=towerdict[0]['tower_lng']
             tower.tower_elevation=towerdict[0]['tower_elevation']
             rs = self.dao.add_tower(user,tower)
+            if rs==-1:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return make_response(jsonify({'success': 'Add data success'}), 401)
+        else:
+             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class PowerLineTowerUpdate(Resource):
+    def __init__(self):
+        self.dao = TowerDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            towerdict = data['tower']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            tower=Towers()
+            tower.tower_linename=towerdict[0]['tower_linename']
+            tower.tower_idx=towerdict[0]['tower_idx']
+            tower.tower_type=towerdict[0]['tower_type']
+            tower.tower_height=towerdict[0]['tower_height']
+            tower.tower_lat=towerdict[0]['tower_lat']
+            tower.tower_lng=towerdict[0]['tower_lng']
+            tower.tower_elevation=towerdict[0]['tower_elevation']
+            rs = self.dao.update_tower(user,tower)
             if rs==-1:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:

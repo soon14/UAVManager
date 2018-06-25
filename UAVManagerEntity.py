@@ -179,14 +179,55 @@ class Lines(EntityBase):
 class Towers(EntityBase):
     __tablename__='tb_tower'
     tower_id = Column(Integer,primary_key=True)
-    tower_linename=Column(String(128))
-    tower_idx=Column(Integer)
-    tower_type=Column(String(45))
-    tower_height=Column(FLOAT)
-    tower_lat=Column(FLOAT)
-    tower_lng=Column(FLOAT)
-    tower_elevation=Column(FLOAT)
+    tower_linename = Column(String(128))
+    tower_idx = Column(Integer)
+    tower_type = Column(String(45))
+    tower_date = Column(Date)
+    tower_span_small = Column(FLOAT)
+    tower_span_horizonal = Column(FLOAT)
+    tower_span_vertical = Column(FLOAT)
+    tower_rotation_direction = Column(String(45))
+    tower_rotation_degree = Column(FLOAT)
+    tower_height = Column(FLOAT)
+    tower_lat = Column(FLOAT)
+    tower_lng = Column(FLOAT)
+    tower_elevation = Column(FLOAT)
+    tower_descriptor = Column(String(256))
     deleted = Column(Integer)
+
+class LightArrest(EntityBase):
+    __tablename__='tb_tower'
+    light_arrest_id = Column(Integer)
+    light_arrest_type = Column(String(45))
+    light_arrest_factor = Column(String(128))
+    light_arrest_counter_type = Column(String(128))
+    light_arrest_install_date = Column(Date)
+    light_arrest_gap = Column(String(45))
+    light_arrest_descriptor = Column(String(128))
+
+class Insulator(EntityBase):
+    __tablename__ = 'tb_tower'
+    insulator_id = Column(Integer)
+    insulator_type = Column(String(45))
+    insulator_number_strand = Column(Integer)
+    insulator_strands = Column(Integer)
+    insulator_install_date = Column(Date)
+    insulator_factor = Column(String(128))
+    insulator_creepagedistance = Column(FLOAT)
+    insulator_distanceStd = Column(String(45))
+    insulator_std_required = Column(String(45))
+    insulator_double = Column(String(45))
+    insulator_double_hang = Column(String(45))
+    insulator_descriptor = Column(String(128))
+
+class OPGW(EntityBase):
+    __tablename__ = 'tb_tower'
+    opgw_id = Column(Integer)
+    opgw_region=Column(String(45))
+    opgw_type = Column(String(45))
+    opgw_date = Column(Date)
+    opgw_factor = Column(String(128))
+    opgw_descriptor = Column(String(128))
 
 class Photo(EntityBase):
     __tablename__="tb_photo"
@@ -221,6 +262,8 @@ class Defect(EntityBase):
     tb_defect_level=Column(Integer)
     tb_defect_part = Column(String(45))
     tb_defect_desc = Column(String(256))
+
+
 
 def class_to_dict(obj):
     is_list = obj.__class__ == [].__class__
