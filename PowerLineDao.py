@@ -12,6 +12,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,query
 from UAVManagerEntity import User, Lines, Towers,Photo,DefectLevel,DefectPart,Defect, class_to_dict
 from UAVManagerDAO import UserDAO
+from datetime import datetime
 
 cf = ConfigParser.ConfigParser()
 cf.read("config.conf")
@@ -242,8 +243,12 @@ class PhotoDao:
         rs = self.session_power.query(Photo).all()
         return class_to_dict(rs)
 
-    def query_photos(self,towerIdx):
+    def query_photos_towerid(self,towerIdx):
         rs = self.session_power.query(Photo).filter(Photo.photo_tower_id==towerIdx).all()
+        return class_to_dict(rs)
+
+    def query_photos_time(self,towerIdx,photoDate):
+        rs = self.session_power.query(Photo).filter(Photo.photo_tower_id==towerIdx,Photo.photo_date==photoDate).all()
         return class_to_dict(rs)
 
     def query_photo_condition(self,start_date,end_date,tower_id):
@@ -256,6 +261,17 @@ class PhotoDao:
             q=q.filter(Photo.photo_tower_id==tower_id)
         photos = q.all()
         return class_to_dict(photos)
+
+    def query_photo_date(self,towerid):
+        sql = 'select photo_date from tb_photo  where photo_tower_id='+str(towerid)+' group by photo_date ;'
+        rs = self.session_power.execute(sql).fetchall()
+        self.session_power.rollback()
+        ret = []
+        for i in rs:
+            item = {}
+            item['date'] = i[0].strftime("%Y-%m-%d")
+            ret.append(item)
+        return json.dumps(ret)
 
     def add_photo(self,user,photo):
         usrDao=UserDAO()

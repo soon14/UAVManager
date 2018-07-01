@@ -42,20 +42,21 @@ class FileUpload(Resource):
             tower_id = data['towerid']
             voltage = data['voltage']
             classify = data['classify']
-            date=datetime.strptime(data['date'],'%Y-%m-%d').date()
+            date=datetime.datetime.strptime(data['date'],'%Y-%m-%d').date()
             image = request.files['image']
 
-            file_folder = save_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+date+'/'+classify
+            file_folder = save_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+data['date']+'/'+classify
             if not os.path.isdir(file_folder):
                 os.makedirs(file_folder)
             if image and self.allowed_file(image.filename):
                 filename = secure_filename(image.filename)
                 image.save(os.path.join(file_folder, filename))
-
-            db_folder=database_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+classify
-            rs = self.photoDao.add_photo(voltage,line_id,tower_id,classify,os.path.join(db_folder, filename),date)
-            if rs == 1:
-                return make_response(jsonify({'seccess': 'upload success'}), 200)
+                db_folder=database_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+classify
+                rs = self.photoDao.add_photo(voltage,line_id,tower_id,classify,os.path.join(db_folder, filename),date)
+                if rs == 1:
+                    return make_response(jsonify({'seccess': 'upload success'}), 200)
+            else:
+                return make_response(jsonify({'error': 'param error'}), 401)
         else:
             return make_response(jsonify({'error': 'param error'}), 401)
 

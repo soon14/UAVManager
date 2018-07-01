@@ -73,6 +73,7 @@ api.add_resource(UserManagerRoute.UserModify,'/usermanager/api/v1.0/user/modify'
 api.add_resource(UserManagerRoute.UserRole,'/usermanager/api/v1.0/user/role')
 api.add_resource(UserManagerRoute.UserDepartment,'/usermanager/api/v1.0/user/department')
 api.add_resource(UserManagerRoute.UserTeam,'/usermanager/api/v1.0/user/team')
+api.add_resource(UserManagerRoute.UserTeams,'/usermanager/api/v1.0/user/teams')
 #api.add_resource(UserManagerRoute.AuthorityAdd,'/usermanager/api/v1.0/user/AddAuthority')
 
 
@@ -180,6 +181,8 @@ api.add_resource(PowerLinesRoute.PowerLineTowerUpdate,'/gis/api/v1.0/tower/Updat
 api.add_resource(PowerLinesRoute.PowerPhotoSearch,'/gis/api/v1.0/photo/search')
 api.add_resource(PowerLinesRoute.PowerLinePhotoIdxRoute,'/gis/api/v1.0/line/photo')
 api.add_resource(PowerLinesRoute.PowerTowerPhotoIdxRoute,'/gis/api/v1.0/tower/photo')
+api.add_resource(PowerLinesRoute.PowerTowerPhotoDate,'/gis/api/v1.0/tower/photodate')
+
 api.add_resource(DefectRoute.DefectLevel, '/gis/api/v1.0/defectlevel')
 api.add_resource(DefectRoute.DefectPart, '/gis/api/v1.0/defectPart')
 api.add_resource(DefectRoute.DefectTowerID,'/gis/api/v1.0/searchdefect/towerid')

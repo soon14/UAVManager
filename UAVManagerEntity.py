@@ -196,8 +196,8 @@ class Towers(EntityBase):
     deleted = Column(Integer)
 
 class LightArrest(EntityBase):
-    __tablename__='tb_tower'
-    light_arrest_id = Column(Integer)
+    __tablename__='tb_lightarrest'
+    light_arrest_id = Column(Integer,primary_key=True)
     light_arrest_type = Column(String(45))
     light_arrest_factor = Column(String(128))
     light_arrest_counter_type = Column(String(128))
@@ -206,8 +206,8 @@ class LightArrest(EntityBase):
     light_arrest_descriptor = Column(String(128))
 
 class Insulator(EntityBase):
-    __tablename__ = 'tb_tower'
-    insulator_id = Column(Integer)
+    __tablename__ = 'tb_insulator'
+    insulator_id = Column(Integer,primary_key=True)
     insulator_type = Column(String(45))
     insulator_number_strand = Column(Integer)
     insulator_strands = Column(Integer)
@@ -221,8 +221,8 @@ class Insulator(EntityBase):
     insulator_descriptor = Column(String(128))
 
 class OPGW(EntityBase):
-    __tablename__ = 'tb_tower'
-    opgw_id = Column(Integer)
+    __tablename__ = 'tb_opgw'
+    opgw_id = Column(Integer,primary_key=True)
     opgw_region=Column(String(45))
     opgw_type = Column(String(45))
     opgw_date = Column(Date)

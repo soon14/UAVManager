@@ -249,3 +249,27 @@ class UserTeam(Resource):
 
     def get(self):
         return self.post()
+
+class UserTeams(Resource):
+    def __init__(self):
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+            rs = self.userDao.get_role_teams()
+            if rs == None:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()

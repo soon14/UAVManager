@@ -293,6 +293,17 @@ class UserDAO:
         else:
             return None
 
+    def get_role_teams(self):
+        sql = 'select user_team from user group by user_team;'
+        rs = self.session_usr.execute(sql).fetchall()
+        self.session_usr.rollback()
+        ret = []
+        for i in rs:
+            item = {}
+            item['team'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
 class DeviceDAO:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -1324,6 +1335,7 @@ class ManagerDAO:
     #   是同一个班组
     #       当前用户是否有权限批准
     #       无权限批准则返回错误
+    #   代码需要优化
     def manager_borrow(self,user,approver,borrower,borrow_team,uav_id,borrow_time,return_time):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)

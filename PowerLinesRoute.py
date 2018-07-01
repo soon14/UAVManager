@@ -23,8 +23,7 @@ parser.add_argument('work_team', type=str, location='args')
 parser.add_argument('line_name', type=str, location='args')
 parser.add_argument('page_size', type=int, location='args')
 parser.add_argument('page_index', type=int, location='args')
-
-
+parser.add_argument('photo_date', type=str, location='args')
 parser.add_argument('start_time', type=str, location='args')
 parser.add_argument('end_time', type=str, location='args')
 
@@ -502,7 +501,41 @@ class PowerTowerPhotoIdxRoute(Resource):
         #          return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         args = parser.parse_args()
         toweridx = args.get('towerid')
-        rs=self.dao.query_photos(toweridx)
+        strDate = args.get('photo_date')
+
+        rs=None
+        if strDate==None:
+            rs = self.dao.query_photos_towerid(toweridx)
+        else:
+            photodate = datetime.strptime(strDate, '%Y-%m-%d')
+            rs = self.dao.query_photos_time(toweridx,photodate)
+
+        if rs==None:
+             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        else:
+             return rs
+        # else:
+        #     return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class PowerTowerPhotoDate(Resource):
+    def __init__(self):
+        self.dao = PhotoDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        # if (request.data != ""):
+        #     data = json.loads(request.data)
+        #     token = data['token']
+        #     toweridx = data['toweridx']
+        #     user = self.userDao.verify_token(token, '')
+        #     if (not user):
+        #          return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        args = parser.parse_args()
+        toweridx = args.get('towerid')
+        rs=self.dao.query_photo_date(toweridx)
         if rs==None:
              return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         else:
