@@ -74,8 +74,9 @@ class Device(EntityBase):
     uad_camera= Column(String(45))
     uav_yuntai=Column(String(45))
     uad_rcontrol=Column(String(45))
-    device_status=Column(String(10))
+    device_status=Column(String(10)) #在库 出库 维修 报废 丢失
     device_use_number=Column(Integer)
+    device_use_dpartment = Column(String(45))
 
 class Battery(EntityBase):
     __tablename__ = 'tb_battery'
@@ -85,7 +86,7 @@ class Battery(EntityBase):
     battery_fact=Column(String(45))
     battery_date=Column(Date)
     user_team=Column(String(45))
-    battery_status=Column(String(10))
+    battery_status=Column(String(10))#在库 出库 维修 报废 丢失
     battery_use_number=Column(Integer)
     battery_use_dpartment=Column(String(45))
 
@@ -97,7 +98,7 @@ class Pad(EntityBase):
     pad_fact=Column(String(45))
     pad_date=Column(Date)
     user_team = Column(String(45))
-    pad_status=Column(String(45))
+    pad_status=Column(String(45))#在库 出库 维修 报废 丢失
     pad_use_number=Column(Integer)
     pad_use_dpartment=Column(String(45))
 
@@ -109,7 +110,7 @@ class Parts(EntityBase):
     parts_fact=Column(String(45))
     parts_date=Column(Date)
     user_team = Column(String(45))
-    parts_status=Column(String(45))
+    parts_status=Column(String(45))#在库 出库 维修 报废 丢失
     parts_use_number=Column(Integer)
     pad_use_dpartment=Column(String(45))
 

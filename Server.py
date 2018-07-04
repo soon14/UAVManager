@@ -74,6 +74,8 @@ api.add_resource(UserManagerRoute.UserRole,'/usermanager/api/v1.0/user/role')
 api.add_resource(UserManagerRoute.UserDepartment,'/usermanager/api/v1.0/user/department')
 api.add_resource(UserManagerRoute.UserTeam,'/usermanager/api/v1.0/user/team')
 api.add_resource(UserManagerRoute.UserTeams,'/usermanager/api/v1.0/user/teams')
+#get user team manager
+api.add_resource(UserManagerRoute.TeamManager,'/usermanager/api/v1.0/user/teammanager')
 #api.add_resource(UserManagerRoute.AuthorityAdd,'/usermanager/api/v1.0/user/AddAuthority')
 
 
