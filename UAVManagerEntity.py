@@ -87,6 +87,7 @@ class Battery(EntityBase):
     user_team=Column(String(45))
     battery_status=Column(String(10))
     battery_use_number=Column(Integer)
+    battery_use_dpartment=Column(String(45))
 
 class Pad(EntityBase):
     __tablename__ = 'tb_pad'
@@ -98,6 +99,7 @@ class Pad(EntityBase):
     user_team = Column(String(45))
     pad_status=Column(String(45))
     pad_use_number=Column(Integer)
+    pad_use_dpartment=Column(String(45))
 
 class Parts(EntityBase):
     __tablename__ = 'tb_parts'
@@ -109,6 +111,7 @@ class Parts(EntityBase):
     user_team = Column(String(45))
     parts_status=Column(String(45))
     parts_use_number=Column(Integer)
+    pad_use_dpartment=Column(String(45))
 
 class Approval(EntityBase):
     __tablename__ = 'tb_approval'
