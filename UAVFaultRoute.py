@@ -62,7 +62,7 @@ class UAVFaultListPages(Resource):
             if user==-1:
                 return make_response(jsonify({'error': 'token expired'}), 399)
 
-            return self.dao.query_pages(device_ver,page_size)
+            return self.dao.query_pages(user,device_ver,page_size)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 

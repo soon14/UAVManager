@@ -67,6 +67,7 @@ def login():
 ##########################################用户权限管理模块
 api.add_resource(UserManagerRoute.UserList,'/usermanager/api/v1.0/user/list')
 api.add_resource(UserManagerRoute.UserGetID,'/usermanager/api/v1.0/user/id')
+api.add_resource(UserManagerRoute.DelUserID,'/usermanager/api/v1.0/user/del/id')
 api.add_resource(UserManagerRoute.UserPages,'/usermanager/api/v1.0/user/pages')
 api.add_resource(UserManagerRoute.UserAdd,'/usermanager/api/v1.0/user/add')
 api.add_resource(UserManagerRoute.UserModify,'/usermanager/api/v1.0/user/modify')

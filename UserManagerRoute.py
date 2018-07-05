@@ -74,6 +74,31 @@ class UserGetID(Resource):
     def get(self):
         return self.post()
 
+class DelUserID(Resource):
+    def __init__(self):
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user_id = data['user_id']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user == -1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
+            rs = self.userDao.delete_user_byId(user,user_id)
+            if rs == None:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
 
 class UserPages(Resource):
     def __init__(self):
@@ -264,6 +289,30 @@ class UserTeams(Resource):
             if user==-1:
                 return make_response(jsonify({'error': 'token expired'}), 399)
             rs = self.userDao.get_role_teams()
+            if rs == None:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return rs
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class TeamManager(Resource):
+    def __init__(self):
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user == -1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+            rs = self.userDao.get_teamManager(user)
             if rs == None:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:

@@ -4,7 +4,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer,String,DateTime,FLOAT,Date
+from sqlalchemy import Column, Integer, String, DateTime, FLOAT, Date, ForeignKey
 import json
 from datetime import date
 
@@ -54,6 +54,7 @@ class Manager(EntityBase):
     device_id = Column(Integer)
     device_ver= Column(String(50))
     device_type = Column(String(50))
+    device_department = Column(String(45))
     user_team = Column(String(50))
     borrower_name = Column(String(45))
     borrow_date = Column(Date)
@@ -112,7 +113,7 @@ class Parts(EntityBase):
     user_team = Column(String(45))
     parts_status=Column(String(45))#在库 出库 维修 报废 丢失
     parts_use_number=Column(Integer)
-    pad_use_dpartment=Column(String(45))
+    parts_use_dpartment=Column(String(45))
 
 class Approval(EntityBase):
     __tablename__ = 'tb_approval'
@@ -146,6 +147,7 @@ class Fault(EntityBase):
     fault_id = Column(Integer, primary_key=True)
     device_id = Column(Integer)
     device_ver=Column(String(45))
+    device_department = Column(String(45))
     fault_date = Column(Date)
     fault_reason=Column(String(45))
     fault_deal = Column(String(45))
