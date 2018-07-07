@@ -8,7 +8,7 @@ from flask_restful import Resource
 from flask_restful import reqparse
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
-from UAVManagerDAO import ManagerDAO,UserDAO,DeviceDAO
+from UAVManagerDAO import ManagerDAO,UserDAO,DeviceDAO,Manager
 from datetime import datetime,date,time
 
 parser = reqparse.RequestParser()
@@ -118,7 +118,7 @@ class ManagerBorrow(Resource):
                 for item in borrowList:
                     borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
                     returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
-                    rs=self.dao.manager_borrow(user,item['approver'],item['borrower'],item['borrow_team'],item['uav_id'],borrowtime,returntime)
+                    rs=self.dao.manager_borrow(user,item['borrower'],item['borrow_team'],item['uav_id'],borrowtime,returntime)
                     if rs==-1:
                         return make_response(jsonify({'error': 'device not exist'}), 401)
                     if rs==-2:
@@ -130,6 +130,20 @@ class ManagerBorrow(Resource):
 
                     ret = self.dao.manager_query_device(int(item['uav_id']),returntime.strftime('%Y-%m-%d'),item['borrower'])
                 return json.dumps(ret)
+
+                #同时借用多个，建议前端修改调用这个接口
+                #borrowList=[]
+                #for item in borrowList:
+                #    borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
+                #    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
+                #    mngr = Manager()
+                #    mngr.borrow_date = borrowtime
+                #    mngr.borrow_date = returntime = returntime
+                #    mngr.device_id = item['uav_id']
+                #    mngr.borrower_name = item['borrower']
+                #    borrowList.append(mngr)
+                #rs = self.dao.manager_borrowList(user,borrowList)
+                #return json.dumps(rs)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 

@@ -178,3 +178,30 @@ class UAVFaultFinished(Resource):
 
     def get(self):
         return self.post()
+
+class UAVFaultScrap(Resource):
+    def __init__(self):
+        self.dao = FaultDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            fault_id = data['fault_id']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if user == -1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+
+            rs = self.dao.finished_fault(user, fault_id)
+            if rs == -1:
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            else:
+                return make_response(jsonify({'success': 'Fault finished success'}), 401)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()

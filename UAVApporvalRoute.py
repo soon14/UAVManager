@@ -89,6 +89,8 @@ class UAVApprovalAgree(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
+            user = self.userDao.verify_token(token, '')
+
             approvaldict=data['approval']
             approval=Approval()
             approval.apply_person=approvaldict[0]['apply_person']
@@ -99,8 +101,7 @@ class UAVApprovalAgree(Resource):
             approval.battery_number = approvaldict[0]['battery_number']
             approval.pad_ver = approvaldict[0]['pad_ver']
             approval.pad_number = approvaldict[0]['pad_number']
-
-            user = self.userDao.verify_token(token, '')
+            approval.approval_person = user.user_id
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             if user==-1:

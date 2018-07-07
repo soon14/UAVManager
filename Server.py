@@ -141,6 +141,7 @@ api.add_resource(UAVFaultRoute.UAVFaultDeviceVersion,'/uavmanager/api/v1.0/fault
 api.add_resource(UAVFaultRoute.UAVFaultListPages,'/uavmanager/api/v1.0/fault/pages')
 api.add_resource(UAVFaultRoute.UAVFaultAdd,'/uavmanager/api/v1.0/fault/add')
 api.add_resource(UAVFaultRoute.UAVFaultFinished,'/uavmanager/api/v1.0/fault/finished')
+api.add_resource(UAVFaultRoute.UAVFaultScrap,'/uavmanager/api/v1.0/fault/scrap')
 
 #fault report api
 api.add_resource(UAVFaultReportRoute.FaultReportQuery, '/uavmanager/api/v1.0/faultreport')

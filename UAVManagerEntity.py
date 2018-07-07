@@ -121,6 +121,7 @@ class Approval(EntityBase):
     approval_person = Column(String(45))
     approval_team=Column(String(45))
     device_ver=Column(String(45))
+    return_date = Column(Date)
     device_number=Column(Integer)
     battery_ver = Column(String(45))
     battery_number=Column(Integer)
@@ -131,9 +132,10 @@ class Approval(EntityBase):
 class Approval_db(EntityBase):
     __tablename__ = 'tb_approval_db'
     approval_id=Column(Integer,primary_key=True)
-    apply_person=Column(String(45))
+    apply_person = Column(String(45))
     approval_person = Column(String(45))
     approval_team=Column(String(45))
+    return_date = Column(Date)
     device_ver=Column(String(45))
     device_number=Column(Integer)
     battery_ver = Column(String(45))
@@ -151,7 +153,7 @@ class Fault(EntityBase):
     fault_date = Column(Date)
     fault_reason=Column(String(45))
     fault_deal = Column(String(45))
-    fault_finished = Column(Integer)
+    fault_finished = Column(Integer) #0维修 1维修完成 2报废
 
 class FaultReport(EntityBase):
     __tablename__ = 'tb_fault_report'
