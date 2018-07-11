@@ -367,13 +367,13 @@ class DefectDao:
     def query_defect_photo(self,user,photo_id):
         defects = self.session_power.query(Defect).filter(Defect.tb_defect_photoid==photo_id).all()
         self.session_power.rollback()
-        photoids=[]
-        for defect in defects:
-            photoids.append(defect.tb_defect_photoid)
+        #photoids=[]
+        #for defect in defects:
+        #    photoids.append(defect.tb_defect_photoid)
 
-        photo = self.session_power.query(Photo).filter(Photo.photo_id.in_(photoids)).all()
-        self.session_power.rollback()
-        return class_to_dict(photo)
+        #photo = self.session_power.query(Photo).filter(Photo.photo_id.in_(photoids)).all()
+        #self.session_power.rollback()
+        return class_to_dict(defects)
 
     #添加缺陷
     def defect_add(self,defect):
