@@ -169,7 +169,7 @@ class ManagerReturn(Resource):
                     rs=self.dao.manager_return(user,item['device_id'],returntime,item['return_desc'])
                     if rs!=1:
                         return make_response(jsonify({'error': 'return deivce failed'}), 401)
-                    ret = self.dao.manager_query_device(int(item['device_id']),returntime.strftime('%Y-%m-%d'),"")
+                    ret = self.dao.manager_query_device(int(item['device_id']),returntime.strftime('%Y-%m-%d'),"",item['return_desc'])
                 return json.dumps(ret)
         else:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)

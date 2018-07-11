@@ -62,7 +62,7 @@ class DefectPart(Resource):
 
 class DefectTowerID(Resource):
     def __init__(self):
-        self.dao = DefectPartDao()
+        self.dao = DefectDao()
 
     def post(self):
         #if (request.data != ""):
@@ -73,7 +73,7 @@ class DefectTowerID(Resource):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         args = parser.parse_args()
         towerid = args.get('tower_id')
-        rs=self.dao.query_defect_tower(towerid)
+        rs=self.dao.query_defect_tower(None,towerid)
         if rs==None:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         else:
@@ -86,7 +86,7 @@ class DefectTowerID(Resource):
 
 class DefectPhotoID(Resource):
     def __init__(self):
-        self.dao = DefectPartDao()
+        self.dao = DefectDao()
 
     def post(self):
         #if (request.data != ""):
@@ -97,7 +97,7 @@ class DefectPhotoID(Resource):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         args = parser.parse_args()
         photo_id = args.get('photo_id')
-        rs=self.dao.query_photo_id(photo_id)
+        rs=self.dao.query_photo_id(None,photo_id)
         if rs==None:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         else:
@@ -110,7 +110,7 @@ class DefectPhotoID(Resource):
 
 class DefectAdd(Resource):
     def __init__(self):
-        self.dao = DefectPartDao()
+        self.dao = DefectDao()
 
     def post(self):
         #if (request.data != ""):
@@ -134,7 +134,32 @@ class DefectAdd(Resource):
             if rs==-1:
                 return make_response(jsonify({'error': 'add defect error'}), 401)
             else:
-                return rs
+                return make_response(jsonify({'success': 'add defect'}), 200)
+    #else:
+        #    return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+class DefectPhotoIDSearch(Resource):
+    def __init__(self):
+        self.dao = DefectDao()
+
+    def post(self):
+        #if (request.data != ""):
+        #    data = json.loads(request.data)
+        #    token = data['token']
+        #    user = self.userDao.verify_token(token, '')
+        #    if (not user):
+        #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        args = parser.parse_args()
+        towerid = args.get('tower_id')
+        photoid = args.get('photo_id')
+        rs=self.dao.query_defect_photo(None,photoid)
+        if rs==None:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        else:
+            return rs
     #else:
         #    return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 

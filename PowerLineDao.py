@@ -179,7 +179,7 @@ class TowerDao:
 
     def query_towers(self,linename):
         if linename is not None:
-            rs = self.session_power.query(Towers).filter(Towers.tower_linename==linename,Towers.deleted==0).all()
+            rs = self.session_power.query(Towers).filter(Towers.tower_linename==linename,Towers.deleted==0).order_by(Towers.tower_idx).all()
             return class_to_dict(rs)
         else:
             return self.query_towers_all()
@@ -351,6 +351,19 @@ class DefectDao:
         self.session_power.rollback()
         return class_to_dict(photo)
 
+    #根据杆塔id和照片id查询对应的照片实际上有照片id了就不太需要杆塔id了 有点鸡肋
+    def query_search(self,tower_id,photo_id):
+        defects = self.session_power.query(Defect).filter(Defect.tb_defect_towerid==tower_id,Defect.tb_defect_photoid==photo_id).all()
+        self.session_power.rollback()
+        photoids=[]
+        for defect in defects:
+            photoids.append(defect.tb_defect_photoid)
+
+        photo = self.session_power.query(Photo).filter(Photo.photo_id.in_(photoids)).all()
+        self.session_power.rollback()
+        return class_to_dict(photo)
+
+    #根据照片id查询缺陷
     def query_defect_photo(self,user,photo_id):
         defects = self.session_power.query(Defect).filter(Defect.tb_defect_photoid==photo_id).all()
         self.session_power.rollback()
@@ -362,16 +375,20 @@ class DefectDao:
         self.session_power.rollback()
         return class_to_dict(photo)
 
+    #添加缺陷
     def defect_add(self,defect):
         self.session_power.add(defect)
         isAdd = False
-        try:
-            self.session_power.commit()
-            isAdd = True
-        except:
-            self.session_power.rollback()
-            isAdd = False
-        if isAdd:
-            return 1
-        else:
-            return -1
+        self.session_power.commit()
+        return 1
+        ###
+        #try:
+        #    self.session_power.commit()
+        #    isAdd = True
+        #except:
+        #    self.session_power.rollback()
+        #    isAdd = False
+        #if isAdd:
+        #    return 1
+        #else:
+        #    return -1

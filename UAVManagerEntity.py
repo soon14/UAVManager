@@ -127,6 +127,8 @@ class Approval(EntityBase):
     battery_number=Column(Integer)
     pad_ver = Column(String(45))
     pad_number=Column(Integer)
+    approval_reason = Column(String(256))
+    approval_desc = Column(String(256))
     approval_status=Column(Integer)
 
 class Approval_db(EntityBase):
@@ -142,6 +144,8 @@ class Approval_db(EntityBase):
     battery_number=Column(Integer)
     pad_ver = Column(String(45))
     pad_number=Column(Integer)
+    approval_reason = Column(String(256))
+    approval_desc = Column(String(256))
     approval_status=Column(Integer)
 
 class Fault(EntityBase):
@@ -187,20 +191,44 @@ class Lines(EntityBase):
 class Towers(EntityBase):
     __tablename__='tb_tower'
     tower_id = Column(Integer,primary_key=True)
-    tower_linename = Column(String(128))
-    tower_idx = Column(Integer)
-    tower_type = Column(String(45))
-    tower_date = Column(Date)
-    tower_span_small = Column(FLOAT)
-    tower_span_horizonal = Column(FLOAT)
-    tower_span_vertical = Column(FLOAT)
-    tower_rotation_direction = Column(String(45))
-    tower_rotation_degree = Column(FLOAT)
-    tower_height = Column(FLOAT)
-    tower_lat = Column(FLOAT)
-    tower_lng = Column(FLOAT)
-    tower_elevation = Column(FLOAT)
-    tower_descriptor = Column(String(256))
+    tower_linename = Column(String(128))             #所在线路名称
+    tower_idx = Column(Integer)                      #杆塔序号
+    tower_type = Column(String(45))                  #杆塔类型
+    tower_date = Column(Date)                        #杆塔日期
+    tower_span_small = Column(FLOAT)                 #小号侧杆塔距离
+    tower_span_horizonal = Column(FLOAT)             #水平距离
+    tower_span_vertical = Column(FLOAT)              #垂直距离
+    tower_rotation_direction = Column(String(45))    #转角方向
+    tower_rotation_degree = Column(FLOAT)            #转角角度
+    tower_height = Column(FLOAT)                     #杆塔高度
+    tower_lat = Column(FLOAT)                        #纬度
+    tower_lng = Column(FLOAT)                        #经度
+    tower_elevation = Column(FLOAT)                  #高程
+    tower_descriptor = Column(String(256))           #杆塔描述
+    tower_lightarrest_type = Column(String(45))      #避雷器类型
+    tower_lightarrest_factory = Column(String(45))   #避雷器厂家
+    tower_lightarrest_number_type=Column(String(45)) #避雷器计数器型号
+    tower_lightarrest_date = Column(Date)            #避雷器安装日期
+    tower_lightarrest_gap = Column(String(45))       #避雷器是否有间隙
+    tower_lightarrest_desc = Column(String(256))     #避雷器描述
+    tower_insulator_strandtype = Column(String(45))  #绝缘子串类
+    tower_insulator_material = Column(String(45))    #绝缘子材质
+    tower_insulator_type = Column(String(45))        #绝缘子型号
+    tower_insulator_strandnumber = Column(Integer)   #绝缘子单串只数
+    tower_insulator_strand = Column(Integer)         #绝缘子串数
+    tower_insulator_date = Column(Date)              #安装日期
+    tower_insulator_factory = Column(String(45))     #绝缘子厂家
+    tower_insulator_creepagedistance = Column(FLOAT) #爬电比距
+    tower_insulator_distanceStd = Column(String(45)) #比距标准
+    tower_insulator_required = Column(String(45))    #是否符合标准
+    tower_insulator_double = Column(String(45))      #悬垂串是否为双串
+    tower_insulator_doublehang = Column(String(45))  #悬垂串是否为双串挂点
+    tower_insulator_desc = Column(String(256))       #绝缘子描述
+    tower_opgw_span = Column(String(45))             #杆塔段
+    tower_opgw_type = Column(String(45))             #导线型号
+    tower_opgw_date = Column(Date)                   #投运日期
+    tower_opgw_factory = Column(String(45))          #生产厂家
+    tower_opgw_desc = Column(String(256))            #备注
     deleted = Column(Integer)
 
 class LightArrest(EntityBase):

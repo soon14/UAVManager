@@ -1651,7 +1651,7 @@ class ManagerDAO:
                     self.session_uav.rollback()
             return 1
 
-    def manager_query_device(self,device_id,retruntime,borrower):
+    def manager_query_device(self,device_id,retruntime,borrower,desc):
         device = self.session_uav.query(Device).filter(Device.device_id == device_id).first()
         battery = self.session_uav.query(Battery).filter(Battery.battery_id == device_id).first()
         part = self.session_uav.query(Battery).filter(Parts.parts_id == device_id).first()
@@ -1681,7 +1681,7 @@ class ManagerDAO:
             deviceitem['user_team'] = uav['user_team']
             deviceitem['return_date'] = retruntime
             deviceitem['borrower'] = borrower
-
+            deviceitem['desc'] = desc
         elif idx==2:
             battery = class_to_dict(self.session_uav.query(Battery).filter(Battery.battery_id==device_id).all())
             deviceitem['device_type'] = battery[0]['battery_type']
@@ -1689,7 +1689,7 @@ class ManagerDAO:
             deviceitem['user_team'] = battery[0]['user_team']
             deviceitem['return_date'] = retruntime
             deviceitem['borrower'] = borrower
-
+            deviceitem['desc'] = desc
         elif idx==3:
             part = class_to_dict(self.session_uav.query(Parts).filter(Parts.parts_id==device_id).all())
             deviceitem['device_type'] = part[0]['parts_type']
@@ -1697,6 +1697,7 @@ class ManagerDAO:
             deviceitem['user_team'] = part[0]['user_team']
             deviceitem['return_date'] = retruntime
             deviceitem['borrower'] = borrower
+            deviceitem['desc'] = desc
         else:
             pad = class_to_dict(self.session_uav.query(Pad).filter(Pad.pad_id==device_id).all())
             deviceitem['device_type'] = pad[0]['pad_type']
@@ -1704,6 +1705,7 @@ class ManagerDAO:
             deviceitem['user_team'] = pad[0]['user_team']
             deviceitem['return_date'] = retruntime
             deviceitem['borrower'] = borrower
+            deviceitem['desc'] = desc
         ret.append(deviceitem)
         return ret
 
@@ -2223,6 +2225,8 @@ class ApprovalDao:
         approval_db.pad_ver = approval_cur.pad_ver
         approval_db.pad_number=approval_cur.pad_number
         approval_db.approval_status=approval_cur.approval_status
+        approval_db.approval_reason = approval_cur.approval_reason
+        approval_db.approval_desc = approval_cur.approval_desc
         try:
             self.session_uav.add(approval_db)
             self.session_uav.commit()
