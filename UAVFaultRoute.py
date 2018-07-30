@@ -135,6 +135,7 @@ class UAVFaultAdd(Resource):
             fault.fault_reason = faultdict[0]['fault_reason']
             fault.fault_deal = faultdict[0]['fault_deal']
             fault.fault_finished = 0
+
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
@@ -161,18 +162,22 @@ class UAVFaultFinished(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
-            fault_id=data['fault_id']
+            fault_list=data['fault_id']
+
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             if user==-1:
                 return make_response(jsonify({'error': 'token expired'}), 399)
-
-            rs=self.dao.finished_fault(user,fault_id)
+            rs=1
+            for item in fault_list:
+                rs=self.dao.finished_fault(user,item)
+                if rs == -1:
+                    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             if rs==-1:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:
-                return make_response(jsonify({'success': 'Fault finished success'}), 401)
+                return make_response(jsonify({'success': 'Fault finished success'}), 200)
         else:
             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
@@ -188,18 +193,22 @@ class UAVFaultScrap(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
-            fault_id = data['fault_id']
+            fault_list = data['fault_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             if user == -1:
                 return make_response(jsonify({'error': 'token expired'}), 399)
 
-            rs = self.dao.finished_fault(user, fault_id)
+            rs = 1
+            for item in fault_list:
+                rs = self.dao.scrap_fault(user, item)
+                if rs == -1:
+                    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             if rs == -1:
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             else:
-                return make_response(jsonify({'success': 'Fault finished success'}), 401)
+                return make_response(jsonify({'success': 'Fault finished success'}), 200)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 

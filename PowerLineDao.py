@@ -10,7 +10,7 @@ import ConfigParser
 import json
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,query
-from UAVManagerEntity import User, Lines, Towers,Photo,DefectLevel,DefectPart,Defect, class_to_dict
+from UAVManagerEntity import User, Lines, Towers,Photo,DefectLevel,DefectPart,Defect,DataService, class_to_dict
 from UAVManagerDAO import UserDAO
 from datetime import datetime
 
@@ -27,6 +27,10 @@ secret_key = cf.get('token','SECRET_KEY')
 engine_power = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(power_port) + '/' + power_name+'?charset=utf8',pool_size=100,pool_recycle=3600)
 Session_Power= sessionmaker(bind=engine_power)
 
+### 线路台账数据操作类
+#   定义并实现线路数据增、改、删、查等操作，实现统计以及
+#
+
 class LinesDao:
     def __init__(self):
         self.session_power= Session_Power()
@@ -39,6 +43,11 @@ class LinesDao:
 
     def query_line(self,lineID):
         rs = self.session_power.query(Lines).filter(Lines.lines_id==lineID,Lines.deleted==0).all()
+        return class_to_dict(rs)
+
+    def query_line_fuzzy(self,linename):
+        filter= '%'+linename+'%'
+        rs = self.session_power.query(Lines).filter(Lines.lines_name.like(filter)).all()
         return class_to_dict(rs)
 
     def query_line_pages(self,work_team,page_size,page_index):
@@ -273,6 +282,10 @@ class PhotoDao:
             ret.append(item)
         return json.dumps(ret)
 
+    def query_photo_idx(self,photoidx):
+        rs = self.session_power.query(Photo).filter(Photo.photo_id == photoidx).all()
+        return class_to_dict(rs)
+
     def add_photo(self,user,photo):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -286,10 +299,10 @@ class PhotoDao:
         else:
             return -1
 
-    def add_photo(self,voltage,line_id,tower_id,classify,path,date):
+    def add_photo(self,voltage,line_id,tower_id,classify,path,paththumbnail,date):
         #是否进行判断
         line = self.session_power.query(Lines).filter(Lines.lines_id==line_id).first()
-        photo = Photo(photo_line=line_id,photo_tower_id=tower_id,photo_path=path,photo_classify=classify,photo_date=date)
+        photo = Photo(photo_line=line_id,photo_tower_id=tower_id,photo_path=path,photo_thumbnail_path=paththumbnail,photo_classify=classify,photo_date=date)
         self.session_power.add(photo)
         try:
             self.session_power.commit()
@@ -392,3 +405,24 @@ class DefectDao:
         #    return 1
         #else:
         #    return -1
+
+class DataServiceDao:
+    def __init__(self):
+        self.session_power= Session_Power()
+    def __del__(self):
+        self.session_power.close()
+
+    def dataservice_add(self,dataservice):
+        self.session_power.add(dataservice)
+        self.session_power.commit()
+        return 1
+
+    def dataservice_delete(self,dataserviceid):
+        self.session_power.query(DataService).filter(DataService.tb_dataservice_id==dataserviceid).delete()
+        self.session_power.commit()
+        return 1
+
+    def dataservice_search(self,linename):
+        rs=self.session_power.query(DataService).filter(DataService.tb_dataservice_linename==linename).all()
+        return class_to_dict(rs)
+

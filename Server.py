@@ -14,7 +14,7 @@ from flask_restful import Api
 from flask_httpauth import HTTPBasicAuth
 from flask import Flask, render_template
 
-import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute,PhotoUpload,PowerLinesRoute,UserManagerRoute,DefectRoute
+import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute,PhotoUpload,PowerLinesRoute,UserManagerRoute,DefectRoute,DataServiceRoute
 import UAVManagerDAO
 
 auth = HTTPBasicAuth()
@@ -84,8 +84,14 @@ api.add_resource(UserManagerRoute.TeamManager,'/usermanager/api/v1.0/user/teamma
 #manager related api
 api.add_resource(UAVManagerRoute.ManagerListPages,'/uavmanager/api/v1.0/manager/list')
 api.add_resource(UAVManagerRoute.ManagerBorrow,'/uavmanager/api/v1.0/manager/borrow')
+api.add_resource(UAVManagerRoute.ManagerBorrowConfirm,'/uavmanager/api/v1.0/manager/borrow/confirm')
 api.add_resource(UAVManagerRoute.ManagerReturn,'/uavmanager/api/v1.0/manager/return')
 api.add_resource(UAVManagerRoute.ManagerListPageNum,'/uavmanager/api/v1.0/manager/pages')
+
+api.add_resource(UAVManagerRoute.ManagerHistoryPages,'/uavmanager/api/v1.0/manager/history/list/pagenum')
+api.add_resource(UAVManagerRoute.ManagerHistory,'/uavmanager/api/v1.0/manager/history/list/pages')
+api.add_resource(UAVManagerRoute.ManagerHistorySearchPages,'/uavmanager/api/v1.0/manager/history/date/pagenum')
+api.add_resource(UAVManagerRoute.ManagerHistorySearch,'/uavmanager/api/v1.0/manager/history/list/date')
 
 #device related api
 api.add_resource(UAVDeviceRoute.UAVDeviceList,'/uavmanager/api/v1.0/devices')
@@ -163,6 +169,7 @@ api.add_resource(PhotoUpload.ImageUpload,'/gis/api/v1.0/imageupload')
 
 ###################################################################电力线路杆塔查询模块
 api.add_resource(PowerLinesRoute.PowerLineListRoute,'/gis/api/v1.0/lines')
+api.add_resource(PowerLinesRoute.PowerLineSearchFuzzy,'/gis/api/v1.0/lines/search')
 api.add_resource(PowerLinesRoute.PowerLineListPages,'/gis/api/v1.0/lines/pages')
 api.add_resource(PowerLinesRoute.PowerLineListPageRoute,'/gis/api/v1.0/linesList')
 api.add_resource(PowerLinesRoute.PowerLineDeleteRoute,'/gis/api/v1.0/linesDelete')
@@ -180,9 +187,11 @@ api.add_resource(PowerLinesRoute.PowerLineTowerDeleteRoute,'/gis/api/v1.0/towerD
 
 api.add_resource(PowerLinesRoute.PowerLineTowerQueryRoute,'/gis/api/v1.0/tower/query')
 api.add_resource(PowerLinesRoute.PowerLineTowerAdd,'/gis/api/v1.0/tower/add')
-api.add_resource(PowerLinesRoute.PowerLineTowerUpdate,'/gis/api/v1.0/tower/Update')
+api.add_resource(PowerLinesRoute.PowerLineTowerUpdate,'/gis/api/v1.0/tower/update')
+api.add_resource(PowerLinesRoute.PowerLineTowerUpdateLocation,'/gis/api/v1.0/tower/updatelocation')
 
 api.add_resource(PowerLinesRoute.PowerPhotoSearch,'/gis/api/v1.0/photo/search')
+api.add_resource(PowerLinesRoute.PowerPhotoIdx,'/gis/api/v1.0/photo/search/idx')
 api.add_resource(PowerLinesRoute.PowerLinePhotoIdxRoute,'/gis/api/v1.0/line/photo')
 api.add_resource(PowerLinesRoute.PowerTowerPhotoIdxRoute,'/gis/api/v1.0/tower/photo')
 api.add_resource(PowerLinesRoute.PowerTowerPhotoDate,'/gis/api/v1.0/tower/photodate')
@@ -194,6 +203,9 @@ api.add_resource(DefectRoute.DefectPhotoID,'/gis/api/v1.0/searchdefect/photoid')
 api.add_resource(DefectRoute.DefectPhotoIDSearch,'/gis/api/v1.0/defectsearch')
 api.add_resource(DefectRoute.DefectAdd,'/gis/api/v1.0/defectadd')
 
+api.add_resource(DataServiceRoute.DataServiceAdd, '/gis/api/v1.0/dataservice/add')
+api.add_resource(DataServiceRoute.DataServiceDelete, '/gis/api/v1.0/dataservice/del')
+api.add_resource(DataServiceRoute.DataServiceSearch, '/gis/api/v1.0/dataservice/search')
 
 if __name__ == '__main__':
     app.run()

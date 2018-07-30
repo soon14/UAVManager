@@ -58,8 +58,8 @@ class UAVApprovalAdd(Resource):
             approval.battery_number = approvaldict[0]['battery_number']
             approval.pad_ver = approvaldict[0]['pad_ver']
             approval.pad_number = approvaldict[0]['pad_number']
-            approval.approval_reason = approvaldict[0]['reason']
-            approval.approval_desc = approvaldict[0]['desc']
+            #approval.approval_reason = approvaldict[0]['reason']
+            #approval.approval_desc = approvaldict[0]['desc']
             approval.approval_status = 0
 
             user = self.userDao.verify_token(token, '')

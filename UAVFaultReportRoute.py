@@ -11,6 +11,7 @@ from flask import Flask, request ,jsonify
 from flask import Response,make_response
 from UAVManagerDAO import FaultReportDao,UserDAO
 from UAVManagerEntity import FaultReport
+from datetime import datetime
 
 class FaultReportQuery(Resource):
     def __init__(self):
@@ -47,7 +48,22 @@ class FaultReportUpdate(Resource):
             report = data['report']
             reportdict=json.loads(json.dumps(report))
             report = FaultReport()
-            report.__dict__ = reportdict[0]
+            report.fault_report_id = reportdict[0]['fault_report_id']
+            report.fault_report_device_id = reportdict[0]['fault_report_device_id']
+            report.fault_report_line_name = reportdict[0]['fault_report_line_name']
+            report.fault_report_towerRange = reportdict[0]['fault_report_towerRange']
+            report.fault_report_date = datetime.strptime(reportdict[0]['fault_report_date'],'%Y-%m-%d').date()
+            report.fault_report_flyer = reportdict[0]['fault_report_flyer']
+            report.fault_report_wether = reportdict[0]['fault_report_wether']
+            report.fault_report_observer = reportdict[0]['fault_report_observer']
+            report.fault_time = datetime.strptime(reportdict[0]['fault_time'],'%Y-%m-%d').date()
+            report.fault_crash_position = reportdict[0]['fault_crash_position']
+            report.fault_crash_desc = reportdict[0]['fault_crash_desc']
+            report.fault_crash_operation = reportdict[0]['fault_crash_operation']
+            report.fault_crash_damage = reportdict[0]['fault_crash_damage']
+            report.fault_crash_electric = reportdict[0]['fault_crash_electric']
+            report.fault_crash_around = reportdict[0]['fault_crash_around']
+
 
             user = self.userDao.verify_token(token, '')
             if (not user):

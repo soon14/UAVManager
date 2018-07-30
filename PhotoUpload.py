@@ -15,14 +15,17 @@ from PowerLineDao import PhotoDao
 from UAVManagerDAO import UserDAO
 from UAVManagerEntity import Photo
 from datetime import datetime
-
+from PIL import Image
 import datetime
+
 ALLOWED_EXTENSIONS = set(['png', 'jpg','JPG', 'jpeg', 'gif'])
 cf = ConfigParser.ConfigParser()
 cf.read("config.conf")
 save_folder = cf.get("picture","UPLOAD_FOLDER")
+thumbnail_folder=cf.get("picture","UPLOAD_THUMBNAIL")
 save__picture_folder = cf.get("picture","IMAGE_UPLOAD_FOLDER")
 database_folder = cf.get("picture","DATABASEFOLDER")
+thumbnail_database_folder = cf.get("picture","DATABASETHUMBNAIL")
 nowTime=datetime.datetime.now().strftime('%Y%m%d')
 
 class FileUpload(Resource):
@@ -33,6 +36,13 @@ class FileUpload(Resource):
     def allowed_file(self,filename):
         return '.' in filename and \
                filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+    def generateThumbnail(self,pathSrc,pathThumbnail):
+        im = Image.open(pathSrc)
+        factor=0.2
+        w, h = im.size
+        im.thumbnail((w *factor, h*factor))
+        im.save(pathThumbnail,'jpeg')
 
     def post(self):
         if (request.form != ""):
@@ -46,13 +56,18 @@ class FileUpload(Resource):
             image = request.files['image']
 
             file_folder = save_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+data['date']+'/'+classify
+            thumbnail =thumbnail_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+data['date']+'/'+classify
             if not os.path.isdir(file_folder):
                 os.makedirs(file_folder)
+            if not os.path.isdir(thumbnail):
+                os.makedirs(thumbnail)
             if image and self.allowed_file(image.filename):
                 filename = secure_filename(image.filename)
                 image.save(os.path.join(file_folder, filename))
-                db_folder=database_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+classify
-                rs = self.photoDao.add_photo(voltage,line_id,tower_id,classify,os.path.join(db_folder, filename),date)
+                self.generateThumbnail(os.path.join(file_folder, filename),os.path.join(thumbnail, filename))
+                db_folder=database_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+data['date']+'/'+classify
+                db_thumbnail=thumbnail_database_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+data['date']+'/'+classify
+                rs = self.photoDao.add_photo(voltage,line_id,tower_id,classify,os.path.join(db_folder, filename),os.path.join(db_thumbnail, filename),date)
                 if rs == 1:
                     return make_response(jsonify({'seccess': 'upload success'}), 200)
             else:

@@ -1039,6 +1039,28 @@ class ManagerDAO:
             return class_to_dict(self.session_uav.query(Manager).limit(page_size).offset((page_index-1)*page_size).all())
         else:
             return None
+    def query_time(self,user,page_index,page_size,sttime,endtime):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(user)
+        if '1' in roles:
+            q = self.session_uav.query(Manager)
+            rs = q.filter(Manager.borrow_date.between(sttime,endtime)).limit(page_size).offset((page_index-1)*page_size).all()
+            return class_to_dict(rs)
+        else:
+            return None
+
+    def query_history_pagenumber(self,user,page_size):
+        rs=self.session_uav.query(Manager).count()/page_size+1
+        item = {}
+        item['pages'] = rs
+        return json.dumps(item)
+
+    def query_date_pagenumber(self,user,page_size,sttime,endtime):
+        q = self.session_uav.query(Manager)
+        rs = q.filter(Manager.borrow_date.between(sttime, endtime)).count()/page_size+1
+        item = {}
+        item['pages'] = rs
+        return json.dumps(item)
 
     def query_uav_manager(self,device_type,device_status,page_index,page_size):
         ret = []
@@ -1807,16 +1829,24 @@ class FaultDao:
         pad = self.session_uav.query(Battery).filter(Pad.pad_id == fault.device_id).first()
 
         idx = 0
+        devicestatus='在库';
         if device:
             idx = 1
+            devicestatus = device.device_status
         if battery:
             idx = 2
+            devicestatus = battery.battery_status
         if part:
             idx = 3
+            devicestatus = part.parts_status
         if pad:
             idx = 4
+            devicestatus = pad.pad_status
         if idx==0:
             return -2
+        if devicestatus != '在库':
+            return -2
+
 
         if '2' in roles and '5' not in roles:
             #不是管理员则需要判断飞机和用户的班组
@@ -1932,6 +1962,7 @@ class FaultDao:
                     self.session_uav.commit()
                 except:
                     self.session_uav.rollback()
+                return 1
             if device_type == 2:
                 if result == 1:
                     self.session_uav.query(Battery).filter(Battery.battery_id == tmpfault.device_id).update(
@@ -1943,6 +1974,7 @@ class FaultDao:
                     self.session_uav.commit()
                 except:
                     self.session_uav.rollback()
+                return 1
             if device_type == 3:
                 if result==1:
                     self.session_uav.query(Parts).filter(Parts.parts_id == tmpfault.device_id).update(
@@ -1954,6 +1986,7 @@ class FaultDao:
                     self.session_uav.commit()
                 except:
                     self.session_uav.rollback()
+                return 1
             if device_type == 4:
                 if result ==1:
                     self.session_uav.query(Pad).filter(Pad.pad_id == tmpfault.device_id).update({Pad.pad_status: '在库'},
@@ -2011,10 +2044,9 @@ class FaultDao:
                 self.faule_processManager(user, fault_id, part,idx,1)
             if idx==4:
                 self.faule_processManager(user, fault_id, pad,idx,1)
+        return 1
 
-        return -1
-
-    def scrap_faule(self,user,fault_id):
+    def scrap_fault(self,user,fault_id):
         usrDao = UserDAO()
         roles = usrDao.get_role(user)
         fault=self.session_uav.query(Fault).filter(Fault.fault_id==fault_id).first()
@@ -2040,23 +2072,23 @@ class FaultDao:
         #普通用户只能处理本班组的设备
         if '2' in roles and '5' not in roles:
             if idx==1:
-                self.faule_processManager(user,fault_id,device,idx,2)
+                return self.faule_processManager(user,fault_id,device,idx,2)
             if idx==2:
-                self.faule_processManager(user, fault_id, battery,idx,2)
+                return self.faule_processManager(user, fault_id, battery,idx,2)
             if idx==3:
-                self.faule_processManager(user, fault_id, part,idx,2)
+                return self.faule_processManager(user, fault_id, part,idx,2)
             if idx==4:
-                self.faule_processManager(user, fault_id, pad,idx,2)
+                return self.faule_processManager(user, fault_id, pad,idx,2)
         #管理员可以处理本所的设备
         if '5' in roles:
             if idx==1:
-                self.faule_processManager(user,fault_id,device,idx,2)
+                return  self.faule_processManager(user,fault_id,device,idx,2)
             if idx==2:
-                self.faule_processManager(user, fault_id, battery,idx,2)
+                return self.faule_processManager(user, fault_id, battery,idx,2)
             if idx==3:
-                self.faule_processManager(user, fault_id, part,idx,2)
+                return self.faule_processManager(user, fault_id, part,idx,2)
             if idx==4:
-                self.faule_processManager(user, fault_id, pad,idx,2)
+                return self.faule_processManager(user, fault_id, pad,idx,2)
 
         return -1
 class FaultReportDao:
@@ -2075,20 +2107,53 @@ class FaultReportDao:
         roles=usrDao.get_role(user)
         if '3' in roles:
             rs = self.session_uav.query(FaultReport).filter(FaultReport.fault_report_id == faultreport.fault_report_id).first()
-            rs.fault_report_device_id = faultreport.fault_report_device_id
-            rs.fault_report_line_name = faultreport.fault_report_line_name
-            rs.fault_report_towerRange = faultreport.fault_report_towerRange
-            rs.fault_report_date = faultreport.fault_report_date
-            rs.fault_report_flyer = faultreport.fault_report_flyer
-            rs.fault_report_wether = faultreport.fault_report_wether
-            rs.fault_report_observer = faultreport.fault_report_observer
-            rs.fault_time = faultreport.fault_time
-            rs.fault_crash_position = faultreport.fault_crash_position
-            rs.fault_crash_desc = faultreport.fault_crash_desc
-            rs.fault_crash_operation = faultreport.fault_crash_operation
-            rs.fault_crash_damage = faultreport.fault_crash_damage
-            rs.fault_crash_electric = faultreport.fault_crash_electric
-            rs.fault_crash_around = faultreport.fault_crash_around
+            if(rs!=None):
+                if(faultreport.fault_report_device_id!=None):
+                    rs.fault_report_device_id = faultreport.fault_report_device_id
+                if (faultreport.fault_report_line_name != None):
+                    rs.fault_report_line_name = faultreport.fault_report_line_name
+                if (faultreport.fault_report_towerRange != None):
+                    rs.fault_report_towerRange = faultreport.fault_report_towerRange
+                if (faultreport.fault_report_date != None):
+                    rs.fault_report_date = faultreport.fault_report_date
+                if (faultreport.fault_report_flyer != None):
+                    rs.fault_report_flyer = faultreport.fault_report_flyer
+                if (faultreport.fault_report_wether != None):
+                    rs.fault_report_wether = faultreport.fault_report_wether
+                if (faultreport.fault_report_observer != None):
+                    rs.fault_report_observer = faultreport.fault_report_observer
+                if (faultreport.fault_time != None):
+                    rs.fault_time = faultreport.fault_time
+                if (faultreport.fault_crash_position != None):
+                    rs.fault_crash_position = faultreport.fault_crash_position
+                if (faultreport.fault_crash_desc != None):
+                    rs.fault_crash_desc = faultreport.fault_crash_desc
+                if (faultreport.fault_crash_operation != None):
+                    rs.fault_crash_operation = faultreport.fault_crash_operation
+                if (faultreport.fault_crash_damage != None):
+                    rs.fault_crash_damage = faultreport.fault_crash_damage
+                if (faultreport.fault_crash_electric != None):
+                    rs.fault_crash_electric = faultreport.fault_crash_electric
+                if (faultreport.fault_crash_around != None):
+                    rs.fault_crash_around = faultreport.fault_crash_around
+            else:
+                tmp = FaultReport()
+                tmp.fault_report_id=faultreport.fault_report_id
+                tmp.fault_report_device_id = faultreport.fault_report_device_id
+                tmp.fault_report_line_name = faultreport.fault_report_line_name
+                tmp.fault_report_towerRange = faultreport.fault_report_towerRange
+                tmp.fault_report_date = faultreport.fault_report_date
+                tmp.fault_report_flyer = faultreport.fault_report_flyer
+                tmp.fault_report_wether = faultreport.fault_report_wether
+                tmp.fault_report_observer = faultreport.fault_report_observer
+                tmp.fault_time = faultreport.fault_time
+                tmp.fault_crash_position = faultreport.fault_crash_position
+                tmp.fault_crash_desc = faultreport.fault_crash_desc
+                tmp.fault_crash_operation = faultreport.fault_crash_operation
+                tmp.fault_crash_damage = faultreport.fault_crash_damage
+                tmp.fault_crash_electric = faultreport.fault_crash_electric
+                tmp.fault_crash_around = faultreport.fault_crash_around
+                self.session_uav.add(tmp)
             try:
                 self.session_uav.commit()
             except:

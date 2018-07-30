@@ -50,18 +50,18 @@ class Role_basic(EntityBase):
 #############################################################################无人机管理
 class Manager(EntityBase):
     __tablename__ = 'tb_manager'
-    manager_id = Column(Integer,primary_key=True)
-    device_id = Column(Integer)
-    device_ver= Column(String(50))
-    device_type = Column(String(50))
-    device_department = Column(String(45))
-    user_team = Column(String(50))
-    borrower_name = Column(String(45))
-    borrow_date = Column(Date)
-    approver_name = Column(String(45))
-    manager_status = Column(String(10))
-    return_date = Column(Date)
-    return_desc = Column(String(1024))
+    manager_id = Column(Integer,primary_key=True)       #管理id
+    device_id = Column(Integer)                         #设备id
+    device_ver= Column(String(50))                      #设备类型
+    device_type = Column(String(50))                    #设备种类
+    device_department = Column(String(45))              #设备所属部门
+    user_team = Column(String(50))                      #所属班组
+    borrower_name = Column(String(45))                  #借用人
+    borrow_date = Column(Date)                          #借用日期
+    approver_name = Column(String(45))                  #审批人
+    manager_status = Column(String(10))                 #借用状态
+    return_date = Column(Date)                          #归还日期
+    return_desc = Column(String(1024))                  #描述
 
 class Device(EntityBase):
     __tablename__ = 'tb_device'
@@ -150,31 +150,31 @@ class Approval_db(EntityBase):
 
 class Fault(EntityBase):
     __tablename__ = 'tb_fault'
-    fault_id = Column(Integer, primary_key=True)
-    device_id = Column(Integer)
-    device_ver=Column(String(45))
-    device_department = Column(String(45))
-    fault_date = Column(Date)
-    fault_reason=Column(String(45))
-    fault_deal = Column(String(45))
-    fault_finished = Column(Integer) #0维修 1维修完成 2报废
+    fault_id = Column(Integer, primary_key=True)        #故障id
+    device_id = Column(Integer)                         #设备id
+    device_ver=Column(String(45))                       #设备型号
+    device_department = Column(String(45))              #所属部门
+    fault_date = Column(Date)                           #故障日期
+    fault_reason=Column(String(45))                     #故障原因
+    fault_deal = Column(String(45))                     #故障处理方式
+    fault_finished = Column(Integer)                    #0维修 1维修完成 2报废
 
 class FaultReport(EntityBase):
     __tablename__ = 'tb_fault_report'
-    fault_report_id = Column(Integer,primary_key=True)
-    fault_report_device_id = Column(Integer)
-    fault_report_line_name = Column(String(45))
-    fault_report_towerRange=Column(String(45))
-    fault_report_date = Column(Date)
-    fault_report_flyer=Column(String(45))
-    fault_report_wether=Column(String(45))
-    fault_report_observer=Column(String(45))
-    fault_time=Column(String(45))
-    fault_crash_position=Column(String(256))
-    fault_crash_desc=Column(String(1024))
-    fault_crash_operation=Column(String(1024))
-    fault_crash_damage=Column(String(1024))
-    fault_crash_electric=Column(String(1024))
+    fault_report_id = Column(Integer,primary_key=True)  #报告id
+    fault_report_device_id = Column(Integer)            #设备id
+    fault_report_line_name = Column(String(45))         #线路名称
+    fault_report_towerRange=Column(String(45))          #杆塔范围
+    fault_report_date = Column(Date)                    #报告日期
+    fault_report_flyer=Column(String(45))               #飞手
+    fault_report_wether=Column(String(45))              #天气
+    fault_report_observer=Column(String(45))            #观察人员
+    fault_time=Column(String(45))                       #故障时间
+    fault_crash_position=Column(String(256))            #故障位置
+    fault_crash_desc=Column(String(1024))               #故障描述
+    fault_crash_operation=Column(String(1024))          #引起故障的操作
+    fault_crash_damage=Column(String(1024))             #故障造成的损失
+    fault_crash_electric=Column(String(1024))           #故障造成的电力设备损毁
     fault_crash_around=Column(String(1024))
 
 ##############################################################################线路杆塔管理
@@ -271,6 +271,7 @@ class Photo(EntityBase):
     photo_line = Column(Integer)
     photo_tower_id = Column(Integer)
     photo_path=Column(String(256))
+    photo_thumbnail_path=Column(String(256))
     photo_classify=Column(String(45))
     photo_date = Column(Date)
 
@@ -299,7 +300,11 @@ class Defect(EntityBase):
     tb_defect_part = Column(String(45))
     tb_defect_desc = Column(String(256))
 
-
+class DataService(EntityBase):
+    __tablename__ = "tb_dataservice"
+    tb_dataservice_id=Column(Integer,primary_key=True)
+    tb_dataservice_linename=Column(String(256))
+    tb_dataservice_url = Column(String(256))
 
 def class_to_dict(obj):
     is_list = obj.__class__ == [].__class__
