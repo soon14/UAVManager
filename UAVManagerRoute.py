@@ -227,16 +227,15 @@ class ManagerBorrow(Resource):
                 for item in borrowList:
                     borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
                     returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
-                    #rs=self.dao.manager_borrow(user,item['borrower'],item['borrow_team'],item['uav_id'],borrowtime,returntime)
-                    #if rs==-1:
-                    #    return make_response(jsonify({'error': 'device not exist'}), 401)
-                    #if rs==-2:
-                    #    return make_response(jsonify({'error': 'device not returned'}), 404)
-                    #if rs == -3:
-                    #    return make_response(jsonify({'error': 'borrower not returned'}), 405)
-                    #if rs == -4:
-                    #    return make_response(jsonify({'error': 'approver not exist'}), 406)
-
+                    rs=self.dao.manager_borrow(user,item['borrower'],item['borrow_team'],item['uav_id'],borrowtime,returntime)
+                    if rs==-1:
+                        return make_response(jsonify({'error': 'device not exist'}), 401)
+                    if rs==-2:
+                        return make_response(jsonify({'error': 'device not returned'}), 404)
+                    if rs == -3:
+                        return make_response(jsonify({'error': 'borrower not returned'}), 405)
+                    if rs == -4:
+                        return make_response(jsonify({'error': 'approver not exist'}), 406)
                     ret = self.dao.manager_query_device(int(item['uav_id']),returntime.strftime('%Y-%m-%d'),item['borrower'],'')
                 return json.dumps(ret)
 
