@@ -27,9 +27,11 @@ class DataServiceAdd(Resource):
             token = data['token']
             linename = data['linename']
             urlLink = data['url']
+            type = data['type']
             dataservice = DataService()
             dataservice.tb_dataservice_linename=linename
             dataservice.tb_dataservice_url = urlLink
+            dataservice.tb_dataservice_type=type
 
             user = self.userDao.verify_token(token, '')
             if (not user):

@@ -6,7 +6,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 import ConfigParser
-import json
+import json,base64
 from flask_restful import Resource
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
@@ -70,6 +70,60 @@ class FileUpload(Resource):
                 rs = self.photoDao.add_photo(voltage,line_id,tower_id,classify,os.path.join(db_folder, filename),os.path.join(db_thumbnail, filename),date)
                 if rs == 1:
                     return make_response(jsonify({'seccess': 'upload success'}), 200)
+            else:
+                return make_response(jsonify({'error': 'param error'}), 401)
+        else:
+            return make_response(jsonify({'error': 'param error'}), 401)
+
+    def get(self):
+        return self.post()
+
+class FileUploadDraw(Resource):
+    def __init__(self):
+        self.photoDao = PhotoDao()
+        self.userDao = UserDAO()
+
+    def allowed_file(self,filename):
+        return '.' in filename and \
+               filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+    def generateThumbnail(self,pathSrc,pathThumbnail):
+        im = Image.open(pathSrc)
+        factor=0.2
+        w, h = im.size
+        im.thumbnail((w *factor, h*factor))
+        im.save(pathThumbnail)
+
+    def post(self):
+        if (request.form != ""):
+            data = json.loads(request.data)
+            #token = data['token'] #要不要登录
+            photo_id = data['photoid']
+            line_id = str(data['lineid'])
+            tower_id = str(data['towerid'])
+            voltage = data['voltage']
+            classify = data['classify']
+            date=datetime.datetime.strptime(data['date'],'%Y-%m-%d').date()
+            filename=data['name']
+            image = base64.b64decode(data['image'])
+            file_folder = save_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+data['date']+'/'+classify
+            thumbnail =thumbnail_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+data['date']+'/'+classify
+
+            if not os.path.isdir(file_folder):
+                os.makedirs(file_folder)
+            if not os.path.isdir(thumbnail):
+                os.makedirs(thumbnail)
+            if image and self.allowed_file(filename):
+                fileImage = open(os.path.join(file_folder, filename), 'wb')
+                fileImage.write(image)
+                fileImage.close()
+                #image.save(os.path.join(file_folder, filename))
+                self.generateThumbnail(os.path.join(file_folder, filename),os.path.join(thumbnail, filename))
+                db_folder=database_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+data['date']+'/'+classify
+                db_thumbnail=thumbnail_database_folder+'/'+voltage+'/'+line_id+'/'+tower_id+'/'+data['date']+'/'+classify
+                #rs = self.photoDao.add_photo(voltage,line_id,tower_id,classify,os.path.join(db_folder, filename),os.path.join(db_thumbnail, filename),date)
+                #if rs == 1:
+                return make_response(jsonify({'success': 'upload success'}), 200)
             else:
                 return make_response(jsonify({'error': 'param error'}), 401)
         else:

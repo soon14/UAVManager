@@ -56,7 +56,9 @@ class FaultReportUpdate(Resource):
             report.fault_report_flyer = reportdict[0]['fault_report_flyer']
             report.fault_report_wether = reportdict[0]['fault_report_wether']
             report.fault_report_observer = reportdict[0]['fault_report_observer']
-            report.fault_time = datetime.strptime(reportdict[0]['fault_time'],'%Y-%m-%d').date()
+            #时间格式需要修改
+            #report.fault_time = datetime.strptime(reportdict[0]['fault_time'],'%Y-%m-%d %H:%M').date()
+            report.fault_time = datetime.strptime(reportdict[0]['fault_time'], '%Y-%m-%d').date()
             report.fault_crash_position = reportdict[0]['fault_crash_position']
             report.fault_crash_desc = reportdict[0]['fault_crash_desc']
             report.fault_crash_operation = reportdict[0]['fault_crash_operation']

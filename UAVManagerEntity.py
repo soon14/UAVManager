@@ -27,20 +27,20 @@ def convert(obj):
 class User(EntityBase):
     #table name
     __tablename__ = 'user'
-    user_id = Column(String(20),primary_key=True)
-    user_password = Column(String(32))
-    user_name= Column(String(45))
-    user_phone=Column(String(11))
-    user_number=Column(String(45))
-    user_department=Column(String(45))
-    user_team =Column(String(45))
-    user_role =Column(Integer)
+    user_id = Column(String(20),primary_key=True)       #用户id 用户唯一标识
+    user_password = Column(String(32))                  #用户密码
+    user_name= Column(String(45))                       #用户名
+    user_phone=Column(String(11))                       #用户电话号码
+    user_number=Column(String(45))                      #用户编号
+    user_department=Column(String(45))                  #所属部门
+    user_team =Column(String(45))                       #所属班组
+    user_role =Column(Integer)                          #用户权限
 
 class Role(EntityBase):
     __tablename__ = 'role'
-    role_id = Column(Integer,primary_key=True)
-    role_name = Column(String(45))
-    role_basic = Column(String(14))
+    role_id = Column(Integer,primary_key=True)          #权限
+    role_name = Column(String(45))                      #权限名称
+    role_basic = Column(String(14))                     #所包含的基础权限
 
 class Role_basic(EntityBase):
     __tablename__ = 'role_basic'
@@ -65,31 +65,31 @@ class Manager(EntityBase):
 
 class Device(EntityBase):
     __tablename__ = 'tb_device'
-    device_id = Column(Integer, primary_key=True)
-    device_ver = Column(String(45))
-    device_type = Column(String(45))
-    uad_code = Column(String(45))
-    device_fact = Column(String(45))
-    device_date = Column(Date)
-    user_team = Column(String(45))
-    uad_camera= Column(String(45))
-    uav_yuntai=Column(String(45))
-    uad_rcontrol=Column(String(45))
-    device_status=Column(String(10)) #在库 出库 维修 报废 丢失
-    device_use_number=Column(Integer)
-    device_use_dpartment = Column(String(45))
+    device_id = Column(Integer, primary_key=True)       #设备ID（设备的唯一标识，考虑修改为字符类型）
+    device_ver = Column(String(45))                     #设备版本信息
+    device_type = Column(String(45))                    #设备类型
+    uad_code = Column(String(45))                       #设备机身编码
+    device_fact = Column(String(45))                    #维护人
+    device_date = Column(Date)                          #设备日期
+    user_team = Column(String(45))                      #使用班组
+    uad_camera= Column(String(45))                      #相机型号（不使用了）
+    uav_yuntai=Column(String(45))                       #云台相机
+    uad_rcontrol=Column(String(45))                     #民航局编码
+    device_status=Column(String(10))                    #设备状态：在库 出库 维修 报废 丢失
+    device_use_number=Column(Integer)                   #设备使用次数
+    device_use_dpartment = Column(String(45))           #设备使用部门
 
 class Battery(EntityBase):
     __tablename__ = 'tb_battery'
-    battery_id = Column(Integer, primary_key=True)
-    battery_ver = Column(String(45))
-    battery_type=Column(String(45))
-    battery_fact=Column(String(45))
-    battery_date=Column(Date)
-    user_team=Column(String(45))
-    battery_status=Column(String(10))#在库 出库 维修 报废 丢失
-    battery_use_number=Column(Integer)
-    battery_use_dpartment=Column(String(45))
+    battery_id = Column(Integer, primary_key=True)      #电池id
+    battery_ver = Column(String(45))                    #电池版本信息
+    battery_type=Column(String(45))                     #电池类型
+    battery_fact=Column(String(45))                     #维护人
+    battery_date=Column(Date)                           #电池日期
+    user_team=Column(String(45))                        #使用班组
+    battery_status=Column(String(10))                   #电池状态：在库 出库 维修 报废 丢失
+    battery_use_number=Column(Integer)                  #电池使用次数
+    battery_use_dpartment=Column(String(45))            #电池使用部门
 
 class Pad(EntityBase):
     __tablename__ = 'tb_pad'
@@ -180,13 +180,13 @@ class FaultReport(EntityBase):
 ##############################################################################线路杆塔管理
 class Lines(EntityBase):
     __tablename__='tb_lines'
-    lines_id = Column(Integer,primary_key=True)
-    lines_name=Column(String(45))
-    lines_construct_date = Column(Date)
-    lines_voltage = Column(String(45))
-    lines_work_team = Column(String(45))
-    lines_incharge = Column(String(45))
-    deleted = Column(Integer)
+    lines_id = Column(Integer,primary_key=True)         #线路ID
+    lines_name=Column(String(45))                       #线路名称
+    lines_construct_date = Column(Date)                 #建造日期
+    lines_voltage = Column(String(45))                  #电压等级
+    lines_work_team = Column(String(45))                #维护班组
+    lines_incharge = Column(String(45))                 #线路负责人
+    deleted = Column(Integer)                           #是否被删除
 
 class Towers(EntityBase):
     __tablename__='tb_tower'
@@ -305,7 +305,7 @@ class DataService(EntityBase):
     tb_dataservice_id=Column(Integer,primary_key=True)
     tb_dataservice_linename=Column(String(256))
     tb_dataservice_url = Column(String(256))
-
+    tb_dataservice_type = Column(Integer)
 def class_to_dict(obj):
     is_list = obj.__class__ == [].__class__
     is_set = obj.__class__ == set().__class__

@@ -283,8 +283,12 @@ class PhotoDao:
         return json.dumps(ret)
 
     def query_photo_idx(self,photoidx):
-        rs = self.session_power.query(Photo).filter(Photo.photo_id == photoidx).all()
-        return class_to_dict(rs)
+        rs = self.session_power.query(Photo).filter(Photo.photo_id == photoidx).first()
+        #根据查到的线路id获取电压等级
+        lineinfo = self.session_power.query(Lines).filter(Lines.lines_id==rs.photo_line).first()
+        dic = class_to_dict(rs)
+        dic['voltage'] = lineinfo.lines_voltage
+        return dic
 
     def add_photo(self,user,photo):
         usrDao=UserDAO()

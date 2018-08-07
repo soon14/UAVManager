@@ -165,6 +165,7 @@ api.add_resource(UAVApporvalRoute.UAVApprovalDisagree, '/uavmanager/api/v1.0/app
 
 ###################################################################文件上传模块
 api.add_resource(PhotoUpload.FileUpload,'/gis/api/v1.0/fileupload')
+api.add_resource(PhotoUpload.FileUploadDraw,'/gis/api/v1.0/fileuploaddraw')
 api.add_resource(PhotoUpload.ImageUpload,'/gis/api/v1.0/imageupload')
 
 ###################################################################电力线路杆塔查询模块
