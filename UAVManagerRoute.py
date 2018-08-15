@@ -224,34 +224,44 @@ class ManagerBorrow(Resource):
                 return make_response(jsonify({'error': 'token expired'}), 399)
             else:
                 ret=[]
-                for item in borrowList:
-                    borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
-                    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
-                    rs=self.dao.manager_borrow(user,item['borrower'],item['borrow_team'],item['uav_id'],borrowtime,returntime)
-                    if rs==-1:
-                        return make_response(jsonify({'error': 'device not exist'}), 401)
-                    if rs==-2:
-                        return make_response(jsonify({'error': 'device not returned'}), 404)
-                    if rs == -3:
-                        return make_response(jsonify({'error': 'borrower not returned'}), 405)
-                    if rs == -4:
-                        return make_response(jsonify({'error': 'approver not exist'}), 406)
-                    ret = self.dao.manager_query_device(int(item['uav_id']),returntime.strftime('%Y-%m-%d'),item['borrower'],'')
-                return json.dumps(ret)
+                borrower = borrowList['borrower']
+                #borrowteam=borrowList['borrow_team']
+                borrowtime = datetime.strptime(borrowList['borrow_time'], '%Y-%m-%d').date()
+                returntime = None
+                device_idList = borrowList['uav_id']
 
-                #同时借用多个，建议前端修改调用这个接口
-                #borrowList=[]
+                #单次扫描的时候调用的
                 #for item in borrowList:
                 #    borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
                 #    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
-                #    mngr = Manager()
-                #    mngr.borrow_date = borrowtime
-                #    mngr.borrow_date = returntime = returntime
-                #    mngr.device_id = item['uav_id']
-                #    mngr.borrower_name = item['borrower']
-                #    borrowList.append(mngr)
-                #rs = self.dao.manager_borrowList(user,borrowList)
-                #return json.dumps(rs)
+                #    rs=self.dao.manager_borrow(user,item['borrower'],item['borrow_team'],item['uav_id'],borrowtime,returntime)
+                #    if rs==-1:
+                #        return make_response(jsonify({'error': 'device not exist'}), 401)
+                #    if rs==-2:
+                #        return make_response(jsonify({'error': 'device not returned'}), 404)
+                #    if rs == -3:
+                #        return make_response(jsonify({'error': 'borrower not returned'}), 405)
+                #    if rs == -4:
+                #        return make_response(jsonify({'error': 'approver not exist'}), 406)
+                #    ret = self.dao.manager_query_device(int(item['uav_id']),returntime.strftime('%Y-%m-%d'),item['borrower'],'')
+                #return json.dumps(ret)
+
+                #同时借用多个，建议前端修改调用这个接口
+                tmplist=[]
+                for item in device_idList:
+                #    borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
+                #    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
+                    mngr = Manager()
+                    mngr.borrow_date = borrowtime
+                    mngr.return_date = returntime
+                    mngr.device_id = item
+                    mngr.borrower_name = borrower
+                    tmplist.append(mngr)
+                rs = self.dao.manager_borrowList(user,tmplist)
+                if len(rs)==0:
+                    return  make_response(jsonify({'error': 'device is borrowed or have no authority to borrow'}), 401)
+                else:
+                    return json.dumps(rs)
         else:
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
@@ -265,17 +275,22 @@ class ManagerBorrowConfirm(Resource):
             data = json.loads(request.data)
             token = data['token']
             borrowList=data['borrow']
+            if len(borrowList) <=0:
+                return make_response(jsonify({'error': 'no borrow device'}), 401)
             user = self.userDao.verify_token(token, '')
             if (not user):
-                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             elif user==-1:
                 return make_response(jsonify({'error': 'token expired'}), 399)
             else:
                 ret=[]
                 for item in borrowList:
-                    borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
-                    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
-                    rs=self.dao.manager_borrow(user,item['borrower'],item['borrow_team'],item['uav_id'],borrowtime,returntime)
+                    borrower   = item['borrower']
+                    #borrowteam = item['team']
+                    borrowtime = datetime.strptime(item['return_date'], '%Y-%m-%d').date()
+                    returntime = datetime.strptime(item['return_date'], '%Y-%m-%d').date()
+                    deviceid   = item['id']
+                    rs=self.dao.manager_borrow(user,borrower,None,deviceid,borrowtime,returntime)
                     if rs==-1:
                         return make_response(jsonify({'error': 'device not exist'}), 401)
                     if rs==-2:
@@ -284,7 +299,6 @@ class ManagerBorrowConfirm(Resource):
                         return make_response(jsonify({'error': 'borrower not returned'}), 405)
                     if rs == -4:
                         return make_response(jsonify({'error': 'approver not exist'}), 406)
-
                     #ret = self.dao.manager_query_device(int(item['uav_id']),returntime.strftime('%Y-%m-%d'),item['borrower'],'')
                 return make_response(jsonify({'success': 'Borrow success'}), 200)
         else:
@@ -299,23 +313,84 @@ class ManagerReturn(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
-            borrowList=data['return']
+            returnList=data['return']
             user = self.userDao.verify_token(token, '')
             if (not user):
                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
             elif user==-1:
                 return make_response(jsonify({'error': 'token expired'}), 399)
             else:
+                ret=[]
+                returntime = datetime.strptime(returnList['return_time'], '%Y-%m-%d').date()
+                device_idList = returnList['uav_id']
 
-                for item in borrowList:
-                    returntime = datetime.strptime(item['return_time'],'%Y-%m-%d').date()
-                    rs=self.dao.manager_return(user,item['device_id'],returntime,item['return_desc'])
-                    if rs!=1:
-                        return make_response(jsonify({'error': 'return deivce failed'}), 401)
-                    ret = self.dao.manager_query_device(int(item['device_id']),returntime.strftime('%Y-%m-%d'),"",item['return_desc'])
-                return json.dumps(ret)
+                #单次扫描的时候调用的
+                #for item in borrowList:
+                #    borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
+                #    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()
+                #    rs=self.dao.manager_borrow(user,item['borrower'],item['borrow_team'],item['uav_id'],borrowtime,returntime)
+                #    if rs==-1:
+                #        return make_response(jsonify({'error': 'device not exist'}), 401)
+                #    if rs==-2:
+                #        return make_response(jsonify({'error': 'device not returned'}), 404)
+                #    if rs == -3:
+                #        return make_response(jsonify({'error': 'borrower not returned'}), 405)
+                #    if rs == -4:
+                #        return make_response(jsonify({'error': 'approver not exist'}), 406)
+                #    ret = self.dao.manager_query_device(int(item['uav_id']),returntime.strftime('%Y-%m-%d'),item['borrower'],'')
+                #return json.dumps(ret)
+
+                #同时借用多个，建议前端修改调用这个接口
+                tmplist=[]
+                for item in device_idList:
+                    mngr = Manager()
+                    mngr.return_date = returntime
+                    mngr.device_id = item
+                    tmplist.append(mngr)
+                rs = self.dao.manager_return_list(user,tmplist)
+                if len(rs)==0:
+                    return  make_response(jsonify({'error': 'device is borrowed or have no authority to borrow'}), 401)
+                else:
+                    return json.dumps(rs)
         else:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
+class ManagerReturnConfirm(Resource):
+    def __init__(self):
+        self.dao = ManagerDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            returnList=data['return']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            elif user==-1:
+                return make_response(jsonify({'error': 'token expired'}), 399)
+            else:
+                ret=[]
+                for item in returnList:
+                    returntime = datetime.strptime(item['return_date'], '%Y-%m-%d').date()
+                    deviceid   = item['id']
+                    device_cond= item['condition']
+                    rs=self.dao.manager_return(user,deviceid,returntime,device_cond)
+                    if rs==-1:
+                        return make_response(jsonify({'error': 'device not exist'}), 401)
+                    if rs==-2:
+                        return make_response(jsonify({'error': 'device not returned'}), 404)
+                    if rs == -3:
+                        return make_response(jsonify({'error': 'borrower not returned'}), 405)
+                    if rs == -4:
+                        return make_response(jsonify({'error': 'approver not exist'}), 406)
+                    if rs == -5:
+                        return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                    #ret = self.dao.manager_query_device(int(item['uav_id']),returntime.strftime('%Y-%m-%d'),item['borrower'],'')
+
+                return make_response(jsonify({'success': 'Borrow success'}), 200)
+        else:
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
 

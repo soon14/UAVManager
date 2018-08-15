@@ -10,6 +10,7 @@ import ConfigParser
 import hashlib
 import json
 from sqlalchemy import create_engine
+from sqlalchemy.sql import func
 from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker,query
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -40,12 +41,18 @@ engine_usr = create_engine('mysql+mysqldb://' + usr_user + ':' + usr_pass + '@' 
 Session_UAV = sessionmaker(bind=engine_uav)
 Session_User = sessionmaker(bind=engine_usr)
 
-
+#进行md5加密
+#param arg:输入需要加密的参数
+#return :输出加密后的数据
 def md5_key(arg):
     hash = hashlib.md5()
     hash.update(arg)
     return hash.hexdigest()
 
+#用户操作类
+# 主要定义用户数据的操作，包括增改删查等
+#author:Wu Wei
+#Version 1.0.0.0
 class UserDAO:
     def __init__(self):
         self.session_usr=Session_User()
@@ -53,7 +60,10 @@ class UserDAO:
     def __del__(self):
         self.session_usr.close()
     
-    #verify passowrd
+    #verify passowrd,确认用户名和密码登录
+    #param username:输入用户名
+    #param password:输入密码
+    #return: 正确返回True 错误返回False
     def verify_password(self,username,password):
         if(not username or not password):
             return False
@@ -64,7 +74,10 @@ class UserDAO:
             return False
         else:
             return True
-    #verify token
+
+    #verify token 确认token直接导入token解析是否正确
+    #param token 输入token
+    #param password 输入密码（可以不需要输入）
     def verify_token(self,token,password):
         if token is None:
             return None
@@ -80,7 +93,9 @@ class UserDAO:
         self.session_usr.rollback()
         return usr
 
-    #insert obj into table
+    #insert obj into table 插入用户
+    #param user:需要插入的用户
+    #param user_login:登录的用户
     def insert_user(self,user,user_login):
         roles = self.get_role(user_login)
         if '4' in roles and '5' not in roles and '6' not in roles:
@@ -112,6 +127,9 @@ class UserDAO:
         else:
             return -1
 
+    #修改用户信息
+    #param user:修改后的用户信息
+    #param user_login:登录的用户
     def modify_user(self,user,user_login):
         roles = self.get_role(user_login)
         if '4' in roles and '5' not in roles and '6' not in roles:
@@ -159,12 +177,17 @@ class UserDAO:
         else:
             return -1
 
-    #get obj by id
+    #根据用户id获取用户信息（没有验证）
+    #param userid:输入用户id
+    #返回用户信息
     def get_user_byId(self,userid):
         user=self.session_usr.query(User).filter(User.user_id==userid).all()
         self.session_usr.rollback()
         return class_to_dict(user)
 
+    #删除用户
+    #param user:登录的用户
+    #param userid:需要删除的用户的id
     def delete_user_byId(self,user,userid):
         roles = self.get_role(user.user_role)
         if '6' in roles:
@@ -176,7 +199,9 @@ class UserDAO:
                 self.session_usr.rollback()
             return 1
 
-    #get obj by name
+    #get obj by name 根据用户名获取用户
+    #param name:用户名
+    #返回用户信息
     def get_user_byName(self,name):
         if(not name):
             return -1
@@ -185,13 +210,22 @@ class UserDAO:
             self.session_usr.rollback()
             return usr
 
-    #authority
+    #authority 获取用户权限
+    #param user:输入用户
+    #返回用户基础权限集合
     def get_role(self,user):
         rs = self.session_usr.query(Role).filter(Role.role_id==user.user_role).first()
         self.session_usr.rollback()
         role = rs.role_basic.split(',')
         return role
 
+    #查询用户列表（分页查询）
+    #param user:当前登录用户信息
+    #param department:筛选部门(为空则所有部门)
+    #param team:筛选班组(为空则所有班组)
+    #page_index:查询第几页
+    #page_size:每页展示数据条数
+    #用户列表信息
     def query_users(self,user,department,team,page_index,page_size):
         roles = self.get_role(user)
         if '4' in roles and '5' not in roles and '6' not in roles:
@@ -215,6 +249,12 @@ class UserDAO:
         else:
             return None
 
+    #查询获取用户列表页数
+    #param user:当前登录用户信息
+    #param department:筛选部门(为空则所有部门)
+    #param team:筛选班组(为空则所有班组)
+    #page_size:每页展示数据条数
+    #用户一共多少页
     def query_users_pages(self,user,department,team,page_size):
         roles = self.get_role(user)
         if '4' in roles and '5' not in roles and '6' not in roles:
@@ -242,6 +282,8 @@ class UserDAO:
         else:
             return None
 
+    #获取权限类别
+    #param user:用户
     def get_role_type(self,user):
         userrole = self.get_role(user)
         rs = self.session_usr.query(Role).all()
@@ -262,6 +304,9 @@ class UserDAO:
                 roles.append(tmpItem)
         return json.dumps(roles)
 
+    #获取用户所在部门
+    #param user:用户信息
+    #返回用户所在部门
     def get_role_department(self,user):
         roles = self.get_role(user)
         sql = 'select user_department from user group by user_department;'
@@ -283,6 +328,9 @@ class UserDAO:
         else:
             return None
 
+    #获取用户所在班组
+    #param user:用户信息
+    #返回用户所在班组
     def get_role_team(self,user):
         roles = self.get_role(user)
         sql = 'select user_team from user group by user_team;'
@@ -304,6 +352,8 @@ class UserDAO:
         else:
             return None
 
+    #获取所有班组信息
+    #返回班组列表
     def get_role_teams(self):
         sql = 'select user_team from user group by user_team;'
         rs = self.session_usr.execute(sql).fetchall()
@@ -315,15 +365,22 @@ class UserDAO:
             ret.append(item)
         return json.dumps(ret)
 
+    #返回用户所在班组的班组管理员信息
+    #param user:输入登录用户
+    #返回用户所在班组的班组管理员姓名
     def get_teamManager(self,user):
         managers=self.session_usr.query(User.user_id).filter(User.user_team==user.user_team,User.user_role==4).all()
         ret = []
         for i in managers:
             item = {}
-            item['team_manager'] = i.user_id
+            item['team_manager'] = i.user_name
             ret.append(item)
         return  ret
 
+#无人机设备对象操作类
+#包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
+#author:Wu Wei
+#Version 1.0.0.0
 class DeviceDAO:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -331,7 +388,10 @@ class DeviceDAO:
     def __del__(self):
         self.session_uav.close()
 
-    #简单的设置成只能查看本部门的设备
+    #简单的设置成只能查看本部门的设备，根据用户进行查询，简单的设置为本部门的用户只能够查看本部门的所有设备
+    #param user:当前登录的用户
+    #返回所有无人机设备
+    #author: Wu Wei P.S. 函数实用性较差已经弃用
     def query_all(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -340,13 +400,24 @@ class DeviceDAO:
         return class_to_dict(rs)
         return None
 
+    #分页查询，查询用户所在部门的设备
+    #param user:当前登录的用户信息
+    #param page_index 查询第几页
+    #param page_size 每一页展示的数据条数
+    #返回查询到的所有设备
+    # author: Wu Wei P.S. 函数实用性较差已经弃用
     def query_page(self,user,page_index,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         rs=self.session_uav.query(Device).filter(Device.device_use_dpartment==user.user_department).limit(page_size).offset((page_index-1)*page_size).all()
         return class_to_dict(rs)
 
-    #查询页数
+    #查询所有设备的页数
+    #param user:用户信息
+    #param device_type:设备类型为空则显示所有设备
+    #param device_status:设备状态，为空则查询所有状态的设备
+    #param page_size:每页展示的数据条数
+    #返回页数json数据
     def query_pages(self,user,device_type,device_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -363,10 +434,22 @@ class DeviceDAO:
         return json.dumps(item)
 
     #根据设备id查看设备
+    #param uav_id:输入无人机设备id
+    #返回无人机设备
     def query_index(self,uav_id):
         return class_to_dict(self.session_uav.query(Device).filter(Device.device_id==uav_id).first())
 
-    #查看本部门的的设备（输电一所和输电二所）
+    #条件查询，此查询包含各种条件以及分页查询，因此可以将分页查询废弃（所有查询记录都通过调用此函数实现）
+    # 查看本部门的的设备（输电一所和输电二所）
+    #param user:登录的用户信息
+    #param device_id:无人机id
+    #param device_ver:无人机类型
+    #param device_type:无人机种类
+    #param uad_code:无人机设备编码（已经改为民航局编码）
+    #param device_status:无人机状态
+    #param page_index:查询第几页
+    #param page_size:每页展示数据条数
+    #返回查询到的数据条数
     def query_condition(self,user,device_id,device_ver,device_type,uad_code,device_status,page_index,page_size):
         q = self.session_uav.query(Device)
         usrDao=UserDAO()
@@ -388,7 +471,10 @@ class DeviceDAO:
         self.session_uav.rollback()
         return  class_to_dict(device)
 
-    #直接统计本所的设备就好了
+    #统计用户所在输电所的设备情况
+    #param user:用户信息
+    #param device_status:设备状态
+    #返回设备类型以及每类设备数目
     def query_statistic(self,user,device_status):
         usrDao=UserDAO()
         roles = usrDao.get_role(user)
@@ -406,6 +492,9 @@ class DeviceDAO:
             ret.append(item)
         return json.dumps(ret)
 
+    #统计每一类设备情况
+    #param user 当前登录用户
+    #返回每一类设备各个状态的设备数目
     def query_statistic_all(self,user):
         #get type first
         usrDao=UserDAO()
@@ -428,6 +517,8 @@ class DeviceDAO:
         return json.dumps(ret)
 
     #获取设备类型和设备型号
+    #param user_team:查询某一班组的设备类型
+    #返回设备类型的json数据
     def query_type(self,user_team):
         sql = 'select device_type from tb_device group by device_type;'
         rs = self.session_uav.execute(sql).fetchall()
@@ -439,6 +530,8 @@ class DeviceDAO:
             ret.append(item)
         return json.dumps(ret)
 
+    #查询所有设备版本
+    #返回设备备版本的json数据
     def query_ver(self):
         sql = 'select device_ver from tb_device group by device_ver;'
         rs = self.session_uav.execute(sql).fetchall()
@@ -450,6 +543,8 @@ class DeviceDAO:
             ret.append(item)
         return json.dumps(ret)
 
+    #查询所有设备类型
+    # 返回设备类型的json数据
     def query_type(self):
         sql = 'select device_type from tb_device group by device_type;'
         rs = self.session_uav.execute(sql).fetchall()
@@ -461,6 +556,10 @@ class DeviceDAO:
             ret.append(item)
         return json.dumps(ret)
 
+    #添加无人机设备
+    #param usr:当前登录的用户信息
+    #param device:需要添加的设备
+    #添加成功返回1，返回其他值则添加失败
     def add_device(self,usr,device):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -479,6 +578,9 @@ class DeviceDAO:
         else:
             return -1
 
+    #修改无人机设备状态
+    #param usr:当前登录用户信息
+    #param device:修改后写回的设备
     def modify_device(self,usr,device):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -508,7 +610,11 @@ class DeviceDAO:
         else:
             return -1
 
+    #修改无人机设备状态
     #状态有五种 在库 出库 维修 报废 丢失
+    #param usr:当前登录用户信息
+    #param device_id:无人机设备id
+    #param status:修改后无人机状态
     def modify_device_status(self,usr,device_id,status):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -523,6 +629,10 @@ class DeviceDAO:
         else:
             return -1
 
+#电池设备对象操作类
+#包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
+#author:Wu Wei
+#Version 1.0.0.0
 class BatteryDAO:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -530,6 +640,9 @@ class BatteryDAO:
     def __del__(self):
         self.session_uav.close()
 
+    #查询用户所在部门所有设备
+    #param usr:登录用户
+    #返回获取的所有设备 P.S. 弃用 通过条件查询替代
     def query_all(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -537,12 +650,23 @@ class BatteryDAO:
         self.session_uav.rollback()
         return class_to_dict(rs)
 
+    #分页查询所有设备
+    #param user:当前登录用户
+    #param page_index: 当前展示的页数
+    #param page_size: 每一页展示数据条数
+    #返回获取的设备 P.S. 弃用，通过条件查询替代
     def query_page(self,user,page_index,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         rs=self.session_uav.query(Battery).filter(Battery.battery_use_dpartment==user.user_department).limit(page_size).offset((page_index-1)*page_size).all()
         return class_to_dict(rs)
 
+    #获取设备页数
+    #param user:当前登录用户
+    #param battery_type:电池类型
+    #param battery_status 电池状态
+    #param page_size 每一页展示数据的条数
+    #p返回查询设备总页数
     def query_pages(self,user,battery_type,battery_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -560,6 +684,15 @@ class BatteryDAO:
         item['pages'] = rs
         return json.dumps(item)
 
+    #根据条件进行分页查询
+    #param user:当前登录的用户
+    #param battery_id:电池id
+    #param battery_ver:电池版本
+    #param battery_type:电池类型
+    #param battery_status:电池状态
+    #param page_index:展示第几页的数据
+    #param page_size:每一页展示数据条数
+    #返回查询设备
     def query_condition(self,user,bttery_id,bttery_ver,bttery_type,bttery_status,page_index,page_size):
         q = self.session_uav.query(Battery)
         usrDao=UserDAO()
@@ -579,6 +712,11 @@ class BatteryDAO:
         self.session_uav.rollback()
         return class_to_dict(battery)
 
+    #查询统计信息
+    #查询不同类型的电池的数目
+    #param user:当前登录用户
+    #param battery_status:电池状态（输入’总数‘，统计所有状态）
+    #返回统计结果
     def query_statistic(self,user,bttery_status):
         usrDao=UserDAO()
         roles = usrDao.get_role(user)
@@ -596,7 +734,9 @@ class BatteryDAO:
             ret.append(item)
         return json.dumps(ret)
 
-    #统计不同状态下飞机数量
+    #统计不同类型不同状态下的电池的统计结果
+    #param user:当前登录用户
+    #返回统计结果
     def query_statistic_all(self,user):
         #get type first
         usrDao=UserDAO()
@@ -618,6 +758,8 @@ class BatteryDAO:
         return json.dumps(ret)
 
     #查询电池类型
+    #param user_team:用户所在班组
+    #查询本班组所有电池类型
     def query_type(self,user_team):
         sql = 'select battery_type from tb_battery where user_team=\'' + user_team + '\' group by battery_type;'
         rs = self.session_uav.execute(sql).fetchall()
@@ -628,6 +770,8 @@ class BatteryDAO:
             ret.append(item)
         return json.dumps(ret)
 
+    #查询所有电池类型
+    #返回所有电池类型
     def query_type(self):
         sql = 'select battery_type from tb_battery group by battery_type;'
         rs = self.session_uav.execute(sql).fetchall()
@@ -638,6 +782,9 @@ class BatteryDAO:
             ret.append(item)
         return json.dumps(ret)
 
+    #添加电池（将电池添加进入到电池数据表中）
+    #param usr:当前登录用户
+    #param battery:待添加的电池
     def add_battery(self,usr,battery):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -656,6 +803,9 @@ class BatteryDAO:
         else:
             return -1
 
+    #添加电池（将电池添加进入到电池数据表中）
+    #param usr:当前登录用户
+    #param battery:修改后的电池数据
     def modify_battery(self,usr,battery):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -677,6 +827,10 @@ class BatteryDAO:
         else:
             return -1
 
+    #修改电池状态
+    #param usr:当前登录用户
+    #param battery_id:电池id
+    #param status:修改后电池状态
     def modify_battery_status(self,usr,battery_id,status):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -691,6 +845,10 @@ class BatteryDAO:
         else:
             return -1
 
+#平板设备对象操作类
+#包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
+#author:Wu Wei
+#Version 1.0.0.0
 class PadDao:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -698,6 +856,9 @@ class PadDao:
     def __del__(self):
         self.session_uav.close()
 
+    # 查询所有平板设备
+    # param user: 当前登录用户信息
+    #返回查询到的结果数据
     def query_all(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -710,6 +871,11 @@ class PadDao:
         else:
             return None
 
+    #分页查询
+    #param user:当前登录用户
+    #param page_index:当前显示的数据页
+    #param page_size:每页显示数据条数
+    #返回查询结果
     def query_page(self,user,page_index,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -722,6 +888,12 @@ class PadDao:
         else:
             return None
 
+    #查询总页数
+    #param user:当前登录的用户
+    #param pad_type:查询平台类型
+    #param pad_status:查询平板状态
+    #param page_size:每一页展示数据条数
+    #返回查询总页数
     def query_pages(self,user,pad_type,pad_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -740,6 +912,14 @@ class PadDao:
         item['pages'] = rs
         return json.dumps(item)
 
+    #条件查询，根据输入条件对平板设备进行分页查询
+    #param user:登录的用户
+    #param pad_id:平板id
+    #param pad_ver:平板版本
+    #param pad_type:平板类型
+    #param pad_status:平板状态
+    #param page_index:当前显示的页数
+    #param page_size:每一页大小
     def query_condition(self, user, pad_id, pad_ver, pad_type, pad_status, page_index, page_size):
         q = self.session_uav.query(Pad)
         usrDao=UserDAO()
@@ -759,6 +939,10 @@ class PadDao:
         pad=q.limit(page_size).offset((page_index-1)*page_size).all()
         return  class_to_dict(pad)
 
+    #查询统计信息
+    #param user:当前登录用户
+    #param pad_status:平板状态
+    #返回查询结果
     def query_statistic(self,user,pad_status):
         usrDao=UserDAO()
         roles = usrDao.get_role(user)
@@ -794,6 +978,8 @@ class PadDao:
         else:
             return None
 
+    #查询平板类型信息 查询所有平板的类型信息
+    #返回平板类型
     def query_type(self):
         sql = 'select pad_type from tb_pad group by pad_type;'
         rs = self.session_uav.execute(sql).fetchall()
@@ -804,6 +990,9 @@ class PadDao:
             ret.append(item)
         return json.dumps(ret)
 
+    #添加平板信息
+    #param usr:当前登录用户
+    #param pad:需要添加的平板
     def add_pad(self,usr,pad):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -821,6 +1010,9 @@ class PadDao:
         else:
             return -1
 
+    #修改平板信息
+    #param usr:当前登录用户
+    #param pad:需要修改的平板信息
     def modify_pad(self,usr,pad):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -839,6 +1031,10 @@ class PadDao:
         else:
             return -1
 
+    #修改平板状态
+    #param usr:当前登录的用户
+    #param pad_id:修改修改的平板的id
+    #param status:修改后平板状态
     def modify_pad_status(self,usr,pad_id,status):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -853,7 +1049,11 @@ class PadDao:
         else:
             return -1
 
-#配件
+
+#配件设备对象操作类
+#包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
+#author:Wu Wei
+#Version 1.0.0.0
 class PartsDao:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -861,6 +1061,9 @@ class PartsDao:
     def __del__(self):
         self.session_uav.close()
 
+    #查询所有配件设备
+    #param user:输入的用户信息
+    #返回所有配件数据
     def query_all(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -869,6 +1072,11 @@ class PartsDao:
         else:
             return None
 
+    #分页查询查询配件信息
+    #param user:输入用户信息
+    #param page_index:查询第几页
+    #param page_size:查询每一页数据条数
+    #返回所有配件数据
     def query_page(self,user,page_index,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -881,6 +1089,12 @@ class PartsDao:
         else:
             return None
 
+    #查询配件页数
+    #param usr:当前登录用户
+    #param parts_type:配件类型
+    #param parts_status:配件状态
+    #param page_size:每一页展示数据数量
+    #返回所有配件数据
     def query_pages(self,user,parts_type,parts_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -899,6 +1113,9 @@ class PartsDao:
         item['pages'] = rs
         return json.dumps(item)
 
+    #查询配件的统计信息
+    #param user:当前登录用户
+    #param part_status:配件状态
     def query_statistic(self,user,part_status):
         usrDao=UserDAO()
         roles = usrDao.get_role(user)
@@ -933,6 +1150,9 @@ class PartsDao:
         else:
             return None
 
+    #查询配件信息
+    #param user:当前登录用户
+    #param part_status:配件状态
     def query_type(self):
         sql = 'select parts_type from tb_parts group by parts_type;'
         rs = self.session_uav.execute(sql).fetchall()
@@ -943,6 +1163,13 @@ class PartsDao:
             ret.append(item)
         return json.dumps(ret)
 
+    #条件查询
+    #param user:当前登录用户
+    #param parts_id:配件di
+    #param parts_ver:配件类型
+    #param parts_status:配件状态
+    #param page_index:当前显示页
+    #param page_size:每页展示数据条数
     def query_condition(self,user,parts_id,parts_ver,parts_type,parts_status,page_index,page_size):
         q = self.session_uav.query(Parts)
         usrDao=UserDAO()
@@ -962,6 +1189,9 @@ class PartsDao:
         parts=q.limit(page_size).offset((page_index-1)*page_size).all()
         return  class_to_dict(parts)
 
+    #添加部件
+    #param usr;登录的用户信息
+    #param parts:待添加的配件
     def add_parts(self,usr,parts):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -979,6 +1209,9 @@ class PartsDao:
         else:
             return -1
 
+    #修改部件
+    #param usr:当前登录的用户
+    #param parts:修改后的配件
     def modify_parts(self,usr,parts):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -1000,6 +1233,10 @@ class PartsDao:
         else:
             return -1
 
+    #修改配件状态
+    #param usr:当前登录的用户
+    #param parts_id:配件id
+    #param status:配件状态
     def modify_parts_status(self,usr,parts_id,status):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -1015,6 +1252,12 @@ class PartsDao:
             return -1
 
 #出入库管理
+#出入库管理功能比较复杂
+# 涉及到设备的出入库,设备借调以及设备申请 而且由于每个设备都通过一张表来保存
+# 所以查询和修改的时候也相对比较复杂，感觉数据表结构需要进行调整才行
+# 根据现在的经验来看实际上所有的设备都可以放在一张表中，避免查询的时候过多的判断，这个在后面三个月需要进行仔细思考后进行修改
+#author: Wu Wei
+#Version 1.0.0.0
 class ManagerDAO:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -1023,6 +1266,8 @@ class ManagerDAO:
         self.session_uav.close()
         self.session_usr.close()
 
+    #查询所有出入库管理记录
+    #param user:当前登录的用户信息
     def query_all(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -1031,6 +1276,10 @@ class ManagerDAO:
         else:
             return None
 
+    #分页查询借用记录
+    #param user:当前登录的用户的信息
+    #param page_index:数据显示的当前页
+    #param page_size:数据显示每一页数据展示条数
     def query_page(self,user,page_index,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -1039,6 +1288,13 @@ class ManagerDAO:
             return class_to_dict(self.session_uav.query(Manager).limit(page_size).offset((page_index-1)*page_size).all())
         else:
             return None
+
+    #根据时间段对借用记录进行查询
+    #param user:当前登录的用户的信息
+    #param page_index:数据显示的当前页
+    #param page_size:数据显示每一页数据展示条数
+    #param sttime:起始时间
+    #param endtime:结束时间
     def query_time(self,user,page_index,page_size,sttime,endtime):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -1049,12 +1305,20 @@ class ManagerDAO:
         else:
             return None
 
+    #查询历史记录的页数
+    #param user:当前登录用户信息
+    #param page_size:每页展示数据条数
     def query_history_pagenumber(self,user,page_size):
         rs=self.session_uav.query(Manager).count()/page_size+1
         item = {}
         item['pages'] = rs
         return json.dumps(item)
 
+    #根据日期查询页数
+    #param user:当前登录的用户信息
+    #param page_size:每页展示数据条数
+    #param sttime:起始时间
+    #param endtime:终止时间
     def query_date_pagenumber(self,user,page_size,sttime,endtime):
         q = self.session_uav.query(Manager)
         rs = q.filter(Manager.borrow_date.between(sttime, endtime)).count()/page_size+1
@@ -1062,6 +1326,11 @@ class ManagerDAO:
         item['pages'] = rs
         return json.dumps(item)
 
+    #设备的库存状态查询，由于每类设备对应一张数据表，所以每个设备对应一个函数进行查询，在查询的过程中有众多的条件判断需要处理
+    #param device_type:设备类型
+    #param device_status:设备状态
+    #param page_index:当前显示页
+    #param page_size:每页显示的条数
     def query_uav_manager(self,device_type,device_status,page_index,page_size):
         ret = []
         q = self.session_uav.query(Device)
@@ -1237,6 +1506,7 @@ class ManagerDAO:
                 tmp['borrower'] = ''
                 tmp['status'] = '在库'
                 ret.append(tmp)
+        return ret
     def query_device_manager(self,device_type,device_ver,device_status,page_index,page_size):
         ret = []
         if device_ver=='无人机':
@@ -1249,6 +1519,12 @@ class ManagerDAO:
             ret = self.query_pads_manager(device_type,device_status,page_index,page_size)
         return json.dumps(ret)
 
+    #直接根据设备情况查询页数
+    #param user:用户信息
+    #param device_type:设备类型
+    #param device_ver:设备种类
+    #param device_status:设备状态
+    #param page_size:每页展示数据条数
     def query_pages(self,user,device_type,device_ver,device_status,page_size):
         if device_ver=='无人机':
             q=self.session_uav.query(Device)
@@ -1295,6 +1571,8 @@ class ManagerDAO:
             item['pages'] = rs
             return json.dumps(item)
 
+    #查询设备借用情况（只能看到本班组的设备的借用情况，实际上由于展示策略的问题已经弃用）
+    #param user:当前登录的用户
     def query_borrow(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -1307,6 +1585,16 @@ class ManagerDAO:
         else:
             return None
 
+    #条件查询，根据条件查询借用记录
+    #param user:当前登录的用户信息
+    #param device_ver:设备种类
+    #param device_id:设备id
+    #param device_type:设备类型
+    #param manager_status:设备管理状态
+    #param borrow_time:设备借用时间
+    #param return_time:设备归还时间
+    #param page_index:当前展示的页数
+    #param page_size:每页展示的数据条数
     def query_condition(self,user,device_ver,device_id,device_type,manager_status,borrow_time,return_time,page_index,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -1407,7 +1695,6 @@ class ManagerDAO:
         if idx == 4 and device.pad_status == '在库':
             return self.updateManager(borrower, borrow_team, device, borrow_time, return_time, idx)
         return -1
-
     #不是同一个班组的借用
     def borrow_notin_team(self,user,borrower,borrow_team,device,borrow_time,return_time,idx):
         #判断是否提交借调申请
@@ -1453,8 +1740,61 @@ class ManagerDAO:
                 else:
                     return -1
         return -1
+    #同一个班组的借用列表
+    def borrow_in_teamList(self,user,borrower,borrow_team,device,borrow_time,return_time,idx):
+        #判断设备是否在库
+        if idx==1 and device.device_status=='在库':
+            return 1
+        if idx == 2 and device.battery_status == '在库':
+            return 1
+        if idx == 3 and device.parts_status == '在库':
+            return 1
+        if idx == 4 and device.pad_status == '在库':
+            return 1
+        return -1
+    #不是同一个班组的借用列表
+    def borrow_notin_teamList(self,user,borrower,borrow_team,device,borrow_time,return_time,idx):
+        #判断是否提交借调申请
+        approve = self.session_uav.query(Approval).filter(Approval.apply_person == user.user_name).first()
 
-    #数据借用
+        if  approve != None and approve.approval_status==1: #通过审批则直接借用
+            #判断借用的飞机和审批的飞机是不是同一班组或者是管理员
+            userDao = UserDAO()
+            approver = self.session_usr.query(User).filter(User.user_id==approve.approval_person).first()
+            roles = userDao.get_role(approver)
+
+            # 判断设备是否在库
+            if idx == 1 and device.device_status == '在库':
+                if ('5' in roles and device.device_use_dpartment==approver.user_department) or\
+                    ('4' in roles and device.user_team==approver.user_team):
+                    return 1
+                else:
+                    return -1
+            if idx == 2 and device.battery_status == '在库':
+                if ('5' in roles and device.battery_use_dpartment==approver.user_department) or\
+                    ('4' in roles and device.user_team==approver.user_team):
+                    return 1
+                else:
+                    return -1
+            if idx == 3 and device.parts_status == '在库':
+                if ('5' in roles and device.parts_use_dpartment==approver.user_department) or\
+                    ('4' in roles and device.user_team==approver.user_team):
+                    return 1
+                else:
+                    return -1
+            if idx == 4 and device.pad_status == '在库':
+                if ('5' in roles and device.pad_use_dpartment==approver.user_department) or\
+                    ('4' in roles and device.user_team==approver.user_team):
+                    return 1
+                else:
+                    return -1
+        return -1
+
+
+    #数据借用，确认借用直接写进数据库中
+    #param user:登录用户
+    #param borrower:借用人
+    #
     def manager_borrow(self,user,borrower,borrow_team,uav_id,borrow_time,return_time):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -1564,59 +1904,91 @@ class ManagerDAO:
             #userApprover = self.session_usr.query(User).filter(User.user_id==approver).first()
             if usr.user_team!=user_team:
                 if idx==1:
-                    if self.borrow_notin_team(user,usr,usr.user_team,device,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
+                    if self.borrow_notin_teamList(user,usr,usr.user_team,device,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
                         continue
                     else:
-                        tmp['success idx']=idx
+                        tmp['type']=device.device_type
+                        tmp['id']=device.device_id
+                        tmp['team']=device.user_team
+                        tmp['return_date']=borrowItem.borrow_date.strftime('%Y-%m-%d')
+                        tmp['borrower']=borrowItem.borrower_name
                         result.append(tmp)
                 if idx==2:
-                    if self.borrow_notin_team(user, usr, usr.user_team, battery,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
+                    if self.borrow_notin_teamList(user, usr, usr.user_team, battery,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
                         result = result and False
                     else:
-                        tmp['success idx']=idx
+                        tmp['type']=battery.battery_type
+                        tmp['id']=battery.battery_id
+                        tmp['team']=battery.user_team
+                        tmp['return_date']=borrowItem.borrow_date.strftime('%Y-%m-%d')
+                        tmp['borrower']=borrowItem.borrower_name
                         result.append(tmp)
                 if idx==3:
-                    if self.borrow_notin_team(user, usr, usr.user_team, part,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
+                    if self.borrow_notin_teamList(user, usr, usr.user_team, part,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
                         result = result and False
                     else:
-                        tmp['success idx']=idx
+                        tmp['type']=part.parts_type
+                        tmp['id']=part.parts_id
+                        tmp['team']=part.user_team
+                        tmp['return_date']=borrowItem.borrow_date.strftime('%Y-%m-%d')
+                        tmp['borrower']=borrowItem.borrower_name
                         result.append(tmp)
                 if idx==4:
-                    if self.borrow_notin_team(user, usr, usr.user_team, pad,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
+                    if self.borrow_notin_teamList(user, usr, usr.user_team, pad,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
                         result = result and False
                     else:
-                        tmp['success idx']=idx
+                        tmp['type']=pad.pad_type
+                        tmp['id']=pad.pad_id
+                        tmp['team']=pad.user_team
+                        tmp['return_date']=borrowItem.borrow_date.strftime('%Y-%m-%d')
+                        tmp['borrower']=borrowItem.borrower_name
                         result.append(tmp)
             else:#同一班组
                 if idx==1:
-                    if self.borrow_in_team(user,usr,usr.user_team,device,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
+                    if self.borrow_in_teamList(user,usr,usr.user_team,device,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
                         result = result and False
                     else:
-                        tmp['success idx']=idx
+                        tmp['type']=device.device_type
+                        tmp['id']=device.device_id
+                        tmp['team']=device.user_team
+                        tmp['return_date']=borrowItem.borrow_date.strftime('%Y-%m-%d')
+                        tmp['borrower']=borrowItem.borrower_name
                         result.append(tmp)
                 if idx==2:
-                    if self.borrow_in_team(user, usr, usr.user_team, battery,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
+                    if self.borrow_in_teamList(user, usr, usr.user_team, battery,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
                         result = result and False
                     else:
-                        tmp['success idx']=idx
+                        tmp['type']=battery.battery_type
+                        tmp['id']=battery.battery_id
+                        tmp['team']=battery.user_team
+                        tmp['return_date']=borrowItem.borrow_date.strftime('%Y-%m-%d')
+                        tmp['borrower']=borrowItem.borrower_name
                         result.append(tmp)
                 if idx==3:
-                    if self.borrow_in_team(user, usr, usr.user_team, battery,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
+                    if self.borrow_in_teamList(user, usr, usr.user_team, part,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
                         result = result and False
                     else:
-                        tmp['success idx']=idx
+                        tmp['type']=part.parts_type
+                        tmp['id']=part.parts_id
+                        tmp['team']=part.user_team
+                        tmp['return_date']=borrowItem.borrow_date.strftime('%Y-%m-%d')
+                        tmp['borrower']=borrowItem.borrower_name
                         result.append(tmp)
                 if idx==4:
-                    if self.borrow_in_team(user, usr, usr.user_team, pad,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
+                    if self.borrow_in_teamList(user, usr, usr.user_team, pad,borrowItem.borrow_date,borrowItem.return_date,idx)<0:
                         result = result and False
                     else:
-                        tmp['success idx']=idx
+                        tmp['type']=pad.pad_type
+                        tmp['id']=pad.pad_id
+                        tmp['team']=pad.user_team
+                        tmp['return_date']=borrowItem.borrow_date.strftime('%Y-%m-%d')
+                        tmp['borrower']=borrowItem.borrower_name
                         result.append(tmp)
             idx=idx+1
         #返回
         return result
 
-    def manager_return(self,user,device_id,return_date,return_desc):
+    def manager_return(self,user,device_id,return_date,device_cond):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '4' in roles or '5' in roles:
@@ -1639,7 +2011,7 @@ class ManagerDAO:
                 return -1
 
             if idx!=0:
-                self.session_uav.query(Manager).filter(Manager.device_id == manager.device_id and Manager.manager_status=='借用').update({Manager.manager_status: '归还',Manager.return_date:return_date,Manager.return_desc:return_desc}, synchronize_session=False)
+                self.session_uav.query(Manager).filter(Manager.device_id == manager.device_id and Manager.manager_status=='借用').update({Manager.manager_status: '归还',Manager.return_date:return_date}, synchronize_session=False)
                 try:
                     self.session_uav.commit()
                 except:
@@ -1648,30 +2020,115 @@ class ManagerDAO:
                 return -1
 
             if idx==1:
-                self.session_uav.query(Device).filter(Device.device_id == manager.device_id).update({Device.device_status: '在库'},synchronize_session=False)
+                if device_cond=='正常':
+                    self.session_uav.query(Device).filter(Device.device_id == manager.device_id).update({Device.device_status: '在库'},synchronize_session=False)
+                else:
+                    self.session_uav.query(Device).filter(Device.device_id == manager.device_id).update(
+                        {Device.device_status: '维修'}, synchronize_session=False)
                 try:
                     self.session_uav.commit()
                 except:
                     self.session_uav.rollback()
             if idx==2:
-                self.session_uav.query(Battery).filter(Battery.battery_id == manager.device_id).update({Battery.battery_status: '在库'},synchronize_session=False)
+                if device_cond == '正常':
+                    self.session_uav.query(Battery).filter(Battery.battery_id == manager.device_id).update({Battery.battery_status: '在库'},synchronize_session=False)
+                else:
+                    self.session_uav.query(Battery).filter(Battery.battery_id == manager.device_id).update(
+                        {Battery.battery_status: '维修'}, synchronize_session=False)
                 try:
                     self.session_uav.commit()
                 except:
                     self.session_uav.rollback()
             if idx==3:
-                self.session_uav.query(Parts).filter(Parts.parts_id == manager.device_id).update({Parts.parts_status: '在库'},synchronize_session=False)
+                if device_cond == '正常':
+                    self.session_uav.query(Parts).filter(Parts.parts_id == manager.device_id).update({Parts.parts_status: '在库'},synchronize_session=False)
+                else:
+                    self.session_uav.query(Parts).filter(Parts.parts_id == manager.device_id).update(
+                        {Parts.parts_status: '维修'}, synchronize_session=False)
                 try:
                     self.session_uav.commit()
                 except:
                     self.session_uav.rollback()
             if idx==4:
-                self.session_uav.query(Pad).filter(Pad.pad_id == manager.device_id).update({Pad.pad_status: '在库'},synchronize_session=False)
+                if device_cond == '正常':
+                    self.session_uav.query(Pad).filter(Pad.pad_id == manager.device_id).update({Pad.pad_status: '在库'},synchronize_session=False)
+                else:
+                    self.session_uav.query(Pad).filter(Pad.pad_id == manager.device_id).update({Pad.pad_status: '维修'},
+                                                                                               synchronize_session=False)
                 try:
                     self.session_uav.commit()
                 except:
                     self.session_uav.rollback()
             return 1
+        return -5
+
+    def manager_return_list(self,usr,returnList):
+        usrDao=UserDAO()
+        roles=usrDao.get_role(usr)
+        result = []
+        idx = 0
+        for returnItem in returnList:
+            tmp={}
+            device_id = returnItem.device_id
+            #判断设备类型
+            device = self.session_uav.query(Device).filter(Device.device_id == device_id).first()
+            battery = self.session_uav.query(Battery).filter(Battery.battery_id == device_id).first()
+            part = self.session_uav.query(Parts).filter(Parts.parts_id == device_id).first()
+            pad = self.session_uav.query(Pad).filter(Pad.pad_id == device_id).first()
+            idx = 0
+            user_team=''
+            status = ''
+            if device:
+                idx = 1
+                user_team = device.user_team
+                status = device.device_status
+            if battery:
+                idx = 2
+                user_team = battery.user_team
+                status = battery.battery_status
+            if part:
+                idx = 3
+                user_team = part.user_team
+                status = part.parts_status
+            if pad:
+                idx = 4
+                user_team = pad.user_team
+                status = pad.pad_status
+            if idx==0:
+                continue
+            if status!='出库':
+                continue
+
+            if idx==1:
+                tmp['type']=device.device_type
+                tmp['id']=device.device_id
+                tmp['team']=device.user_team
+                tmp['return_date']=returnItem.return_date.strftime('%Y-%m-%d')
+                tmp['borrower']=self.manager_query_latestBorrower(device.device_id).borrower_name
+                result.append(tmp)
+            if idx==2:
+                tmp['type'] = battery.battery_type
+                tmp['id'] = battery.device_id
+                tmp['team'] = battery.user_team
+                tmp['return_date'] = returnItem.return_date.strftime('%Y-%m-%d')
+                tmp['borrower'] = self.manager_query_latestBorrower(device.device_id).borrower_name
+                result.append(tmp)
+            if idx==3:
+                tmp['type'] = part.parts_type
+                tmp['id'] = part.parts_id
+                tmp['team'] = part.user_team
+                tmp['return_date'] = returnItem.return_date.strftime('%Y-%m-%d')
+                tmp['borrower'] = self.manager_query_latestBorrower(device.device_id).borrower_name
+                result.append(tmp)
+            if idx==4:
+                tmp['type'] = pad.pad_type
+                tmp['id'] = pad.pad_id
+                tmp['team'] = pad.user_team
+                tmp['return_date'] = returnItem.return_date.strftime('%Y-%m-%d')
+                tmp['borrower'] = self.manager_query_latestBorrower(device.device_id).borrower_name
+                result.append(tmp)
+        #返回
+        return result
 
     def manager_query_device(self,device_id,retruntime,borrower,desc):
         device = self.session_uav.query(Device).filter(Device.device_id == device_id).first()
@@ -1730,6 +2187,12 @@ class ManagerDAO:
             deviceitem['desc'] = desc
         ret.append(deviceitem)
         return ret
+
+    #查询最后借用的借用人信息
+    def manager_query_latestBorrower(self,device_id):
+        tmpdate= self.session_uav.query(func.max(Manager.borrow_date)).filter(Manager.device_id==device_id).first()
+        rs=self.session_uav.query(Manager).filter(Manager.device_id==device_id,Manager.borrow_date==tmpdate[0]).first()
+        return rs
 
 #故障管理
 class FaultDao:
@@ -2091,6 +2554,7 @@ class FaultDao:
                 return self.faule_processManager(user, fault_id, pad,idx,2)
 
         return -1
+
 class FaultReportDao:
     def __init__(self):
         self.session_uav = Session_UAV()

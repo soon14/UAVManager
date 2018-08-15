@@ -430,3 +430,13 @@ class DataServiceDao:
         rs=self.session_power.query(DataService).filter(DataService.tb_dataservice_linename==linename).all()
         return class_to_dict(rs)
 
+    def dataservice_searchLine(self):
+        sql = 'select tb_dataservice_linename from tb_dataservice group by tb_dataservice_linename'
+        nameList = self.session_power.execute(sql)
+        rs=[]
+        for item in nameList:
+            tmp={}
+            tmp['name']=item[0]
+            rs.append(tmp)
+        return rs
+

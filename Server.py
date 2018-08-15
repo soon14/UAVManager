@@ -53,7 +53,7 @@ def login():
         userDao = UAVManagerDAO.UserDAO()
         user = userDao.get_user_byName(username)
         if(userDao.verify_password(username,password)):
-            rst = make_response(jsonify({'Status':True,'Token': generate_auth_token(user.user_id,3600),'ID': user.user_id}))
+            rst = make_response(jsonify({'Status':True,'Token': generate_auth_token(user.user_id,3600),'ID': user.user_id,'Authority':user.user_role}))
             rst.headers['Access-Control-Allow-Origin'] = '*'
             rst.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
             rst.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
@@ -86,6 +86,7 @@ api.add_resource(UAVManagerRoute.ManagerListPages,'/uavmanager/api/v1.0/manager/
 api.add_resource(UAVManagerRoute.ManagerBorrow,'/uavmanager/api/v1.0/manager/borrow')
 api.add_resource(UAVManagerRoute.ManagerBorrowConfirm,'/uavmanager/api/v1.0/manager/borrow/confirm')
 api.add_resource(UAVManagerRoute.ManagerReturn,'/uavmanager/api/v1.0/manager/return')
+api.add_resource(UAVManagerRoute.ManagerReturnConfirm,'/uavmanager/api/v1.0/manager/return/confirm')
 api.add_resource(UAVManagerRoute.ManagerListPageNum,'/uavmanager/api/v1.0/manager/pages')
 
 api.add_resource(UAVManagerRoute.ManagerHistoryPages,'/uavmanager/api/v1.0/manager/history/list/pagenum')
@@ -207,6 +208,6 @@ api.add_resource(DefectRoute.DefectAdd,'/gis/api/v1.0/defectadd')
 api.add_resource(DataServiceRoute.DataServiceAdd, '/gis/api/v1.0/dataservice/add')
 api.add_resource(DataServiceRoute.DataServiceDelete, '/gis/api/v1.0/dataservice/del')
 api.add_resource(DataServiceRoute.DataServiceSearch, '/gis/api/v1.0/dataservice/search')
-
+api.add_resource(DataServiceRoute.DataServiceSearchLine,'/gis/api/v1.0/dataservice/search/lines')
 if __name__ == '__main__':
     app.run()

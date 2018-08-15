@@ -218,6 +218,7 @@ class UAVBatteryAdd(Resource):
             battery_obj.battery_fact = battery_dict[0]['battery_fact']
             battery_obj.battery_date = datetime.strptime(battery_dict[0]['battery_date'],'%Y-%m-%d').date()
             battery_obj.user_team = battery_dict[0]['user_team']
+            battery_obj.battery_use_dpartment=battery_dict[0]['use_department']
             battery_obj.battery_status = '在库'
             battery_obj.battery_use_number = 0
             user = self.userDao.verify_token(token, '')
@@ -289,6 +290,7 @@ class UAVBatteryModify(Resource):
                 battery_obj.battery_fact = battery_dict[0]['battery_fact']
                 battery_obj.battery_date = datetime.strptime(battery_dict[0]['battery_date'],'%Y-%m-%d').date()
                 battery_obj.user_team = battery_dict[0]['user_team']
+                battery_obj.battery_use_dpartment = battery_dict[0]['use_department']
                 user = self.userDao.verify_token(token, '')
                 if (not user):
                     return make_response(jsonify({'error': 'Unauthorized access'}), 401)

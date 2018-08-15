@@ -1,5 +1,17 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:此文件为江门所有数据结构的定义；
+     采用的SQL中间件为为SQLAlchemy；
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.13
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -24,6 +36,8 @@ def convert(obj):
         return obj
 
 #########################################################################用户管理
+#author:Wu Wei
+#Version 1.0.0.0
 class User(EntityBase):
     #table name
     __tablename__ = 'user'
@@ -36,18 +50,24 @@ class User(EntityBase):
     user_team =Column(String(45))                       #所属班组
     user_role =Column(Integer)                          #用户权限
 
+#author:Wu Wei
+#Version 1.0.0.0
 class Role(EntityBase):
     __tablename__ = 'role'
     role_id = Column(Integer,primary_key=True)          #权限
     role_name = Column(String(45))                      #权限名称
     role_basic = Column(String(14))                     #所包含的基础权限
 
+#author:Wu Wei
+#Version 1.0.0.0
 class Role_basic(EntityBase):
     __tablename__ = 'role_basic'
-    role_basic_id = Column(Integer,primary_key=True)
-    role_basic_type = Column(String(45))
+    role_basic_id = Column(Integer,primary_key=True)    #基本权限id
+    role_basic_type = Column(String(45))                #权限类型
 
 #############################################################################无人机管理
+#author:Wu Wei
+#Version 1.0.0.0
 class Manager(EntityBase):
     __tablename__ = 'tb_manager'
     manager_id = Column(Integer,primary_key=True)       #管理id
@@ -63,6 +83,8 @@ class Manager(EntityBase):
     return_date = Column(Date)                          #归还日期
     return_desc = Column(String(1024))                  #描述
 
+#author:Wu Wei
+#Version 1.0.0.0
 class Device(EntityBase):
     __tablename__ = 'tb_device'
     device_id = Column(Integer, primary_key=True)       #设备ID（设备的唯一标识，考虑修改为字符类型）
@@ -79,6 +101,8 @@ class Device(EntityBase):
     device_use_number=Column(Integer)                   #设备使用次数
     device_use_dpartment = Column(String(45))           #设备使用部门
 
+#author:Wu Wei
+#Version 1.0.0.0
 class Battery(EntityBase):
     __tablename__ = 'tb_battery'
     battery_id = Column(Integer, primary_key=True)      #电池id
@@ -91,63 +115,74 @@ class Battery(EntityBase):
     battery_use_number=Column(Integer)                  #电池使用次数
     battery_use_dpartment=Column(String(45))            #电池使用部门
 
+#author:Wu Wei
+#Version 1.0.0.0
 class Pad(EntityBase):
     __tablename__ = 'tb_pad'
-    pad_id = Column(Integer,primary_key=True)
-    pad_ver=Column(String(45))
-    pad_type=Column(String(45))
-    pad_fact=Column(String(45))
-    pad_date=Column(Date)
-    user_team = Column(String(45))
-    pad_status=Column(String(45))#在库 出库 维修 报废 丢失
-    pad_use_number=Column(Integer)
-    pad_use_dpartment=Column(String(45))
+    pad_id = Column(Integer,primary_key=True)           #平板id
+    pad_ver=Column(String(45))                          #平板版本
+    pad_type=Column(String(45))                         #平板类型
+    pad_fact=Column(String(45))                         #平板维护人
+    pad_date=Column(Date)                               #平板购买日期
+    user_team = Column(String(45))                      #使用班组
+    pad_status=Column(String(45))                       #平板状态：在库 出库 维修 报废 丢失
+    pad_use_number=Column(Integer)                      #平板使用次数
+    pad_use_dpartment=Column(String(45))                #平板使用部门
 
+#author:Wu Wei
+#Version 1.0.0.0
 class Parts(EntityBase):
     __tablename__ = 'tb_parts'
-    parts_id = Column(Integer,primary_key=True)
-    parts_ver=Column(String(45))
-    parts_type=Column(String(45))
-    parts_fact=Column(String(45))
-    parts_date=Column(Date)
-    user_team = Column(String(45))
-    parts_status=Column(String(45))#在库 出库 维修 报废 丢失
-    parts_use_number=Column(Integer)
-    parts_use_dpartment=Column(String(45))
+    parts_id = Column(Integer,primary_key=True)         #配件id
+    parts_ver=Column(String(45))                        #配件版本
+    parts_type=Column(String(45))                       #配件类型
+    parts_fact=Column(String(45))                       #配件维护人
+    parts_date=Column(Date)                             #配件购买日期
+    user_team = Column(String(45))                      #配件使用班组
+    parts_status=Column(String(45))                     #在库 出库 维修 报废 丢失
+    parts_use_number=Column(Integer)                    #配件使用次数
+    parts_use_dpartment=Column(String(45))              #配件使用部门
 
+#author:Wu Wei
+#Version 1.0.0.0
 class Approval(EntityBase):
     __tablename__ = 'tb_approval'
-    apply_person=Column(String(45),primary_key=True)
-    approval_person = Column(String(45))
-    approval_team=Column(String(45))
-    device_ver=Column(String(45))
-    return_date = Column(Date)
-    device_number=Column(Integer)
-    battery_ver = Column(String(45))
-    battery_number=Column(Integer)
-    pad_ver = Column(String(45))
-    pad_number=Column(Integer)
-    approval_reason = Column(String(256))
-    approval_desc = Column(String(256))
-    approval_status=Column(Integer)
+    apply_person=Column(String(45),primary_key=True)    #借调申请人
+    approval_person = Column(String(45))                #借调审批人
+    approval_team=Column(String(45))                    #借调设备的班组
+    device_ver=Column(String(45))                       #无人机类型
+    return_date = Column(Date)                          #归还日期
+    device_number=Column(Integer)                       #设备数目
+    battery_ver = Column(String(45))                    #电池类型
+    battery_number=Column(Integer)                      #电池数目
+    pad_ver = Column(String(45))                        #平板类型
+    pad_number=Column(Integer)                          #平板数目
+    approval_status=Column(Integer)                     #申请状态
+    approval_reason = Column(String(256))               #申请原因
+    approval_desc = Column(String(256))                 #申请描述
 
+#申请审批流程完成后将整个申请记录保存在一个表中
+#author:Wu Wei
+#Version 1.0.0.1
 class Approval_db(EntityBase):
     __tablename__ = 'tb_approval_db'
-    approval_id=Column(Integer,primary_key=True)
-    apply_person = Column(String(45))
-    approval_person = Column(String(45))
-    approval_team=Column(String(45))
-    return_date = Column(Date)
-    device_ver=Column(String(45))
-    device_number=Column(Integer)
-    battery_ver = Column(String(45))
-    battery_number=Column(Integer)
-    pad_ver = Column(String(45))
-    pad_number=Column(Integer)
-    approval_reason = Column(String(256))
-    approval_desc = Column(String(256))
-    approval_status=Column(Integer)
+    approval_id=Column(Integer,primary_key=True)        #申请id
+    apply_person=Column(String(45),primary_key=True)    #借调申请人
+    approval_person = Column(String(45))                #借调审批人
+    approval_team=Column(String(45))                    #借调设备的班组
+    device_ver=Column(String(45))                       #无人机类型
+    return_date = Column(Date)                          #归还日期
+    device_number=Column(Integer)                       #设备数目
+    battery_ver = Column(String(45))                    #电池类型
+    battery_number=Column(Integer)                      #电池数目
+    pad_ver = Column(String(45))                        #平板类型
+    pad_number=Column(Integer)                          #平板数目
+    approval_status=Column(Integer)                     #申请状态
+    approval_reason = Column(String(256))               #申请原因
+    approval_desc = Column(String(256))                 #申请描述
 
+#author:Wu Wei
+#Version 1.0.0.0
 class Fault(EntityBase):
     __tablename__ = 'tb_fault'
     fault_id = Column(Integer, primary_key=True)        #故障id
@@ -159,6 +194,8 @@ class Fault(EntityBase):
     fault_deal = Column(String(45))                     #故障处理方式
     fault_finished = Column(Integer)                    #0维修 1维修完成 2报废
 
+#author:Wu Wei
+#Version 1.0.0.0
 class FaultReport(EntityBase):
     __tablename__ = 'tb_fault_report'
     fault_report_id = Column(Integer,primary_key=True)  #报告id
@@ -178,6 +215,8 @@ class FaultReport(EntityBase):
     fault_crash_around=Column(String(1024))
 
 ##############################################################################线路杆塔管理
+#author:Wu Wei
+#Version 1.0.0.0
 class Lines(EntityBase):
     __tablename__='tb_lines'
     lines_id = Column(Integer,primary_key=True)         #线路ID
@@ -188,6 +227,11 @@ class Lines(EntityBase):
     lines_incharge = Column(String(45))                 #线路负责人
     deleted = Column(Integer)                           #是否被删除
 
+#author:Wu Wei
+#Version 1.0.0.0
+#添加杆塔部位
+#author:Wu Wei
+#Version 1.0.0.1
 class Towers(EntityBase):
     __tablename__='tb_tower'
     tower_id = Column(Integer,primary_key=True)
@@ -231,81 +275,68 @@ class Towers(EntityBase):
     tower_opgw_desc = Column(String(256))            #备注
     deleted = Column(Integer)
 
-class LightArrest(EntityBase):
-    __tablename__='tb_lightarrest'
-    light_arrest_id = Column(Integer,primary_key=True)
-    light_arrest_type = Column(String(45))
-    light_arrest_factor = Column(String(128))
-    light_arrest_counter_type = Column(String(128))
-    light_arrest_install_date = Column(Date)
-    light_arrest_gap = Column(String(45))
-    light_arrest_descriptor = Column(String(128))
-
-class Insulator(EntityBase):
-    __tablename__ = 'tb_insulator'
-    insulator_id = Column(Integer,primary_key=True)
-    insulator_type = Column(String(45))
-    insulator_number_strand = Column(Integer)
-    insulator_strands = Column(Integer)
-    insulator_install_date = Column(Date)
-    insulator_factor = Column(String(128))
-    insulator_creepagedistance = Column(FLOAT)
-    insulator_distanceStd = Column(String(45))
-    insulator_std_required = Column(String(45))
-    insulator_double = Column(String(45))
-    insulator_double_hang = Column(String(45))
-    insulator_descriptor = Column(String(128))
-
-class OPGW(EntityBase):
-    __tablename__ = 'tb_opgw'
-    opgw_id = Column(Integer,primary_key=True)
-    opgw_region=Column(String(45))
-    opgw_type = Column(String(45))
-    opgw_date = Column(Date)
-    opgw_factor = Column(String(128))
-    opgw_descriptor = Column(String(128))
-
+#author:Wu Wei
+#Version 1.0.0.0
+#添加缩略图路径
+#author:Wu Wei
+#Version 1.0.0.1
 class Photo(EntityBase):
     __tablename__="tb_photo"
-    photo_id = Column(Integer,primary_key=True)
-    photo_line = Column(Integer)
-    photo_tower_id = Column(Integer)
-    photo_path=Column(String(256))
-    photo_thumbnail_path=Column(String(256))
-    photo_classify=Column(String(45))
-    photo_date = Column(Date)
+    photo_id = Column(Integer,primary_key=True)     #照片id
+    photo_line = Column(Integer)                    #照片所在线路
+    photo_tower_id = Column(Integer)                #照片杆塔id
+    photo_path=Column(String(256))                  #照片路径
+    photo_thumbnail_path=Column(String(256))        #照片缩略图路径
+    photo_classify=Column(String(45))               #照片类别
+    photo_date = Column(Date)                       #照片日期
 
+#author:Wu Wei
+#Version 1.0.0.0
 class TowerPart(EntityBase):
     __tablename__="tb_part_dict"
-    tb_partid = Column(Integer,primary_key=True)
-    tb_partname = Column(Integer)
+    tb_partid = Column(Integer,primary_key=True)    #部位id
+    tb_partname = Column(Integer)                   #部位名称
 
+#author:Wu Wei
+#Version 1.0.0.0
 class DefectLevel(EntityBase):
     __tablename__="tb_defect_level"
-    tb_defect_level_id = Column(Integer,primary_key=True)
-    tb_defect_level = Column(String(45))
+    tb_defect_level_id = Column(Integer,primary_key=True)   #缺陷等级id
+    tb_defect_level = Column(String(45))                    #缺陷等级
 
+#author:Wu Wei
+#Version 1.0.0.0
 class DefectPart(EntityBase):
     __tablename__="tb_defect_part"
-    tb_defect_part_id = Column(Integer,primary_key=True)
-    tb_defect_part_name = Column(String(45))
+    tb_defect_part_id = Column(Integer,primary_key=True)    #缺陷部位id
+    tb_defect_part_name = Column(String(45))                #缺陷部位名称
 
+#author:Wu Wei
+#Version 1.0.0.0
 class Defect(EntityBase):
     __tablename__="tb_defect"
-    tb_defect_id = Column(Integer,primary_key=True)
-    tb_defect_towerid = Column(Integer)
-    tb_defect_lineid = Column(Integer)
-    tb_defect_photoid=Column(Integer)
-    tb_defect_level=Column(Integer)
-    tb_defect_part = Column(String(45))
-    tb_defect_desc = Column(String(256))
+    tb_defect_id = Column(Integer,primary_key=True)         #缺陷id
+    tb_defect_towerid = Column(Integer)                     #缺陷杆塔id
+    tb_defect_lineid = Column(Integer)                      #缺陷线路id
+    tb_defect_photoid=Column(Integer)                       #缺陷所在照片id
+    tb_defect_level=Column(Integer)                         #缺陷等级
+    tb_defect_part = Column(String(45))                     #缺陷部位
+    tb_defect_desc = Column(String(256))                    #缺陷描述
 
+#author:Wu Wei
+#Version 1.0.0.0
 class DataService(EntityBase):
     __tablename__ = "tb_dataservice"
-    tb_dataservice_id=Column(Integer,primary_key=True)
-    tb_dataservice_linename=Column(String(256))
-    tb_dataservice_url = Column(String(256))
-    tb_dataservice_type = Column(Integer)
+    tb_dataservice_id=Column(Integer,primary_key=True)      #服务id
+    tb_dataservice_linename=Column(String(256))             #服务线路名称
+    tb_dataservice_url = Column(String(256))                #服务url
+    tb_dataservice_type = Column(Integer)                   #服务类型
+
+#将类或者类list转换为字典
+#param obj:输入类或类列表
+#返回字典
+#author:Wu Wei
+#Version 1.0.0.0
 def class_to_dict(obj):
     is_list = obj.__class__ == [].__class__
     is_set = obj.__class__ == set().__class__

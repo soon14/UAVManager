@@ -255,6 +255,7 @@ class UAVDeviceAdd(Resource):
             device_obj.uad_camera = device_dict[0]['uad_camera']
             device_obj.uav_yuntai = device_dict[0]['uav_yuntai']
             device_obj.uad_rcontrol = device_dict[0]['uad_rcontrol']
+            device_obj.device_use_dpartment=device_dict[0]['use_department']
             device_obj.device_status = '在库'
             device_obj.device_use_number = 0
 
@@ -329,7 +330,7 @@ class UAVDeviceModify(Resource):
             device_obj.uad_camera = device_dict[0]['uad_camera']
             device_obj.uav_yuntai = device_dict[0]['uav_yuntai']
             device_obj.uad_rcontrol = device_dict[0]['uad_rcontrol']
-
+            device_obj.device_use_dpartment = device_dict[0]['use_department']
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)

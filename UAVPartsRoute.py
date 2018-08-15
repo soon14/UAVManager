@@ -175,6 +175,7 @@ class UAVPartsAdd(Resource):
             parts_obj.parts_fact = parts_dict[0]['parts_fact']
             parts_obj.parts_date = datetime.strptime(parts_dict[0]['parts_date'],'%Y-%m-%d').date()
             parts_obj.user_team = parts_dict[0]['user_team']
+            parts_obj.parts_use_dpartment=parts_dict[0]['use_department']
             parts_obj.parts_status = '在库'
             parts_obj.parts_use_number = 0
             user = self.userDao.verify_token(token, '')
@@ -213,6 +214,7 @@ class UAVPartsModify(Resource):
             parts_obj.parts_fact = parts_dict[0]['parts_fact']
             parts_obj.parts_date = datetime.strptime(parts_dict[0]['parts_date'],'%Y-%m-%d').date()
             parts_obj.user_team = parts_dict[0]['user_team']
+            parts_obj.parts_use_dpartment = parts_dict[0]['use_department']
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)

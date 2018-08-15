@@ -139,6 +139,7 @@ class UAVPadAdd(Resource):
             pad_obj.pad_fact = pad_dict[0]['pad_fact']
             pad_obj.pad_date = datetime.strptime(pad_dict[0]['pad_date'],'%Y-%m-%d').date()
             pad_obj.user_team = pad_dict[0]['user_team']
+            pad_obj.pad_use_dpartment = pad_dict[0]['use_department']
             pad_obj.pad_status = '在库'
             pad_obj.pad_use_number = 0
             user = self.userDao.verify_token(token, '')
@@ -176,6 +177,7 @@ class UAVPadModify(Resource):
             pad_obj.pad_fact = pad_dict[0]['pad_fact']
             pad_obj.pad_date = datetime.strptime(pad_dict[0]['pad_date'],'%Y-%m-%d').date()
             pad_obj.user_team = pad_dict[0]['user_team']
+            pad_obj.pad_use_dpartment = pad_dict[0]['use_department']
             user = self.userDao.verify_token(token, '')
             if (not user):
                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
