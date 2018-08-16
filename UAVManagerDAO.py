@@ -1794,7 +1794,10 @@ class ManagerDAO:
     #数据借用，确认借用直接写进数据库中
     #param user:登录用户
     #param borrower:借用人
-    #
+    #param borrow_team:借用班组
+    #param uav_id:设备id
+    #param borrow_time:借用时间
+    #param return:归还时间
     def manager_borrow(self,user,borrower,borrow_team,uav_id,borrow_time,return_time):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -1856,6 +1859,9 @@ class ManagerDAO:
             if idx==4:
                 return self.borrow_in_team(user, usr, usr.user_team, pad, borrow_time, return_time,idx)
 
+    #返回借用列表
+    #param user:当前登录的用户信息
+    #param borrowList:借用类表
     def manager_borrowList(self,user,borrowList):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -1988,6 +1994,11 @@ class ManagerDAO:
         #返回
         return result
 
+    #设备归还（直接写入数据库）
+    #param user:当前登录的用户
+    #param device_id:设备id
+    #param return_date:归还日期
+    #param device_cond：设备状态
     def manager_return(self,user,device_id,return_date,device_cond):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -2062,6 +2073,9 @@ class ManagerDAO:
             return 1
         return -5
 
+    #设备归还列表（返回列表显示）
+    #param usr:登录用户
+    #param returnlist:归还设备列表
     def manager_return_list(self,usr,returnList):
         usrDao=UserDAO()
         roles=usrDao.get_role(usr)
@@ -2130,6 +2144,11 @@ class ManagerDAO:
         #返回
         return result
 
+    #设备查询（查询设备情况）
+    #param device_id:设备id
+    #param returntime:设备归还时间
+    #param borrower:借用人
+    #param desc:设备描述
     def manager_query_device(self,device_id,retruntime,borrower,desc):
         device = self.session_uav.query(Device).filter(Device.device_id == device_id).first()
         battery = self.session_uav.query(Battery).filter(Battery.battery_id == device_id).first()
@@ -2188,13 +2207,17 @@ class ManagerDAO:
         ret.append(deviceitem)
         return ret
 
-    #查询最后借用的借用人信息
+    #根据设备id 查询最后借用的借用人信息
+    #param device_id:查询设备id
+    #返回最后借用记录信息
     def manager_query_latestBorrower(self,device_id):
         tmpdate= self.session_uav.query(func.max(Manager.borrow_date)).filter(Manager.device_id==device_id).first()
         rs=self.session_uav.query(Manager).filter(Manager.device_id==device_id,Manager.borrow_date==tmpdate[0]).first()
         return rs
 
-#故障管理
+#故障设备表管理接口，查询故障，添加故障
+#author: Wu Wei
+#Version 1.0.0.0
 class FaultDao:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -2202,6 +2225,11 @@ class FaultDao:
     def __del__(self):
         self.session_uav.close()
 
+    #分页查询故障列表
+    #param user:当前登录用户
+    #param device_ver:设备种类
+    #param page_index:当前显示的页码
+    #param page_size:每一页展示的数据条数
     def query_list(self,user,device_ver,page_index,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -2214,6 +2242,10 @@ class FaultDao:
         self.session_uav.rollback()
         return class_to_dict(allFaults)
 
+    #查询故障页数
+    #param user:当前登录用户
+    #param device_ver:设备类型
+    #param page_size:每一页的条数
     def query_pages(self,user,device_ver,page_size):
         if device_ver is not None:
             rs= self.session_uav.query(Fault).filter(Fault.device_ver==device_ver,Fault.device_department==user.user_department).count() / page_size + 1
@@ -2229,6 +2261,8 @@ class FaultDao:
             else:
                 return None
 
+    #查询统计信息
+    #param user:统计故障情况
     def query_statistics(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -2258,6 +2292,7 @@ class FaultDao:
         else:
             return None
 
+    #查询统计故障类别
     def query_types(self):
         sql = 'select device_ver from tb_fault where fault_finished=0 group by device_ver;'
         rs = self.session_uav.execute(sql).fetchall()
@@ -2268,6 +2303,9 @@ class FaultDao:
             ret.append(item)
         return json.dumps(ret)
 
+    #更新设备状态，将设备状态更新为维修
+    #param device:设备信息
+    #param fault:故障信息
     def updateDevice(self,device,fault):
         self.session_uav.add(fault)
         try:
@@ -2281,6 +2319,7 @@ class FaultDao:
         except:
             self.session_uav.rollback()
         fault.device_department = device.device_use_dpartment
+
     #添加故障信息
     def add_fault(self,user,fault):
         usrDao=UserDAO()
@@ -2350,7 +2389,12 @@ class FaultDao:
             return 1
         return -1
 
-    #故障处理完成
+    #故障处理完成，完成的状态有两种分别为维修成功和报废（1,2）
+    #param user:当前登录用户信息
+    #param faultid:故障id
+    #param device:设备信息
+    #param device_type:设备类型
+    #param result:维修结果（0,1）
     def fault_processUser(self,user,faultid,device,device_type,result):
         if device.user_team == user.user_team:
             tmpfault = self.session_uav.query(Fault).filter(Fault.fault_id == faultid).first()
@@ -2464,6 +2508,10 @@ class FaultDao:
                 return 1
         else:
             return -1
+    
+    #故障处理完成
+    #param user:登录用户信息
+    #param fault:错误id
     def finished_fault(self,user,fault_id):
         usrDao = UserDAO()
         roles = usrDao.get_role(user)
@@ -2509,6 +2557,9 @@ class FaultDao:
                 self.faule_processManager(user, fault_id, pad,idx,1)
         return 1
 
+    #设备报废
+    #param user:用户信息
+    #param fault_id:错误id
     def scrap_fault(self,user,fault_id):
         usrDao = UserDAO()
         roles = usrDao.get_role(user)
@@ -2555,6 +2606,11 @@ class FaultDao:
 
         return -1
 
+
+#设备故障报告
+#故障报告的查询更新操作
+#author：Wu Wei
+#version: 1.0.0.0
 class FaultReportDao:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -2562,10 +2618,15 @@ class FaultReportDao:
     def __del__(self):
         self.session_uav.close()
 
+    #根据id查询故障报告
+    #param fpid:故障id
     def query(self,fpid):
         rs = self.session_uav.query(FaultReport).filter(FaultReport.fault_report_id==fpid).all()
         return class_to_dict(rs)
 
+    #更新故障报告
+    #param user:用户信息
+    #param faultreport:故障报告
     def update(self,user,faultreport):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -2635,6 +2696,8 @@ class ApprovalDao:
         self.session_uav.close()
         self.session_usr.close()
 
+    #故障查询
+    #param user:当前登录用户
     def approval_query(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -2647,10 +2710,14 @@ class ApprovalDao:
         else:
             return None
 
+    #根据申请人查询故障
+    #param user:当前登录用户
     def approval_query_apply(self,user):
         rs=self.session_uav.query(Approval).filter(Approval.apply_person==user.user_id).all()
         return class_to_dict(rs)
 
+    #根据故障审批人查询故障（如果为超级用户则可以查看所有审批，部门管理员能看到提交给自己的审批）
+    #param user:审批人
     def approval_query_approve(self,user):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -2664,6 +2731,8 @@ class ApprovalDao:
             return None       
 
     #批准借调
+    #param user:当前登录用户
+    #param approval:审批记录
     def approval_aggree(self,user,approval):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -2687,6 +2756,10 @@ class ApprovalDao:
             return 1
         else:
             return -1
+    
+    #不批准借调
+    #param user:当前登录用户
+    #param approval:审批记录
     def approval_disagree(self,user,approval):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -2706,6 +2779,10 @@ class ApprovalDao:
                 self.session_uav.commit()
             except:
                 self.session_uav.rollback()
+    
+    #添加借调申请
+    #param user:当前登录用户
+    #param approval:提交申请
     def approval_add(self,user,approval):
         usrDao=UserDAO()
 

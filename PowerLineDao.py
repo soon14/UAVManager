@@ -29,27 +29,36 @@ Session_Power= sessionmaker(bind=engine_power)
 
 ### 线路台账数据操作类
 #   定义并实现线路数据增、改、删、查等操作，实现统计以及
-#
-
+#   author :Wu Wei
+#   version:1.0.0.0
 class LinesDao:
     def __init__(self):
         self.session_power= Session_Power()
     def __del__(self):
         self.session_power.close()
 
+    #查询线路信息（查询所有线路信息）
     def query_lines(self):
         rs = self.session_power.query(Lines).filter(Lines.deleted==0).all()
         return class_to_dict(rs)
-
+    
+    #根据线路ID查询线路信息
+    #param lineID:线路ID
     def query_line(self,lineID):
         rs = self.session_power.query(Lines).filter(Lines.lines_id==lineID,Lines.deleted==0).all()
         return class_to_dict(rs)
 
+    #根据线路名称进行模糊查询
+    #param linename:线路名称
     def query_line_fuzzy(self,linename):
         filter= '%'+linename+'%'
         rs = self.session_power.query(Lines).filter(Lines.lines_name.like(filter)).all()
         return class_to_dict(rs)
 
+    #线路进行分页查询
+    #param work_team:线路班组
+    #param page_size:每页显示的数据条数
+    #param page_index:显示当前页
     def query_line_pages(self,work_team,page_size,page_index):
         q = self.session_power.query(Lines)
         if work_team:
@@ -57,6 +66,9 @@ class LinesDao:
         lines=q.filter(Lines.deleted==0).limit(page_size).offset((page_index - 1) * page_size).all()
         return class_to_dict(lines)
 
+    #根据线路id删除线路
+    #param user:当前登录的用户
+    #param lineid:线路id
     def query_line_delete(self,user,lineid):
         line = self.session_power.query(Lines.lines_id==lineid).first()
         line.deleted=1
@@ -73,6 +85,13 @@ class LinesDao:
                 self.session_power.rollback()
         return 1
 
+    #线路信息条件查询
+    #param user:当前登录用户
+    #param voltage:电压等级
+    #param work_team:负责班组
+    #param line_name:线路名称
+    #param page_size:每一页显示数据的条数
+    #param page_index:当前页的页码
     def query_line_condition(self,user,voltage,work_team,line_name,page_size,page_index):
         q = self.session_power.query(Lines)
         usrDao=UserDAO()
@@ -93,6 +112,12 @@ class LinesDao:
         else:
             return None
 
+    #条件查询杆塔页数
+    #param user:当前登录用户
+    #param voltage:电压等级
+    #param work_team:运维班组
+    #param line_name:线路名称
+    #param page_size：每页展示数据条数
     def query_tower_pages(self,user,voltage,work_team,line_name,page_size):
         q = self.session_power.query(Lines)
         usrDao=UserDAO()
@@ -112,6 +137,10 @@ class LinesDao:
         item['pages'] = towersNum
         return  item
 
+    #查询分页数
+    #param user:当前登录用户
+    #param work_team:运维班组
+    #param page_size:每页展示数据条数
     def query_line_pagesNumber(self,user,work_team,page_size):
         q = self.session_power.query(Lines)
         if work_team is not None:
@@ -121,6 +150,7 @@ class LinesDao:
         item['pages'] = page_line
         return  item
 
+    #查询线路类型
     def query_lineTypes(self):
         sql = 'select lines_voltage from tb_lines group by lines_voltage;'
         rs = self.session_power.execute(sql).fetchall()
