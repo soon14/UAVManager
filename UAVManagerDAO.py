@@ -2808,7 +2808,7 @@ class ApprovalDao:
             rs=self.session_uav.query(Approval).filter(Approval.approval_status==0).all()
             return class_to_dict(rs)
         else:
-            return None       
+            return 2080301       
 
     #批准借调
     #param user:当前登录用户
@@ -2859,6 +2859,7 @@ class ApprovalDao:
                 self.session_uav.commit()
             except:
                 self.session_uav.rollback()
+        return 2080501
     
     #添加借调申请
     #param user:当前登录用户
