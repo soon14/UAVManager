@@ -206,6 +206,7 @@ api.add_resource(DefectRoute.DefectPhotoIDSearch,'/gis/api/v1.0/defectsearch')
 api.add_resource(DefectRoute.DefectAdd,'/gis/api/v1.0/defectadd')
 
 api.add_resource(DataServiceRoute.DataServiceAdd, '/gis/api/v1.0/dataservice/add')
+api.add_resource(DataServiceRoute.DataServiceModify,'/gis/api/v1.0/dataservice/modify')
 api.add_resource(DataServiceRoute.DataServiceDelete, '/gis/api/v1.0/dataservice/del')
 api.add_resource(DataServiceRoute.DataServiceSearch, '/gis/api/v1.0/dataservice/search')
 api.add_resource(DataServiceRoute.DataServiceSearchLine,'/gis/api/v1.0/dataservice/search/lines')

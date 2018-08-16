@@ -1,5 +1,16 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:对于平板数据收到发送给服务器的请求，并对请求进行响应，通过Flask构建服务器解析请求
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -24,6 +35,7 @@ parser.add_argument('pad_status',type=str,location='args')
 parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
 
+#查询平板列表的url请求解析与响应
 class UAVPadList(Resource):
     def __init__(self):
         self.dao = PadDao()
@@ -47,6 +59,7 @@ class UAVPadList(Resource):
     def get(self):
         return self.post()
 
+#查询所有平板的url请求解析与响应
 class UAVPadAll(Resource):
     def __init__(self):
         self.dao = PadDao()
@@ -65,6 +78,7 @@ class UAVPadAll(Resource):
     def get(self):
         return self.post()
 
+#根据平板id查询平板的url请求解析与响应
 class UAVPadGetID(Resource):
     def __init__(self):
         self.dao = PadDao()
@@ -83,6 +97,7 @@ class UAVPadGetID(Resource):
     def get(self):
         return self.post()
 
+#平板数据分析请求的url解析与响应
 class UAVPadListPages(Resource):
     def __init__(self):
         self.dao = PadDao()
@@ -104,6 +119,7 @@ class UAVPadListPages(Resource):
     def get(self):
         return self.post()
 
+#查询平板类型请求url解析与响应
 class UAVPadTypes(Resource):
     def __init__(self):
         self.dao = PadDao()
@@ -121,6 +137,7 @@ class UAVPadTypes(Resource):
     def get(self):
         return self.post()
 
+#添加平板请求url解析与响应
 class UAVPadAdd(Resource):
     def __init__(self):
         self.dao = PadDao()
@@ -159,6 +176,7 @@ class UAVPadAdd(Resource):
     def get(self):
         return self.post()
 
+#修改平板请求url解析与响应
 class UAVPadModify(Resource):
     def __init__(self):
         self.dao = PadDao()
@@ -193,6 +211,7 @@ class UAVPadModify(Resource):
     def get(self):
         return self.post()
 
+#修改平板状态请求url解析与响应
 class UAVPadStatus(Resource):
     def __init__(self):
         self.dao = PadDao()
@@ -219,6 +238,7 @@ class UAVPadStatus(Resource):
     def get(self):
         return self.post()
 
+#平板统计请求url解析与响应
 class UAVPadsStatistic(Resource):
     def __init__(self):
         self.dao = PadDao()

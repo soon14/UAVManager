@@ -1,5 +1,16 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:对于电池数据收到发送给服务器的请求，并对请求进行响应，通过Flask构建服务器解析请求
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -24,6 +35,7 @@ parser.add_argument('battery_status',type=str,location='args')
 parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,location='args')
 
+#电池列表展示url请求与响应
 class UAVBatteryList(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -51,6 +63,7 @@ class UAVBatteryList(Resource):
     def get(self):
         return self.post()
 
+#查询所有电池设备url请求与响应
 class UAVBatteryAll(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -73,6 +86,7 @@ class UAVBatteryAll(Resource):
     def get(self):
         return self.post()
 
+#根据设备id查询url的请求与响应
 class UAVBatteryGetID(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -96,7 +110,7 @@ class UAVBatteryGetID(Resource):
     def get(self):
         return self.post()
 
-#查询所有电池装填
+#查询所有电池统计信息url请求与响应
 class UAVBatteryStatisticsList(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -123,7 +137,7 @@ class UAVBatteryStatisticsList(Resource):
     def get(self):
         return self.post()
 
-#查询电池统计信息
+#查询电池统计信息url请求与响应
 class UAVBatteryStatistic(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -150,7 +164,7 @@ class UAVBatteryStatistic(Resource):
     def get(self,battery_status):
         return self.post(battery_status)
 
-#查询电池的类型
+#查询电池的类型url请求与响应
 class UAVBatteryTypes(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -174,7 +188,7 @@ class UAVBatteryTypes(Resource):
     def get(self):
         return self.post()
 
-#根据电池的状态和类型查询电池分页的页数
+#根据电池的状态和类型查询电池分页的页数url请求与响应
 class UAVBatteryListPages(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -199,7 +213,7 @@ class UAVBatteryListPages(Resource):
     def get(self):
         return self.post()
 
-#添加电池 成功则返回1
+#添加电池 成功则返回1  url请求与响应
 class UAVBatteryAdd(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -240,7 +254,7 @@ class UAVBatteryAdd(Resource):
     def get(self):
         return self.post()
 
-#修改电池状态
+#修改电池状态url请求与响应
 class UAVBatteryStatus(Resource):
     def __init__(self):
         self.dao = BatteryDAO()
@@ -269,7 +283,7 @@ class UAVBatteryStatus(Resource):
     def get(self):
         return self.post()
 
-#修改电池信息
+#修改电池信息url请求与响应
 class UAVBatteryModify(Resource):
     def __init__(self):
         self.dao = BatteryDAO()

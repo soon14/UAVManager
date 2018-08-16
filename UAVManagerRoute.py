@@ -324,7 +324,7 @@ class ManagerReturn(Resource):
                 returntime = datetime.strptime(returnList['return_time'], '%Y-%m-%d').date()
                 device_idList = returnList['uav_id']
 
-                #单次扫描的时候调用的
+                #单次扫描的时候调用的已经弃用了
                 #for item in borrowList:
                 #    borrowtime=datetime.strptime(item['borrow_time'],'%Y-%m-%d').date()
                 #    returntime = datetime.strptime(item['return_time'], '%Y-%m-%d').date()

@@ -1,5 +1,16 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:对于借调申请的请求进行响应，通过Flask构建服务器解析请求
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -12,6 +23,7 @@ from flask import Response,make_response
 from UAVManagerDAO import ApprovalDao,UserDAO
 from UAVManagerEntity import Approval
 
+#查询所有借调申请的请求的解析与响应
 class UAVApprovalList(Resource):
     def __init__(self):
         self.dao = ApprovalDao()
@@ -23,9 +35,11 @@ class UAVApprovalList(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             rs=self.dao.approval_query(user)
             if rs==None:
@@ -38,6 +52,7 @@ class UAVApprovalList(Resource):
     def get(self):
         return self.post()
 
+#添加借调申请的请求的解析与响应
 class UAVApprovalAdd(Resource):
     def __init__(self):
         self.dao = ApprovalDao()
@@ -82,6 +97,7 @@ class UAVApprovalAdd(Resource):
     def get(self):
         return self.post()
 
+#同意借调的请求的解析与响应
 class UAVApprovalAgree(Resource):
     def __init__(self):
         self.dao = ApprovalDao()
@@ -120,6 +136,7 @@ class UAVApprovalAgree(Resource):
     def get(self):
         return self.post()
 
+#拒绝借调的请求的解析与响应
 class UAVApprovalDisagree(Resource):
     def __init__(self):
         self.dao = ApprovalDao()
@@ -157,7 +174,7 @@ class UAVApprovalDisagree(Resource):
     def get(self):
         return self.post()
 
-#获取自己提交的申请的状态
+#获取自己提交的申请的状态的解析与响应
 class UAVApprovalListApply(Resource):
     def __init__(self):
         self.dao = ApprovalDao()
@@ -184,7 +201,7 @@ class UAVApprovalListApply(Resource):
     def get(self):
         return self.post()
 
-#获取待我审批的申请
+#获取待我审批的申请的解析与响应
 class UAVApprovalListApprove(Resource):
     def __init__(self):
         self.dao = ApprovalDao()

@@ -1,5 +1,17 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+
+"""
+desc:对于故障报告（炸机报告）操作请求进行响应，通过Flask构建服务器解析请求
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -13,6 +25,7 @@ from UAVManagerDAO import FaultReportDao,UserDAO
 from UAVManagerEntity import FaultReport
 from datetime import datetime
 
+#查询炸机报告的请求解析与响应
 class FaultReportQuery(Resource):
     def __init__(self):
         self.dao = FaultReportDao()
@@ -36,6 +49,7 @@ class FaultReportQuery(Resource):
     def get(self):
         return self.post()
 
+#更新修改炸机报告的请求解析与响应
 class FaultReportUpdate(Resource):
     def __init__(self):
         self.dao = FaultReportDao()

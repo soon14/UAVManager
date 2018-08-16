@@ -1,5 +1,16 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:对于缺陷信息请求进行响应，通过Flask构建服务器解析请求
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -16,6 +27,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('tower_id', type=int, location='args')
 parser.add_argument('photo_id', type=int, location='args')
 
+#查询缺陷等级的请求的响应请求与响应
 class DefectLevel(Resource):
     def __init__(self):
         self.dao = DefectLevelDao()
@@ -29,7 +41,7 @@ class DefectLevel(Resource):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         rs=self.dao.query_defect_level(None)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '查询缺陷等级失败','errorcode' : 10000000}), 401)
         else:
             return rs
     #else:
@@ -38,6 +50,7 @@ class DefectLevel(Resource):
     def get(self):
         return self.post()
 
+#查询缺陷部位的请求与响应请求与响应
 class DefectPart(Resource):
     def __init__(self):
         self.dao = DefectPartDao()
@@ -51,7 +64,7 @@ class DefectPart(Resource):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         rs=self.dao.query_defect_part(None)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '查询缺陷部位失败','errorcode' : 10000000}), 401)
         else:
             return rs
     #else:
@@ -60,6 +73,7 @@ class DefectPart(Resource):
     def get(self):
         return self.post()
 
+#根据杆塔id查询杆塔的故障信息请求与响应
 class DefectTowerID(Resource):
     def __init__(self):
         self.dao = DefectDao()
@@ -75,7 +89,7 @@ class DefectTowerID(Resource):
         towerid = args.get('tower_id')
         rs=self.dao.query_defect_tower(None,towerid)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '查询杆塔故障信息失败','errorcode' : 10000000}), 401)
         else:
             return rs
     #else:
@@ -84,6 +98,7 @@ class DefectTowerID(Resource):
     def get(self):
         return self.post()
 
+#根据照片id查询故障信息请求与响应
 class DefectPhotoID(Resource):
     def __init__(self):
         self.dao = DefectDao()
@@ -99,7 +114,7 @@ class DefectPhotoID(Resource):
         photo_id = args.get('photo_id')
         rs=self.dao.query_photo_id(None,photo_id)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '根据照片查询故障信息失败','errorcode' : 10000000}), 401)
         else:
             return rs
     #else:
@@ -108,6 +123,7 @@ class DefectPhotoID(Resource):
     def get(self):
         return self.post()
 
+#故障信息的添加请求与响应
 class DefectAdd(Resource):
     def __init__(self):
         self.dao = DefectDao()
@@ -131,16 +147,17 @@ class DefectAdd(Resource):
             defect.tb_defect_desc = strDefect[0]['defect_desc']
 
             rs=self.dao.defect_add(defect)
-            if rs==-1:
-                return make_response(jsonify({'error': 'add defect error'}), 401)
+            if rs==None:
+                return make_response(jsonify({'error': '故障信息添加失败', 'errorcode': 10000000}), 401)
             else:
-                return make_response(jsonify({'success': 'add defect'}), 200)
+                return make_response(jsonify({'success': '添加故障成功'}), 200)
     #else:
         #    return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
     def get(self):
         return self.post()
 
+#根据杆塔id和照片id查询照片信息请求与响应
 class DefectPhotoIDSearch(Resource):
     def __init__(self):
         self.dao = DefectDao()
@@ -157,7 +174,7 @@ class DefectPhotoIDSearch(Resource):
         photoid = args.get('photo_id')
         rs=self.dao.query_defect_photo(None,photoid)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '根据照片id查询照片失败', 'errorcode': 10000000}), 401)
         else:
             return rs
     #else:

@@ -1,5 +1,16 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:对于用户管理的请求进行响应，通过Flask构建服务器解析请求
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -18,6 +29,7 @@ parser.add_argument('team',type=str,location='args')
 parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,location='args')
 
+#查看用户列表的请求的解析与响应
 class UserList(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -48,6 +60,7 @@ class UserList(Resource):
     def get(self):
         return self.post()
 
+#根据用户id获取用户的请求的解析㔿响应
 class UserGetID(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -74,6 +87,7 @@ class UserGetID(Resource):
     def get(self):
         return self.post()
 
+#根据用户id删除用的请求解析与响应
 class DelUserID(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -100,6 +114,7 @@ class DelUserID(Resource):
     def get(self):
         return self.post()
 
+#用户数据总页数的请求解析与响应
 class UserPages(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -129,6 +144,7 @@ class UserPages(Resource):
     def get(self):
         return self.post()
 
+#添加用户的请求的解析与响应
 class UserAdd(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -166,6 +182,7 @@ class UserAdd(Resource):
     def get(self):
         return self.post()
 
+#修改用户的请求解析与响应
 class UserModify(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -203,6 +220,7 @@ class UserModify(Resource):
     def get(self):
         return self.post()
 
+#获取用户权限类别的请求解析与响应
 class UserRole(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -227,6 +245,7 @@ class UserRole(Resource):
     def get(self):
         return self.post()
 
+#查询用户部门的请求解析与响应
 class UserDepartment(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -251,6 +270,7 @@ class UserDepartment(Resource):
     def get(self):
         return self.post()
 
+#查询用户班组的请求解析与响应
 class UserTeam(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -275,6 +295,7 @@ class UserTeam(Resource):
     def get(self):
         return self.post()
 
+#分组查询所有用户的班组信息的请求解析与响应
 class UserTeams(Resource):
     def __init__(self):
         self.userDao = UserDAO()
@@ -299,6 +320,7 @@ class UserTeams(Resource):
     def get(self):
         return self.post()
 
+#查询用户所在班组的班组管理员姓名的请求与响应
 class TeamManager(Resource):
     def __init__(self):
         self.userDao = UserDAO()

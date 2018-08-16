@@ -1,5 +1,16 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:配件请求的响应
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -23,6 +34,7 @@ parser.add_argument('parts_status',type=str,location='args')
 parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
 
+#配件列表url的请求与响应
 class UAVPartsList(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -47,6 +59,7 @@ class UAVPartsList(Resource):
     def get(self):
         return self.post()
 
+#查询所有配件的url请求与响应
 class UAVPartsAll(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -66,6 +79,7 @@ class UAVPartsAll(Resource):
     def get(self):
         return self.post()
 
+#根据配件id查询配件的请求与响应
 class UAVPartsGetID(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -86,7 +100,7 @@ class UAVPartsGetID(Resource):
     def get(self):
         return self.post()
 
-#查询配件总页数
+#查询配件总页数url的请求与响应
 class UAVPartsListPages(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -110,7 +124,7 @@ class UAVPartsListPages(Resource):
     def get(self):
         return self.post()
 
-#查询配件类别
+#查询配件类别url的请求与响应
 class UAVPartsTypes(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -132,7 +146,7 @@ class UAVPartsTypes(Resource):
     def get(self):
         return self.post()
 
-#查询配件状态的统计信息
+#查询配件状态的统计信息url的请求与响应
 class UAVPartsStatistic(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -157,6 +171,7 @@ class UAVPartsStatistic(Resource):
     def get(self,parts_status):
         return self.post(parts_status)
 
+#添加配件的url的请求与响应
 class UAVPartsAdd(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -195,7 +210,7 @@ class UAVPartsAdd(Resource):
     def get(self):
         return self.post()
 
-#修改配件信息
+#修改配件信息url的请求与响应
 class UAVPartsModify(Resource):
     def __init__(self):
         self.dao = PartsDao()
@@ -230,7 +245,7 @@ class UAVPartsModify(Resource):
     def get(self):
         return self.post()
 
-
+#查询配件状态url的请求与响应
 class UAVPartsStatus(Resource):
     def __init__(self):
         self.dao = PartsDao()

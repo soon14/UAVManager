@@ -1,5 +1,24 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+"""
+desc:此文件为数据操作接口，主要是对线路，杆塔，缺陷以及线路服务信息进行管理
+     采用的SQL中间件为为SQLAlchemy；
+
+     错误代码的定义：
+     1.成功返回000001
+     2.所有用户表错误代码以01XXXXXX开始 第3/4位标识类名 第5/6位标识函数名 第6/7位标识函数中的返回值
+     3.所有无人机表错误代码以02XXXXXX开始 第3/4位标识类名 第5/6位标识函数名 第6/7位标识函数中的返回值
+     4.所有杆塔表错误代码以03XXXXXX开始 第3/4位标识类名 第5/6位标识函数名 第6/7位标识函数中的返回值
+
+
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 import math
 
@@ -31,6 +50,7 @@ Session_Power= sessionmaker(bind=engine_power)
 #   定义并实现线路数据增、改、删、查等操作，实现统计以及
 #   author :Wu Wei
 #   version:1.0.0.0
+#   所有错误代码以0301XXXX开头
 class LinesDao:
     def __init__(self):
         self.session_power= Session_Power()
@@ -161,6 +181,7 @@ class LinesDao:
             ret.append(item)
         return json.dumps(ret)
 
+    #查询线路的运维班组
     def query_lineWorkTeam(self):
         sql = 'select lines_work_team from tb_lines group by lines_work_team;'
         rs = self.session_power.execute(sql).fetchall()
@@ -171,10 +192,15 @@ class LinesDao:
             ret.append(item)
         return json.dumps(ret)
 
+    #根据电压等级查询线路
+    #param voltage:电压等级
     def query_lineVoltage(self,voltage):
         rs = self.session_power.query(Lines).filter(Lines.lines_voltage==voltage).all()
         return class_to_dict(rs)
 
+    #添加线路
+    #param user:当前登录用户
+    #param line:待添加的线路
     def add_line(self,user,line):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -186,8 +212,11 @@ class LinesDao:
                 self.session_power.rollback()
             return 1
         else:
-            return -1
+            return 3010901
 
+    #添加多条线路
+    #param user:当前登录的用户信息
+    #param lines:待添加的多条线路
     def add_lines(self,user,lines):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -200,22 +229,32 @@ class LinesDao:
                     self.session_power.rollback()
                 return 1
         else:
-            return -1
+            return 3011001
 
+#杆塔数据处理
+#包括杆塔信息的查询，修改添加等处理
+#author Wu Wei
+#version 1.0.0.0
+#   所有错误代码以0302XXXX开头
 class TowerDao:
     def __init__(self):
         self.session_power= Session_Power()
     def __del__(self):
         self.session_power.close()
 
+    #查询所有杆塔信息，无条件查询
     def query_towers_all(self):
         rs = self.session_power.query(Towers).filter(Towers.deleted==0).all()
         return class_to_dict(rs)
 
+    #根据杆塔id查询杆塔信息
+    #param tower_id:输入的杆塔id
     def query_tower_id(self,tower_id):
         rs = self.session_power.query(Towers).filter(Towers.tower_id==tower_id,Towers.deleted==0).all()
         return class_to_dict(rs)
 
+    #查询线路下所有杆塔信息
+    #param linename:线路名称
     def query_towers(self,linename):
         if linename is not None:
             rs = self.session_power.query(Towers).filter(Towers.tower_linename==linename,Towers.deleted==0).order_by(Towers.tower_idx).all()
@@ -223,6 +262,9 @@ class TowerDao:
         else:
             return self.query_towers_all()
 
+    #添加杆塔
+    #param user:当前登录的用户信息
+    #param tower:待添加的杆塔信息
     def add_tower(self,user,tower):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -234,8 +276,11 @@ class TowerDao:
                 self.session_power.rollback()
             return 1
         else:
-            return -1
+            return 3020401
 
+    #更新杆塔信息
+    #param user:当前登录的用户信息
+    #param tower:待添加的杆塔信息
     def update_tower(self,user,tower):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -247,8 +292,11 @@ class TowerDao:
                 self.session_power.rollback()
             return 1
         else:
-            return -1
+            return 3020501
 
+    #添加多个杆塔
+    #param user:当前登录的用户信息
+    #param towers:待添加的杆塔信息
     def add_towers(self,user,towers):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -261,8 +309,11 @@ class TowerDao:
                     self.session_power.rollback()
                 return 1
         else:
-            return -1
+            return 3020601
 
+    #删除杆塔信息
+    #param user:当前登录的用户
+    #param towersid:待删除的杆塔id
     def del_tower(self,user,towersid):
         tower=self.session_power.query(Towers).filter(Towers.tower_id==towersid).first()
         tower.deleted=1
@@ -272,24 +323,40 @@ class TowerDao:
             self.session_power.rollback()
         return 1
 
+
+#杆塔数据处理
+#包括杆塔信息的查询，修改添加等处理
+#author Wu Wei
+#version 1.0.0.0
+#   所有错误代码以0303XXXX开头
 class PhotoDao:
     def __init__(self):
         self.session_power= Session_Power()
     def __del__(self):
         self.session_power.close()
 
+    #查询所有照片信息（无条件查询）
     def query_photos(self):
         rs = self.session_power.query(Photo).all()
         return class_to_dict(rs)
 
+    #查询所有杆塔下的照片
+    #param towerIdx:杆塔id
     def query_photos_towerid(self,towerIdx):
         rs = self.session_power.query(Photo).filter(Photo.photo_tower_id==towerIdx).all()
         return class_to_dict(rs)
 
+    #根据上传时间和杆塔id查询照片信息
+    #param toweridx: 输入杆塔id
+    #param photoDate:照片上传日期
     def query_photos_time(self,towerIdx,photoDate):
         rs = self.session_power.query(Photo).filter(Photo.photo_tower_id==towerIdx,Photo.photo_date==photoDate).all()
         return class_to_dict(rs)
 
+    #杆塔照片的条件查询
+    #param start_date:起始时间
+    #param end_date:结束时间
+    #param tower_id:杆塔id
     def query_photo_condition(self,start_date,end_date,tower_id):
         q=self.session_power.query(Photo)
         if start_date!=None:
@@ -301,6 +368,9 @@ class PhotoDao:
         photos = q.all()
         return class_to_dict(photos)
 
+    #查询杆塔所有照片的日期信息
+    #param towerid:杆塔id
+    #返回日期分组
     def query_photo_date(self,towerid):
         sql = 'select photo_date from tb_photo  where photo_tower_id='+str(towerid)+' group by photo_date ;'
         rs = self.session_power.execute(sql).fetchall()
@@ -312,6 +382,9 @@ class PhotoDao:
             ret.append(item)
         return json.dumps(ret)
 
+    #根据照片id查询杆塔照片
+    #param photoidx:输入杆塔照片id
+    #返回照片信息
     def query_photo_idx(self,photoidx):
         rs = self.session_power.query(Photo).filter(Photo.photo_id == photoidx).first()
         #根据查到的线路id获取电压等级
@@ -320,6 +393,9 @@ class PhotoDao:
         dic['voltage'] = lineinfo.lines_voltage
         return dic
 
+    #添加杆塔照片
+    #param user:输入用户信息
+    #param photo:输入待添加的照片信息
     def add_photo(self,user,photo):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -331,9 +407,17 @@ class PhotoDao:
                 self.session_power.rollback()
             return 1
         else:
-            return -1
+            return 3030701
 
-    def add_photo(self,voltage,line_id,tower_id,classify,path,paththumbnail,date):
+    #添加杆塔照片
+    #param voltage:输入电压等级
+    #param line_id:输入线路id
+    #param tower_id:输入杆塔id
+    #param classify:输入照片类别
+    #param path:照片存储路径（网络路径）
+    #param paththumbnail:照片缩略图网络路径
+    #param date:照片上传日期
+    def add_photo(self, voltage, line_id, tower_id, classify, path, paththumbnail, date):
         #是否进行判断
         line = self.session_power.query(Lines).filter(Lines.lines_id==line_id).first()
         photo = Photo(photo_line=line_id,photo_tower_id=tower_id,photo_path=path,photo_thumbnail_path=paththumbnail,photo_classify=classify,photo_date=date)
@@ -344,6 +428,9 @@ class PhotoDao:
             self.session_power.rollback()
         return 1
 
+    #添加多张照片
+    #param user:用户列表
+    #param photos:照片信息
     def add_photos(self,user,photos):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
@@ -356,30 +443,39 @@ class PhotoDao:
                     self.session_power.rollback()
                 return 1
         else:
-            return -1
+            return 3030901
 
+#缺陷等级处理，简单的进行缺陷等级的查询
+#   所有错误代码以0304XXXX开头
 class DefectLevelDao:
     def __init__(self):
         self.session_power= Session_Power()
     def __del__(self):
         self.session_power.close()
-
+    #查询故障等级
+    #param user:输入用户信息
     def query_defect_level(self,user):
         defectLevels = self.session_power.query(DefectLevel).all()
         self.session_power.rollback()
         return class_to_dict(defectLevels)
 
+#缺陷部位查询，简单的对缺陷部位进行查询
+#   所有错误代码以0305XXXX开头
 class DefectPartDao:
     def __init__(self):
         self.session_power= Session_Power()
     def __del__(self):
         self.session_power.close()
 
+    #查询所有缺陷部位
+    #param  user:当前登录的用户信息
     def query_defect_part(self,user):
         defectParts= self.session_power.query(DefectPart).all()
         self.session_power.rollback()
         return class_to_dict(defectParts)
 
+#缺陷处理，缺陷的添加，缺陷查询等操作
+#   所有错误代码以0305XXXX开头
 class DefectDao:
     def __init__(self):
         self.session_power= Session_Power()
@@ -387,6 +483,8 @@ class DefectDao:
         self.session_power.close()
 
     #查询杆塔对应的缺陷的照片
+    #param user:输入用户信息
+    #param tower_id:用户id
     def query_defect_tower(self,user,tower_id):
         defects = self.session_power.query(Defect).filter(Defect.tb_defect_towerid==tower_id).all()
         self.session_power.rollback()
@@ -428,38 +526,37 @@ class DefectDao:
         isAdd = False
         self.session_power.commit()
         return 1
-        ###
-        #try:
-        #    self.session_power.commit()
-        #    isAdd = True
-        #except:
-        #    self.session_power.rollback()
-        #    isAdd = False
-        #if isAdd:
-        #    return 1
-        #else:
-        #    return -1
 
+#数据服务管理，用来进行数据服务查询，数据服务加载等操作
+#数据服务查询模块应该独立出来单独作为一个模块
+#   所有错误代码以0307XXXX开头
 class DataServiceDao:
     def __init__(self):
         self.session_power= Session_Power()
     def __del__(self):
         self.session_power.close()
 
+    #添加数据服务
+    #param dataservice:待添加的数据服务
     def dataservice_add(self,dataservice):
         self.session_power.add(dataservice)
         self.session_power.commit()
         return 1
 
+    #删除数据服务
+    #param dataserviceid:待删除的数据服务的id
     def dataservice_delete(self,dataserviceid):
         self.session_power.query(DataService).filter(DataService.tb_dataservice_id==dataserviceid).delete()
         self.session_power.commit()
         return 1
 
+    #查询线路下所有数据服务
+    #param linename:输入线路名称
     def dataservice_search(self,linename):
         rs=self.session_power.query(DataService).filter(DataService.tb_dataservice_linename==linename).all()
         return class_to_dict(rs)
 
+    #查询添加了服务的线路
     def dataservice_searchLine(self):
         sql = 'select tb_dataservice_linename from tb_dataservice group by tb_dataservice_linename'
         nameList = self.session_power.execute(sql)
@@ -470,3 +567,15 @@ class DataServiceDao:
             rs.append(tmp)
         return rs
 
+    #修改线路服务
+    #param service_id:线路服务的id
+    #param service_linename:服务的线路名称
+    #param service_url:线路服务的url
+    #param service_type:线路服务的类型
+    def dataservice_modify(self,service_id,service_linename,service_url,service_type):
+        service = self.session_power.query(DataService).filter(DataService.tb_dataservice_id==service_id).first()
+        service.tb_dataservice_linename=service_linename
+        service.tb_dataservice_url = service_url
+        service.tb_dataservice_type=service_type
+        self.session_power.commit()
+        return 1

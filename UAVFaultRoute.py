@@ -1,5 +1,16 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:对于故障查询操作请求进行响应，通过Flask构建服务器解析请求
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -18,6 +29,7 @@ parser.add_argument('device_ver',type=str,location='args')
 parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
 
+#查询故障列表的请求与响应
 class UAVFaultList(Resource):
     def __init__(self):
         self.dao = FaultDao()
@@ -44,6 +56,7 @@ class UAVFaultList(Resource):
     def get(self):
         return self.post()
 
+#查询故障的总页数的请求与响应
 class UAVFaultListPages(Resource):
     def __init__(self):
         self.dao = FaultDao()
@@ -69,7 +82,7 @@ class UAVFaultListPages(Resource):
     def get(self):
         return self.post()
 
-
+#查询故障设备类型的请求与响应
 class UAVFaultDeviceVersion(Resource):
     def __init__(self):
         self.dao = FaultDao()
@@ -92,6 +105,7 @@ class UAVFaultDeviceVersion(Resource):
     def get(self):
         return self.post()
 
+#查询故障统计信息的请求与响应
 class UAVFaultStatistics(Resource):
     def __init__(self):
         self.dao = FaultDao()
@@ -118,6 +132,7 @@ class UAVFaultStatistics(Resource):
     def get(self):
         return self.post()
 
+#故障添加的请求与响应
 class UAVFaultAdd(Resource):
     def __init__(self):
         self.dao = FaultDao()
@@ -153,6 +168,7 @@ class UAVFaultAdd(Resource):
     def get(self):
         return self.post()
 
+#故障维修完成的请求与响应
 class UAVFaultFinished(Resource):
     def __init__(self):
         self.dao = FaultDao()
@@ -184,6 +200,7 @@ class UAVFaultFinished(Resource):
     def get(self):
         return self.post()
 
+#设备报废的请求与响应
 class UAVFaultScrap(Resource):
     def __init__(self):
         self.dao = FaultDao()

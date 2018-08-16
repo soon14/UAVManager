@@ -29,7 +29,7 @@ parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,required=True,location='args')
 
 
-#分页导出无人机
+#查询无人机列表url的请求解析与响应
 class UAVDeviceList(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -57,6 +57,7 @@ class UAVDeviceList(Resource):
     def get(self):
         return self.post()
 
+#查询所有无人机列表url的请求解析与响应
 class UAVDeviceAll(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -79,7 +80,7 @@ class UAVDeviceAll(Resource):
     def get(self):
         return self.post()
 
-#分页查询时查询总页数
+#分页查询时查询总页数url的请求解析与响应
 class UAVDeviceListPages(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -133,7 +134,6 @@ class UAVDeviceGetID(Resource):
         else:
             return make_response(jsonify({'error': 'Data Format Rrror'}), 401)
 
-
 #出无人机设备统计图（设备状态的参数在url中）
 class UAVDeviceManagerStatistic(Resource):
     def __init__(self):
@@ -184,7 +184,7 @@ class UAVDeviceManagerStatisticList(Resource):
     def get(self):
         return self.post()
 
-#获取所有无人机类型
+#获取所有无人机类型url的请求解析与响应
 class UAVDeviceTypes(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -208,7 +208,7 @@ class UAVDeviceTypes(Resource):
     def get(self):
         return self.post()
 
-#获取所有无人机型号
+#获取所有无人机型号url的请求解析与响应
 class UAVDeviceVers(Resource):
     def __init__(self):
         self.dao = DeviceDAO()
@@ -232,7 +232,7 @@ class UAVDeviceVers(Resource):
     def get(self):
         return self.post()
 
-#添加无人机
+#添加无人机url的请求解析与响应
 class UAVDeviceAdd(Resource):
     def __init__(self):
         self.dao = DeviceDAO()

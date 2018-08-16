@@ -1,5 +1,16 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:对于线路杆塔，照片以及服务数据表，并对请求进行响应，通过Flask构建服务器解析请求
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -28,7 +39,7 @@ parser.add_argument('photo_date', type=str, location='args')
 parser.add_argument('start_time', type=str, location='args')
 parser.add_argument('end_time', type=str, location='args')
 
-
+#查询所有线路信息url的解析与响应
 class PowerLineListRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -43,7 +54,7 @@ class PowerLineListRoute(Resource):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         rs=self.dao.query_lines()
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '查询线路信息失败','errorcode':10000000}), 401)
         else:
             return rs
     #else:
@@ -52,6 +63,7 @@ class PowerLineListRoute(Resource):
     def get(self):
         return self.post()
 
+#线路信息的模糊查询的url的解析与响应
 class PowerLineSearchFuzzy(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -69,7 +81,7 @@ class PowerLineSearchFuzzy(Resource):
         linename = args.get('linename')
         rs=self.dao.query_line_fuzzy(linename)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '根据线路名称查询线路信息失败','errorcode':10000000}), 401)
         else:
             return json.dumps(rs)
     #else:
@@ -78,6 +90,7 @@ class PowerLineSearchFuzzy(Resource):
     def get(self):
         return self.post()
 
+#根据线路id查询线路信息的url的解析与响应
 class PowerLineRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -95,7 +108,7 @@ class PowerLineRoute(Resource):
         lineid = args.get('lineid')
         rs=self.dao.query_line(lineid)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '根据线路id查询线路信息失败','errorcode':10000000}), 401)
         else:
             return json.dumps(rs)
     #else:
@@ -104,6 +117,7 @@ class PowerLineRoute(Resource):
     def get(self):
         return self.post()
 
+#线路信息的分页与条件查询的url的解析与响应
 class PowerLineListPageRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -122,7 +136,7 @@ class PowerLineListPageRoute(Resource):
         page_index = args.get('page_index')
         rs=self.dao.query_line_pages(work_team,page_size,page_index)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '查询线路信息失败','errorcode':10000000}), 401)
         else:
             return rs
     #else:
@@ -131,6 +145,7 @@ class PowerLineListPageRoute(Resource):
     def get(self):
         return self.post()
 
+#删除线路信息的url的解析与响应的url的解析与响应
 class PowerLineDeleteRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -142,21 +157,26 @@ class PowerLineDeleteRoute(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期','errorcode':10000000}), 401)
+            if user==1010301:
+                return make_response(jsonify({'error': '登录过期','errorcode':user}), 401)
+            if user==1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             args = parser.parse_args()
             lineid=args.get('lineid')
             rs=self.dao.query_line_delete(user,lineid)
             if rs!=1:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '根据线路id查询线路信息失败','error':10000000}), 401)
             else:
                 return rs
         else:
-            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '没有登录，无权限查询线路信息'}), 401)
 
     def get(self):
         return self.post()
 
-
+#查询所有线路的电压等级情况的url的解析与响应
 class PowerLineTypeRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -171,7 +191,7 @@ class PowerLineTypeRoute(Resource):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         rs=self.dao.query_lineTypes()
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '查询线路电压等级失败','errorcode':10000000}), 401)
         else:
             return rs
     #else:
@@ -180,6 +200,7 @@ class PowerLineTypeRoute(Resource):
     def get(self):
         return self.post()
 
+#查询线路的运维班组情况的url的解析与响应
 class PowerLineWorkteamRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -194,7 +215,7 @@ class PowerLineWorkteamRoute(Resource):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         rs=self.dao.query_lineWorkTeam()
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '查询线路维护班组失败','errorcode':10000000}), 401)
         else:
             return rs
     #else:
@@ -203,6 +224,7 @@ class PowerLineWorkteamRoute(Resource):
     def get(self):
         return self.post()
 
+#根据电压等级查询线路信息的url的解析与响应
 class PowerLineVoltageRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -219,7 +241,7 @@ class PowerLineVoltageRoute(Resource):
         voltage = args.get('voltage')
         rs=self.dao.query_lineVoltage(voltage)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '根据电压等级查询线路信息失败','errorcode':10000000}), 401)
         else:
             return rs
     #else:
@@ -228,6 +250,7 @@ class PowerLineVoltageRoute(Resource):
     def get(self):
         return self.post()
 
+#添加线路信息的url的解析与响应
 class PowerLineAddRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -240,7 +263,12 @@ class PowerLineAddRoute(Resource):
              lineInfo = data['line']
              user = self.userDao.verify_token(token, '')
              if (not user):
-                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+             if user == 1010301:
+                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+             if user == 1010302:
+                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
              line=Lines()
              line.lines_name=lineInfo[0]['lines_name']
              line.lines_construct_date = lineInfo[0]['lines_construct_date']
@@ -248,15 +276,16 @@ class PowerLineAddRoute(Resource):
              line.lines_work_team = lineInfo[0]['lines_work_team']
              line.lines_incharge = lineInfo[0]['lines_incharge']
              rs=self.dao.add_line(user,line)
-             if rs==-1:
-                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+             if rs==3010901:
+                  return make_response(jsonify({'error': '没有权限添加线路'}), 401)
              else:
-                  return make_response(jsonify({'success': 'add data access'}), 401)
-        return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                  return make_response(jsonify({'success': '添加线路成功'}), 200)
+        return  make_response(jsonify({'error': '传入参数错误'}), 401)
 
     def get(self):
         return self.post()   
 
+#查询线路信息总页数的url的解析与响应
 class PowerLineListPages(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -270,19 +299,26 @@ class PowerLineListPages(Resource):
              work_team = args.get('work_team')
              page_size = args.get('page_size')
              user = self.userDao.verify_token(token, '')
+             user = self.userDao.verify_token(token, '')
              if (not user):
-                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+             if user == 1010301:
+                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+             if user == 1010302:
+                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
              rs=self.dao.query_line_pagesNumber(user,work_team,page_size)
              if rs==None:
-                  return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                  return make_response(jsonify({'error': '查询线路分页数失败', 'errorcode': 10000000}), 401)
              else:
                   return rs
-        return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        return  make_response(jsonify({'error': '传入参数错误'}), 401)
 
     def get(self):
         return self.post()
 
 ##################################################
+#根据条件查询分页查询杆塔信息的url的解析与响应
 class PowerLineTowerQueryRoute(Resource):
     def __init__(self):
         self.dao = LinesDao()
@@ -294,7 +330,12 @@ class PowerLineTowerQueryRoute(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             args = parser.parse_args()
             voltage = args.get('voltage')
             work_team = args.get('work_team')
@@ -303,7 +344,7 @@ class PowerLineTowerQueryRoute(Resource):
             page_index = args.get('page_index')
             rs = self.dao.query_line_condition(user,voltage,work_team,line_name,page_size,page_index)
             if rs==None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '查询杆塔信息失败','errorcode':10000000}), 401)
             else:
                 return rs
         else:
@@ -312,6 +353,7 @@ class PowerLineTowerQueryRoute(Resource):
     def get(self):
         return self.post()
 
+#根据线路名称查询杆塔的url的解析与响应
 class PowerLineTowerRoute(Resource):
     def __init__(self):
         self.dao = TowerDao()
@@ -328,7 +370,7 @@ class PowerLineTowerRoute(Resource):
         linename = args.get('linename')
         rs=self.dao.query_towers(linename)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '根据线路名称查询杆塔失败','errorcode':10000000}), 401)
         else:
             return rs
         #     else:
@@ -339,6 +381,7 @@ class PowerLineTowerRoute(Resource):
     def get(self):
         return self.post()
 
+#根据杆塔id查询杆塔的url的解析与响应
 class PowerLineTowerIDRoute(Resource):
     def __init__(self):
         self.dao = TowerDao()
@@ -355,7 +398,7 @@ class PowerLineTowerIDRoute(Resource):
         tower_id = args.get('towerid')
         rs=self.dao.query_tower_id(tower_id)
         if rs==None:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '根据杆塔id查询杆塔信息失败','errorcode':10000000}), 401)
         else:
             return rs
         #     else:
@@ -366,6 +409,7 @@ class PowerLineTowerIDRoute(Resource):
     def get(self):
         return self.post()
 
+#添加杆塔信息的url的解析与响应
 class PowerLineTowerAdd(Resource):
     def __init__(self):
         self.dao = TowerDao()
@@ -378,7 +422,12 @@ class PowerLineTowerAdd(Resource):
             towerdict = data['tower']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             tower=Towers()
             tower.tower_linename=towerdict[0]['tower_linename']
             tower.tower_idx=towerdict[0]['tower_idx']
@@ -388,16 +437,17 @@ class PowerLineTowerAdd(Resource):
             tower.tower_lng=towerdict[0]['tower_lng']
             tower.tower_elevation=towerdict[0]['tower_elevation']
             rs = self.dao.add_tower(user,tower)
-            if rs==-1:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if rs==3020401:
+                return make_response(jsonify({'error': '无权限添加杆塔','errorcode':rs}), 401)
             else:
-                return make_response(jsonify({'success': 'Add data success'}), 401)
+                return make_response(jsonify({'success': '添加杆塔成功'}), 200)
         else:
-             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+             return  make_response(jsonify({'error': '传入参数错误'}), 401)
 
     def get(self):
         return self.post()
 
+#杆塔数据更新的url解析与响应
 class PowerLineTowerUpdate(Resource):
     def __init__(self):
         self.dao = TowerDao()
@@ -410,7 +460,12 @@ class PowerLineTowerUpdate(Resource):
             towerdict = data['tower']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             tower=Towers()
             tower.tower_linename=towerdict['tower_linename']
             tower.tower_id=towerdict['tower_id']
@@ -433,16 +488,17 @@ class PowerLineTowerUpdate(Resource):
             tower.tower_insulator_doublehang = towerdict['tower_insulator_doublehang']
             tower.tower_opgw_type = towerdict['tower_opgw_type']
             rs = self.dao.update_tower(user,tower)
-            if rs==-1:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if rs==3020501:
+                return make_response(jsonify({'error': '无权限更新杆塔信息','errorcode':rs}), 401)
             else:
-                return make_response(jsonify({'success': 'Add data success'}), 200)
+                return make_response(jsonify({'success': '添加杆塔信息成功'}), 200)
         else:
-             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+             return  make_response(jsonify({'error': '传入参数错误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
 
+#更新杆塔坐标的url的解析与响应
 class PowerLineTowerUpdateLocation(Resource):
     def __init__(self):
         self.dao = TowerDao()
@@ -455,22 +511,28 @@ class PowerLineTowerUpdateLocation(Resource):
             towerdict = data['tower']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             tower=Towers()
             tower.tower_id=towerdict['tower_id']
             tower.tower_lat=towerdict['tower_lat']
             tower.tower_lng=towerdict['tower_lng']
             rs = self.dao.update_tower(user,tower)
-            if rs==-1:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if rs==3020501:
+                return make_response(jsonify({'error': '无权限更新杆塔坐标','errorcode':rs}), 401)
             else:
-                return make_response(jsonify({'success': 'Add data success'}), 200)
+                return make_response(jsonify({'success': '更新杆塔坐标成功'}), 200)
         else:
-             return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+             return  make_response(jsonify({'error': '传入参数出错','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
 
+#删除杆塔的url解析与响应
 class PowerLineTowerDeleteRoute(Resource):
     def __init__(self):
         self.dao = TowerDao()
@@ -480,9 +542,16 @@ class PowerLineTowerDeleteRoute(Resource):
         if (request.data != ""):
             data = json.loads(request.data)
             token = data['token']
+
             user = self.userDao.verify_token(token, '')
             if (not user):
-                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
+
             args = parser.parse_args()
             towerid=args.get('lineid')
             rs=self.dao.del_tower(user,towerid)
@@ -496,7 +565,7 @@ class PowerLineTowerDeleteRoute(Resource):
     def get(self):
         return self.post()
 
-
+#条件查询杆塔分页查询的url解析与响应
 class PowerLineTowerPagesRoute(Resource):
     def __init__(self):
         self.dao = TowerDao()
@@ -527,7 +596,7 @@ class PowerLineTowerPagesRoute(Resource):
         return self.post()
 
 ######################################################
-
+#根据线路id查询杆塔照片的url解析与响应（实现的是查询所有照片）
 class PowerLinePhotoIdxRoute(Resource):
     def __init__(self):
         self.dao = PhotoDao()
@@ -545,7 +614,7 @@ class PowerLinePhotoIdxRoute(Resource):
         lineidx = args.get('towerid')
         rs=self.dao.query_photos(lineidx)
         if rs==None:
-             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+             return make_response(jsonify({'error': '查询杆塔照片失败','errorcode':10000000}), 401)
         else:
              return rs
         # else:
@@ -554,6 +623,7 @@ class PowerLinePhotoIdxRoute(Resource):
     def get(self):
         return self.post()
 
+#根据杆塔id与照片日期查询照片的url解析与响应
 class PowerTowerPhotoIdxRoute(Resource):
     def __init__(self):
         self.dao = PhotoDao()
@@ -579,7 +649,7 @@ class PowerTowerPhotoIdxRoute(Resource):
             rs = self.dao.query_photos_time(toweridx,photodate)
 
         if rs==None:
-             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+             return make_response(jsonify({'error': '查询杆塔照片失败','errorcode':10000000}), 401)
         else:
              return rs
         # else:
@@ -588,6 +658,7 @@ class PowerTowerPhotoIdxRoute(Resource):
     def get(self):
         return self.post()
 
+#查询杆塔下所有照片的上传时间的请求url的解析与响应
 class PowerTowerPhotoDate(Resource):
     def __init__(self):
         self.dao = PhotoDao()
@@ -605,7 +676,7 @@ class PowerTowerPhotoDate(Resource):
         toweridx = args.get('towerid')
         rs=self.dao.query_photo_date(toweridx)
         if rs==None:
-             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+             return make_response(jsonify({'error': '查询杆塔照片日期失败','errorcode':10000000}), 401)
         else:
              return rs
         # else:
@@ -614,6 +685,7 @@ class PowerTowerPhotoDate(Resource):
     def get(self):
         return self.post()
 
+#根据杆塔坐标和起止日期查询杆塔照片信息的请求url的解析与响应
 class PowerPhotoSearch(Resource):
     def __init__(self):
         self.dao = PhotoDao()
@@ -633,7 +705,7 @@ class PowerPhotoSearch(Resource):
         end_time = datetime.strptime(args.get('end_time'),'%Y-%m-%d').date()
         rs=self.dao.query_photo_condition(start_time,end_time,toweridx)
         if rs==None:
-             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+             return make_response(jsonify({'error': '查询杆塔照片失败','errorcode':10000000}), 401)
         else:
              return rs
         # else:
@@ -642,6 +714,7 @@ class PowerPhotoSearch(Resource):
     def get(self):
         return self.post()
 
+#根据杆塔id查询杆塔信息请求url的解析与响应
 class PowerPhotoIdx(Resource):
     def __init__(self):
         self.dao = PhotoDao()
@@ -659,7 +732,7 @@ class PowerPhotoIdx(Resource):
         photoid = args.get('photoid')
         rs=self.dao.query_photo_idx(photoid)
         if rs==None:
-             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+             return make_response(jsonify({'error': '根据照片id查询杆塔照片失败','errorcode':10000000}), 401)
         else:
              return rs
         # else:

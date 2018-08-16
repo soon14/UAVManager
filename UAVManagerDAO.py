@@ -1,5 +1,24 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:此文件为数据操作接口，主要是对用户信息，无人机、电池、配件、平板等设备进行管理，
+     对无人机故障等信息进行管理；采用的SQL中间件为为SQLAlchemy；
+
+     错误代码的定义：
+     1.成功返回000001
+     2.所有用户表错误代码以01XXXXXX开始 第3/4位标识类名 第5/6位标识函数名 第6/7位标识函数中的返回值
+     3.所有无人机表错误代码以02XXXXXX开始 第3/4位标识类名 第5/6位标识函数名 第6/7位标识函数中的返回值
+     4.所有杆塔表错误代码以03XXXXXX开始 第3/4位标识类名 第5/6位标识函数名 第6/7位标识函数中的返回值
+
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
 import sys
 import math
 
@@ -53,6 +72,7 @@ def md5_key(arg):
 # 主要定义用户数据的操作，包括增改删查等
 #author:Wu Wei
 #Version 1.0.0.0
+#所有错误代码以0101XXXX开始
 class UserDAO:
     def __init__(self):
         self.session_usr=Session_User()
@@ -86,9 +106,9 @@ class UserDAO:
         try:
             data = s.loads(token)
         except SignatureExpired:
-            return -1 # valid token, but expired
+            return 1010301 # valid token, but expired
         except BadSignature:
-            return None # invalid token
+            return 1010302 # invalid token
         usr=self.session_usr.query(User).filter(User.user_id == data['id']).first()
         self.session_usr.rollback()
         return usr
@@ -102,7 +122,7 @@ class UserDAO:
             if user.user_team==user_login.user_team:
                 exist=self.session_usr.query(User).filter(User.user_id==user.user_id).first()
                 if exist is not None:
-                    return -2
+                    return 1010401
                 user.user_password=md5_key(user.user_password)
                 self.session_usr.add(user)
                 try:
@@ -111,11 +131,11 @@ class UserDAO:
                     self.session_usr.rollback()
                 return 1
             else:
-                return -1
+                return 1010402
         elif '6' in roles or '5' in roles:
             exist = self.session_usr.query(User).filter(User.user_id == user.user_id).first()
             if exist is not None:
-                return -2
+                return 1010403
 
             user.user_password = md5_key(user.user_password)
             self.session_usr.add(user)
@@ -125,7 +145,7 @@ class UserDAO:
                 self.session_usr.rollback()
             return 1
         else:
-            return -1
+            return 1010404
 
     #修改用户信息
     #param user:修改后的用户信息
@@ -136,9 +156,9 @@ class UserDAO:
             if user.user_team==user_login.user_team:
                 exist=self.session_usr.query(User).filter(User.user_id==user.user_id).first()
                 if exist is None:
-                    return -2
+                    return 1010501
                 if user.user_team!=user_login.user_team:
-                    return -1
+                    return 1010502
 
                 user.user_password=md5_key(user.user_password)
                 exist.user_id=user.user_id
@@ -155,11 +175,11 @@ class UserDAO:
                     self.session_usr.rollback()
                 return 1
             else:
-                return -1
+                return 1010503
         elif '6' in roles or '5' in roles:
             exist = self.session_usr.query(User).filter(User.user_id == user.user_id).first()
             if exist is None:
-                return -2
+                return 1010504
             user.user_password = md5_key(user.user_password)
             exist.user_id = user.user_id
             exist.user_password = user.user_password
@@ -175,7 +195,7 @@ class UserDAO:
                 self.session_usr.rollback()
             return 1
         else:
-            return -1
+            return 1010505
 
     #根据用户id获取用户信息（没有验证）
     #param userid:输入用户id
@@ -204,7 +224,7 @@ class UserDAO:
     #返回用户信息
     def get_user_byName(self,name):
         if(not name):
-            return -1
+            return 1010805
         else:
             usr=self.session_usr.query(User).filter(User.user_id==name).first()
             self.session_usr.rollback()
@@ -381,6 +401,7 @@ class UserDAO:
 #包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
 #author:Wu Wei
 #Version 1.0.0.0
+#所有错误代码以0201XXXX开始
 class DeviceDAO:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -398,7 +419,6 @@ class DeviceDAO:
         rs=self.session_uav.query(Device).filter(Device.device_use_dpartment==user.user_department).all()
         self.session_uav.rollback()
         return class_to_dict(rs)
-        return None
 
     #分页查询，查询用户所在部门的设备
     #param user:当前登录的用户信息
@@ -418,11 +438,20 @@ class DeviceDAO:
     #param device_status:设备状态，为空则查询所有状态的设备
     #param page_size:每页展示的数据条数
     #返回页数json数据
+    #修改查询权限 wuwei 2018-08-16
     def query_pages(self,user,device_type,device_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         q = self.session_uav.query(Device)
-        q = q.filter(Device.device_use_dpartment == user.user_department)
+
+        #修改查询权限
+        if '1' not in roles:
+            return None
+        if user.user_role<=4:
+            q = q.filter(Device.device_use_dpartment == user.user_department)
+        if user.user_role<=3:
+            q=q.filter(Device.user_team==user.user_team)
+
         if device_type:
             q = q.filter(Device.device_type == device_type)
         if device_status:
@@ -450,13 +479,18 @@ class DeviceDAO:
     #param page_index:查询第几页
     #param page_size:每页展示数据条数
     #返回查询到的数据条数
+    #修改查询权限 wuwei 2018-08-16
     def query_condition(self,user,device_id,device_ver,device_type,uad_code,device_status,page_index,page_size):
         q = self.session_uav.query(Device)
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' not in roles:
             return None
-        q = q.filter(Device.device_use_dpartment == user.user_department)
+        if user.user_role<=4:
+            q = q.filter(Device.device_use_dpartment == user.user_department)
+        if user.user_role<=3:
+            q=q.filter(Device.user_team==user.user_team)
+
         if device_ver:
             q = q.filter(Device.device_ver==device_ver)
         if device_id:
@@ -567,7 +601,7 @@ class DeviceDAO:
             #首先判断无人机是否存在
             exist = self.session_uav.query(Device).filter(Device.device_id==device.device_id).first()
             if exist is not None:
-                return -2
+                return 02011101
             #不存在则添加
             self.session_uav.add(device)
             try:
@@ -576,7 +610,7 @@ class DeviceDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 02011102
 
     #修改无人机设备状态
     #param usr:当前登录用户信息
@@ -590,7 +624,7 @@ class DeviceDAO:
 
             #无人机不存在
             if uav is None:
-                return  -2
+                return  02011201
 
             #存在则修改
             uav.device_ver=device.device_ver
@@ -608,7 +642,7 @@ class DeviceDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 02011202
 
     #修改无人机设备状态
     #状态有五种 在库 出库 维修 报废 丢失
@@ -627,12 +661,13 @@ class DeviceDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 02011301
 
 #电池设备对象操作类
 #包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
 #author:Wu Wei
 #Version 1.0.0.0
+#所有错误代码以0202XXXX开始
 class BatteryDAO:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -666,14 +701,21 @@ class BatteryDAO:
     #param battery_type:电池类型
     #param battery_status 电池状态
     #param page_size 每一页展示数据的条数
-    #p返回查询设备总页数
+    #返回查询设备总页数
+    #修改查询权限 wuwei 2018-08-16
     def query_pages(self,user,battery_type,battery_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         q = self.session_uav.query(Battery)
-        q = q.filter(Battery.battery_use_dpartment == user.user_department)
+        if '1' not in roles:
+            return None
+        # 修改查询权限
+        if user.user_role<=4:
+            q = q.filter(Battery.battery_use_dpartment == user.user_department)
+        if user.user_role<=3:
+            q = q.filter(Battery.user_team == user.user_team)
         if battery_type:
             q = q.filter(Battery.battery_type == battery_type)
         if battery_status:
@@ -693,13 +735,19 @@ class BatteryDAO:
     #param page_index:展示第几页的数据
     #param page_size:每一页展示数据条数
     #返回查询设备
+    #修改查询权限 wuwei 2018-08-16
     def query_condition(self,user,bttery_id,bttery_ver,bttery_type,bttery_status,page_index,page_size):
         q = self.session_uav.query(Battery)
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' not in roles:
             return None
-        q = q.filter(Battery.battery_use_dpartment == user.user_department)
+        # 修改查询权限
+        if user.user_role<=4:
+            q = q.filter(Battery.battery_use_dpartment == user.user_department)
+        if user.user_role<=3:
+            q = q.filter(Battery.user_team == user.user_team)
+
         if bttery_ver:
             q = q.filter(Battery.battery_ver==bttery_ver)
         if bttery_id:
@@ -801,7 +849,7 @@ class BatteryDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 2020901
 
     #添加电池（将电池添加进入到电池数据表中）
     #param usr:当前登录用户
@@ -812,7 +860,7 @@ class BatteryDAO:
         if '3' in roles:
             batteryobj=self.session_uav.query(Battery).filter(Battery.battery_id == battery.battery_id).first()
             if batteryobj is None:
-                return -2
+                return 02021001
 
             batteryobj.battery_ver = battery.battery_ver
             batteryobj.battery_type = battery.battery_type
@@ -825,7 +873,7 @@ class BatteryDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 02021002
 
     #修改电池状态
     #param usr:当前登录用户
@@ -843,12 +891,13 @@ class BatteryDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 02021101
 
 #平板设备对象操作类
 #包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
 #author:Wu Wei
 #Version 1.0.0.0
+#所有错误代码以0203XXXX开始
 class PadDao:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -894,14 +943,23 @@ class PadDao:
     #param pad_status:查询平板状态
     #param page_size:每一页展示数据条数
     #返回查询总页数
+    #修改查询权限 wuwei 2018-08-16
     def query_pages(self,user,pad_type,pad_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         q = self.session_uav.query(Pad)
-        if '1' in roles and '5' not in roles:
+        roles=usrDao.get_role(user)
+
+        #修改查询权限 wuwei
+        if '1' not in roles:
+            return None
+        if user.user_role<=4:
+            q = q.filter(Pad.pad_use_dpartment == user.user_department)
+        if user.user_role<=3:
             q = q.filter(Pad.user_team == user.user_team)
+
         if pad_type:
             q = q.filter(Pad.pad_type == pad_type)
         if pad_status:
@@ -920,14 +978,20 @@ class PadDao:
     #param pad_status:平板状态
     #param page_index:当前显示的页数
     #param page_size:每一页大小
+    #修改查询权限 wuwei 2018-08-16
     def query_condition(self, user, pad_id, pad_ver, pad_type, pad_status, page_index, page_size):
         q = self.session_uav.query(Pad)
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' not in roles:
             return None
-        if '1' in roles and '5' not in roles:
+
+        #修改查询权限 wuwei
+        if user.user_role<=4:
+            q = q.filter(Pad.pad_use_dpartment == user.user_department)
+        if user.user_role<=3:
             q = q.filter(Pad.user_team == user.user_team)
+
         if pad_ver:
             q = q.filter(Pad.pad_ver==pad_ver)
         if pad_id:
@@ -1000,7 +1064,7 @@ class PadDao:
             existed = self.session_uav.query(Pad).filter(Pad.pad_id==pad.pad_id).first()
             #self.session_uav.rollback()
             if(existed is not None):
-                return -2
+                return 2030701
             self.session_uav.add(pad)
             try:
                 self.session_uav.commit()
@@ -1008,7 +1072,7 @@ class PadDao:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 2030702
 
     #修改平板信息
     #param usr:当前登录用户
@@ -1029,7 +1093,7 @@ class PadDao:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 2030801
 
     #修改平板状态
     #param usr:当前登录的用户
@@ -1047,13 +1111,14 @@ class PadDao:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 2030901
 
 
 #配件设备对象操作类
 #包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
 #author:Wu Wei
 #Version 1.0.0.0
+#所有错误代码以0204XXXX开始
 class PartsDao:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -1095,13 +1160,19 @@ class PartsDao:
     #param parts_status:配件状态
     #param page_size:每一页展示数据数量
     #返回所有配件数据
+    #修改查询权限
     def query_pages(self,user,parts_type,parts_status,page_size):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         q = self.session_uav.query(Parts)
-        if '1' in roles and '5' not in roles:
+        if '1' not in roles:
+            return None
+        # 修改查询权限 wuwei
+        if user.user_role<=4:
+            q = q.filter(Parts.parts_use_dpartment == user.user_department)
+        if user.user_role<=3:
             q = q.filter(Parts.user_team == user.user_team)
         if parts_type:
             q = q.filter(Parts.parts_type == parts_type)
@@ -1170,14 +1241,19 @@ class PartsDao:
     #param parts_status:配件状态
     #param page_index:当前显示页
     #param page_size:每页展示数据条数
+    #修改查询权限 wuwei 2018-08-16
     def query_condition(self,user,parts_id,parts_ver,parts_type,parts_status,page_index,page_size):
         q = self.session_uav.query(Parts)
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
         if '1' not in roles:
             return None
-        if '1' in roles and '5' not in roles:
+        # 修改查询权限 wuwei
+        if user.user_role<=4:
+            q = q.filter(Parts.parts_use_dpartment == user.user_department)
+        if user.user_role<=3:
             q = q.filter(Parts.user_team == user.user_team)
+
         if parts_ver:
             q = q.filter(Parts.parts_ver==parts_ver)
         if parts_id:
@@ -1198,7 +1274,7 @@ class PartsDao:
         if '2' in roles:
             exist = self.session_uav.query(Parts).filter(Parts.parts_id==parts.parts_id).first()
             if exist is not None:
-                return -2
+                return 2030701
 
             self.session_uav.add(parts)
             try:
@@ -1207,7 +1283,7 @@ class PartsDao:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 2030702
 
     #修改部件
     #param usr:当前登录的用户
@@ -1218,7 +1294,7 @@ class PartsDao:
         if '3' in roles:
             partstmp=self.session_uav.query(Parts).filter(Parts.parts_id==parts.parts_id).first()
             if partstmp is None:
-                return -2
+                return 2030801
 
             partstmp.parts_ver = parts.parts_ver
             partstmp.parts_type = parts.parts_type
@@ -1231,7 +1307,7 @@ class PartsDao:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 2030802
 
     #修改配件状态
     #param usr:当前登录的用户
@@ -1249,7 +1325,7 @@ class PartsDao:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 2030901
 
 #出入库管理
 #出入库管理功能比较复杂
@@ -1258,6 +1334,7 @@ class PartsDao:
 # 根据现在的经验来看实际上所有的设备都可以放在一张表中，避免查询的时候过多的判断，这个在后面三个月需要进行仔细思考后进行修改
 #author: Wu Wei
 #Version 1.0.0.0
+#所有错误代码以0205XXXX开始
 class ManagerDAO:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -1694,7 +1771,7 @@ class ManagerDAO:
             return self.updateManager(borrower, borrow_team, device, borrow_time, return_time, idx)
         if idx == 4 and device.pad_status == '在库':
             return self.updateManager(borrower, borrow_team, device, borrow_time, return_time, idx)
-        return -1
+        return 2051501
     #不是同一个班组的借用
     def borrow_notin_team(self,user,borrower,borrow_team,device,borrow_time,return_time,idx):
         #判断是否提交借调申请
@@ -1714,7 +1791,7 @@ class ManagerDAO:
                     approvalDao.approval_finished(borrower.user_id)
                     return self.updateManager(borrower, borrow_team, device, borrow_time, return_time, idx)
                 else:
-                    return -1
+                    return 2051601
             if idx == 2 and device.battery_status == '在库':
                 if ('5' in roles and device.battery_use_dpartment==approver.user_department) or\
                     ('4' in roles and device.user_team==approver.user_team):
@@ -1722,7 +1799,7 @@ class ManagerDAO:
                     approvalDao.approval_finished(borrower.user_id)
                     return self.updateManager(borrower, borrow_team, device, borrow_time, return_time, idx)
                 else:
-                    return -1
+                    return 2051602
             if idx == 3 and device.parts_status == '在库':
                 if ('5' in roles and device.parts_use_dpartment==approver.user_department) or\
                     ('4' in roles and device.user_team==approver.user_team):
@@ -1730,7 +1807,7 @@ class ManagerDAO:
                     approvalDao.approval_finished(borrower.user_id)
                     return self.updateManager(borrower, borrow_team, device, borrow_time, return_time, idx)
                 else:
-                    return -1
+                    return 2051603
             if idx == 4 and device.pad_status == '在库':
                 if ('5' in roles and device.pad_use_dpartment==approver.user_department) or\
                     ('4' in roles and device.user_team==approver.user_team):
@@ -1738,8 +1815,8 @@ class ManagerDAO:
                     approvalDao.approval_finished(borrower.user_id)
                     return self.updateManager(borrower, borrow_team, device, borrow_time, return_time, idx)
                 else:
-                    return -1
-        return -1
+                    return 2051604
+        return 2051605
     #同一个班组的借用列表
     def borrow_in_teamList(self,user,borrower,borrow_team,device,borrow_time,return_time,idx):
         #判断设备是否在库
@@ -1751,7 +1828,7 @@ class ManagerDAO:
             return 1
         if idx == 4 and device.pad_status == '在库':
             return 1
-        return -1
+        return 2051701
     #不是同一个班组的借用列表
     def borrow_notin_teamList(self,user,borrower,borrow_team,device,borrow_time,return_time,idx):
         #判断是否提交借调申请
@@ -1769,26 +1846,26 @@ class ManagerDAO:
                     ('4' in roles and device.user_team==approver.user_team):
                     return 1
                 else:
-                    return -1
+                    return 2051801
             if idx == 2 and device.battery_status == '在库':
                 if ('5' in roles and device.battery_use_dpartment==approver.user_department) or\
                     ('4' in roles and device.user_team==approver.user_team):
                     return 1
                 else:
-                    return -1
+                    return 2051802
             if idx == 3 and device.parts_status == '在库':
                 if ('5' in roles and device.parts_use_dpartment==approver.user_department) or\
                     ('4' in roles and device.user_team==approver.user_team):
                     return 1
                 else:
-                    return -1
+                    return 2051803
             if idx == 4 and device.pad_status == '在库':
                 if ('5' in roles and device.pad_use_dpartment==approver.user_department) or\
                     ('4' in roles and device.user_team==approver.user_team):
                     return 1
                 else:
-                    return -1
-        return -1
+                    return 2051804
+        return 2051805
 
 
     #数据借用，确认借用直接写进数据库中
@@ -1826,9 +1903,9 @@ class ManagerDAO:
             user_team = pad.user_team
             status = pad.pad_status
         if idx==0:
-            return -1
+            return 2051901
         if status!='在库':
-            return -2#设备未归还
+            return 2051902#设备未归还
 
 
         #判断是否是一个班组
@@ -1836,7 +1913,7 @@ class ManagerDAO:
         self.session_usr.rollback()
         #如果用户不存在
         if usr==None:
-            return -3
+            return 2051903
 
         #如果不是同一班组
         #userApprover = self.session_usr.query(User).filter(User.user_id==approver).first()
@@ -2019,7 +2096,7 @@ class ManagerDAO:
                 idx=4
 
             if not manager:
-                return -1
+                return 2052101
 
             if idx!=0:
                 self.session_uav.query(Manager).filter(Manager.device_id == manager.device_id and Manager.manager_status=='借用').update({Manager.manager_status: '归还',Manager.return_date:return_date}, synchronize_session=False)
@@ -2028,7 +2105,7 @@ class ManagerDAO:
                 except:
                     self.session_uav.rollback()
             else:
-                return -1
+                return 2052102
 
             if idx==1:
                 if device_cond=='正常':
@@ -2071,7 +2148,7 @@ class ManagerDAO:
                 except:
                     self.session_uav.rollback()
             return 1
-        return -5
+        return 2052103
 
     #设备归还列表（返回列表显示）
     #param usr:登录用户
@@ -2218,6 +2295,7 @@ class ManagerDAO:
 #故障设备表管理接口，查询故障，添加故障
 #author: Wu Wei
 #Version 1.0.0.0
+#所有错误代码以0206XXXX开始
 class FaultDao:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -2345,9 +2423,9 @@ class FaultDao:
             idx = 4
             devicestatus = pad.pad_status
         if idx==0:
-            return -2
+            return 2060601
         if devicestatus != '在库':
-            return -2
+            return 2060602
 
 
         if '2' in roles and '5' not in roles:
@@ -2371,7 +2449,7 @@ class FaultDao:
                 return 1
 
             else :
-                return -1
+                return 2060603
         if '5' in roles:
             if idx == 1:
                 self.updateDevice(device, fault)
@@ -2387,7 +2465,7 @@ class FaultDao:
             except:
                 self.session_uav.rollback()
             return 1
-        return -1
+        return 2060604
 
     #故障处理完成，完成的状态有两种分别为维修成功和报废（1,2）
     #param user:当前登录用户信息
@@ -2449,7 +2527,7 @@ class FaultDao:
                     self.session_uav.rollback()
                 return 1
         else:
-            return -1
+            return 2060701
     def faule_processManager(self,user,faultid,device,device_type,result):
         if device.device_use_dpartment == user.user_department:
             tmpfault = self.session_uav.query(Fault).filter(Fault.fault_id == faultid).first()
@@ -2507,7 +2585,7 @@ class FaultDao:
                     self.session_uav.rollback()
                 return 1
         else:
-            return -1
+            return 2060801
     
     #故障处理完成
     #param user:登录用户信息
@@ -2533,7 +2611,7 @@ class FaultDao:
         if pad:
             idx = 4
         if idx == 0:
-            return -2
+            return 2060901
 
         #普通用户只能处理本班组的设备
         if '2' in roles and '5' not in roles:
@@ -2581,7 +2659,7 @@ class FaultDao:
         if pad:
             idx = 4
         if idx == 0:
-            return -2
+            return 2061001
 
         #普通用户只能处理本班组的设备
         if '2' in roles and '5' not in roles:
@@ -2611,6 +2689,7 @@ class FaultDao:
 #故障报告的查询更新操作
 #author：Wu Wei
 #version: 1.0.0.0
+#所有错误代码以0207XXXX开始
 class FaultReportDao:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -2685,9 +2764,10 @@ class FaultReportDao:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 2070201
 
 #借调申请管理
+#所有错误代码以0208XXXX开始
 class ApprovalDao:
     def __init__(self):
         self.session_uav = Session_UAV()
@@ -2755,7 +2835,7 @@ class ApprovalDao:
                 self.session_uav.rollback()
             return 1
         else:
-            return -1
+            return 2080401
     
     #不批准借调
     #param user:当前登录用户
@@ -2789,15 +2869,15 @@ class ApprovalDao:
         #提交的批准人无权限批准
         userApproval=self.session_usr.query(User).filter(User.user_id==approval.approval_person).first()
         if userApproval is None:
-            return -2
+            return 2080601
         roleApproval = usrDao.get_role(userApproval)
         if '4' not in roleApproval and '5' not in roleApproval:
-            return -2
+            return 2080602
 
         roles=usrDao.get_role(userApproval)
         if '4' in roles or '5' in roles:
             if user.user_team!=approval.approval_team:
-                return -1
+                return 2080603
 
             approvalTmp = self.session_uav.query(Approval).filter(Approval.apply_person==approval.apply_person).first()
             #提交申请后申请未审核则状态为0，审核通过则状态为1，审核未空过则状态为2
@@ -2812,7 +2892,7 @@ class ApprovalDao:
                 self.session_uav.rollback()
             return 1
         else:
-            return -2
+            return 2080604
 
     #将申请添加到申请处理备份库中
     def approval_finished(self,apply_person):
