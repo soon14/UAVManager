@@ -40,9 +40,11 @@ class UserList(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             args = parser.parse_args()
             department = args.get('department')
@@ -51,11 +53,11 @@ class UserList(Resource):
             page_size = args.get('page_size')
             rs=self.userDao.query_users(user,department,team,page_index,page_size)
             if rs==None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '无权限查询用户信息','errorcode':10000000}), 401)
             else:
                 return rs
         else:
-            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
     
     def get(self):
         return self.post()
@@ -72,17 +74,20 @@ class UserGetID(Resource):
             user_id=data['user_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user == -1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
 
             rs = self.userDao.get_user_byId(user_id)
             if rs == None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '无权限查询用户信息','errorcode':10000000}), 401)
             else:
                 return rs
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -99,17 +104,19 @@ class DelUserID(Resource):
             user_id = data['user_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user == -1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             rs = self.userDao.delete_user_byId(user,user_id)
             if rs == None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '无权限删除用户','errorcode':10000000}), 401)
             else:
                 return rs
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -125,9 +132,11 @@ class UserPages(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user == -1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             args = parser.parse_args()
             department = args.get('department')
@@ -135,11 +144,11 @@ class UserPages(Resource):
             page_size = args.get('page_size')
             rs = self.userDao.query_users_pages(user, department, team, page_size)
             if rs == None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户无权限进行查询','errorcode':10000000}), 401)
             else:
                 return rs
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -166,18 +175,24 @@ class UserAdd(Resource):
             
             user = self.userDao.verify_token(token, '')
             if (not user):
-                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            elif user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
+
             rs=self.userDao.insert_user(userAdd,user)
-            if rs==-1:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            elif rs==-2:
-                return make_response(jsonify({'error': 'User existed'}), 400)
-            else:
-                return make_response(jsonify({'success': 'add user success'}), 200)
+            if rs==1010401 or rs==1010403:
+                return make_response(jsonify({'error': '添加的用户已经存在','errorcode':rs}), 401)
+            elif rs==1010402:
+                return make_response(jsonify({'error': '无权限添加非本班组用户','errorcode':rs}), 401)
+            elif rs==1010404:
+                return make_response(jsonify({'success': '无权限添加用户','errorcode':rs}), 401)
+            elif rs==1:
+                return make_response(jsonify({'success': '添加用户成功'}), 200)
         else:
-            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
     
     def get(self):
         return self.post()
@@ -204,18 +219,22 @@ class UserModify(Resource):
 
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            elif user == -1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
+
             rs = self.userDao.modify_user(userModify, user)
-            if rs == -1:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            elif rs == -2:
-                return make_response(jsonify({'error': 'User existed'}), 400)
+            if rs == 1010501 or rs==1010504:
+                return make_response(jsonify({'error': '用户不存在','errorcode':rs}), 401)
+            elif rs == 1010502 or rs ==1010503 or rs ==1010503:
+                return make_response(jsonify({'error': '当前用户无权限进行修改','errorcode':rs}), 400)
             else:
-                return make_response(jsonify({'success': 'add user success'}), 200)
+                return make_response(jsonify({'success': '添加用户成功'}), 200)
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -231,16 +250,19 @@ class UserRole(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             rs = self.userDao.get_role_type(user)
             if rs == None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '获取权限类别失败','errorcode':rs}), 401)
             else:
                 return rs
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -256,16 +278,19 @@ class UserDepartment(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             rs = self.userDao.get_role_department(user)
             if rs == None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '没有权限获取用户部门信息','errorcode':10000000}), 401)
             else:
                 return rs
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -281,16 +306,19 @@ class UserTeam(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             rs = self.userDao.get_role_team(user)
             if rs == None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '无权限获取用户班组信息','errorcode':1000000}), 401)
             else:
                 return rs
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -306,16 +334,19 @@ class UserTeams(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             rs = self.userDao.get_role_teams()
             if rs == None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '无权限查询班组信息','errorcode':10000000}), 401)
             else:
                 return rs
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -331,16 +362,19 @@ class TeamManager(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user == -1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+
             rs = self.userDao.get_teamManager(user)
             if rs == None:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '获取班组管理员失败','errorcode':10000000}), 401)
             else:
                 return rs
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()

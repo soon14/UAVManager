@@ -217,9 +217,11 @@ class UAVBatteryListPages(Resource):
             page_size = args.get('page_size')
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             return self.dao.query_pages(user,battery_type,battery_status,page_size)
 
@@ -250,19 +252,21 @@ class UAVBatteryAdd(Resource):
             battery_obj.battery_use_number = 0
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             rs = self.dao.add_battery(user, battery_obj)
             if rs == 1:
-                return make_response(jsonify({'success': 'add device success'}), 200)
-            elif rs==-2:
-                return make_response(jsonify({'existed': 'add device failed'}), 404)
+                return make_response(jsonify({'success': '添加电池成功'}), 200)
+            elif rs==2020901:
+                return make_response(jsonify({'existed': '待添加的电池已经存在，添加电池失败','errorcode':rs}), 404)
             else:
-                return make_response(jsonify({'failed': 'add device failed'}), 401)
+                return make_response(jsonify({'failed': '添加电池失败','errorcode':rs}), 401)
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '输入参数错误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -281,17 +285,19 @@ class UAVBatteryStatus(Resource):
             status = data['status']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             rs = self.dao.modify_battery_status(user, battery_id, status)
             if rs == 1:
-                return make_response(jsonify({'success': 'modify device status success'}), 200)
+                return make_response(jsonify({'success': '修改电池状态成功'}), 200)
             else:
-                return make_response(jsonify({'failed': 'modify device status failed'}), 401)
+                return make_response(jsonify({'failed': '用户无权限修改电池状态','errorcode':rs}), 401)
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '输入参数错误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -320,30 +326,18 @@ class UAVBatteryModify(Resource):
                 battery_obj.battery_use_dpartment = battery_dict[0]['use_department']
                 user = self.userDao.verify_token(token, '')
                 if (not user):
-                    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-                if user == -1:
-                    return make_response(jsonify({'error': 'token expired'}), 399)
+                    return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                if user == 1010301:
+                    return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                if user == 1010302:
+                    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
                 rs = self.dao.modify_battery(user, battery_obj)
                 if rs == 1:
-                    return make_response(jsonify({'success': 'add device success'}), 200)
-                else:
-                    return make_response(jsonify({'failed': 'add device failed'}), 401)
+                    return make_response(jsonify({'success': '修改电池状态成功'}), 200)
+                elif rs==2021001:
+                    return make_response(jsonify({'failed': '待修改的电池不存在','errorcode':rs}), 401)
             else:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            user = self.userDao.verify_token(token, '')
-            if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
-
-            rs = self.dao.modify_battery_status(user, battery_id, status)
-            if rs == 1:
-                return make_response(jsonify({'success': 'modify device status success'}), 200)
-            else:
-                return make_response(jsonify({'failed': 'modify device status failed'}), 401)
-        else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-
+                return make_response(jsonify({'error': '输入参数错误','errorcode':10000000}), 401)
     def get(self):
         return self.post()

@@ -47,7 +47,11 @@ class UAVPadList(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
             args = parser.parse_args()
             pad_status = args.get('pad_status')
             pad_type = args.get('pad_type')
@@ -55,7 +59,8 @@ class UAVPadList(Resource):
             page_size = args.get('page_size')
             return self.dao.query_condition(user, None, None, pad_type, pad_status, page_index, page_size)
         else:
-            return
+            return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
+
     def get(self):
         return self.post()
 
@@ -71,10 +76,15 @@ class UAVPadAll(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                if (not user):
+                    return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                if user == 1010301:
+                    return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                if user == 1010302:
+                    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
             return self.dao.query_all(user)
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
     def get(self):
         return self.post()
 
@@ -91,7 +101,11 @@ class UAVPadGetID(Resource):
             pad_id = data['pad_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
             return self.dao.query_condition(user, pad_id, None, None, None, 1, 1)
 
     def get(self):
@@ -113,7 +127,11 @@ class UAVPadListPages(Resource):
             page_size = args.get('page_size')
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
             return self.dao.query_pages(user,pad_type,pad_status,page_size)
 
     def get(self):
@@ -131,7 +149,12 @@ class UAVPadTypes(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                if (not user):
+                    return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                if user == 1010301:
+                    return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                if user == 1010302:
+                    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
             return self.dao.query_type()
 
     def get(self):
@@ -161,17 +184,21 @@ class UAVPadAdd(Resource):
             pad_obj.pad_use_number = 0
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             rs = self.dao.add_pad(user,pad_obj)
             if rs==1:
-                return make_response(jsonify({'success': 'add device success'}), 200)
-            elif rs==-2:
-                return make_response(jsonify({'existed': 'add device failed'}), 404)
-            else:
-                return make_response(jsonify({'failed': 'add device failed'}), 401)
+                return make_response(jsonify({'success': '添加平板设备成功'}), 200)
+            elif rs==2030701:
+                return make_response(jsonify({'existed': '平板设备不存在','errorcode':rs}), 401)
+            elif rs==2030702:
+                return make_response(jsonify({'existed': '无权限添加平板设备', 'errorcode': rs}), 401)
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -198,15 +225,19 @@ class UAVPadModify(Resource):
             pad_obj.pad_use_dpartment = pad_dict[0]['use_department']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             rs = self.dao.modify_pad(user,pad_obj)
             if rs==1:
-                return make_response(jsonify({'success': 'add device success'}), 200)
+                return make_response(jsonify({'success': '修改设备成功'}), 200)
             else:
-                return make_response(jsonify({'failed': 'add device failed'}), 401)
+                return make_response(jsonify({'failed': '无权限修改设备','errorcode':rs}), 401)
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -225,15 +256,19 @@ class UAVPadStatus(Resource):
             status = data['status']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             rs = self.dao.modify_pad_status(user,pad_id,status)
             if rs==1:
-                return make_response(jsonify({'success': 'modify device status success'}), 200)
+                return make_response(jsonify({'success': '修改平板状态成功'}), 200)
             else:
-                return make_response(jsonify({'failed': 'modify device status failed'}), 401)
+                return make_response(jsonify({'failed': '无权限修改平板状态','errorcode':rs}), 401)
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -250,15 +285,19 @@ class UAVPadsStatistic(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                 return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             rs=self.dao.query_statistic(user,pad_status)
-            if rs==-1:
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            if rs==None:
+                return make_response(jsonify({'error': '统计平板信息失败','errorcode':10000000}), 401)
             else:
                 return rs
         else:
-            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self,pad_status):
         return self.post(pad_status)

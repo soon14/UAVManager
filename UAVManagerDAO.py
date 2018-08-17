@@ -601,7 +601,7 @@ class DeviceDAO:
             #首先判断无人机是否存在
             exist = self.session_uav.query(Device).filter(Device.device_id==device.device_id).first()
             if exist is not None:
-                return 02011101
+                return 2011101
             #不存在则添加
             self.session_uav.add(device)
             try:
@@ -610,7 +610,7 @@ class DeviceDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return 02011102
+            return 2011102
 
     #修改无人机设备状态
     #param usr:当前登录用户信息
@@ -624,7 +624,7 @@ class DeviceDAO:
 
             #无人机不存在
             if uav is None:
-                return  02011201
+                return  2011201
 
             #存在则修改
             uav.device_ver=device.device_ver
@@ -840,7 +840,7 @@ class BatteryDAO:
             #首先判断是否存在
             exist = self.session_uav.query(Battery).filter(Battery.battery_id==battery.battery_id).first()
             if exist is not None:
-                return -2
+                return 2020901
 
             self.session_uav.add(battery)
             try:
@@ -849,7 +849,7 @@ class BatteryDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return 2020901
+            return 2020902
 
     #添加电池（将电池添加进入到电池数据表中）
     #param usr:当前登录用户
@@ -860,7 +860,7 @@ class BatteryDAO:
         if '3' in roles:
             batteryobj=self.session_uav.query(Battery).filter(Battery.battery_id == battery.battery_id).first()
             if batteryobj is None:
-                return 02021001
+                return 2021001
 
             batteryobj.battery_ver = battery.battery_ver
             batteryobj.battery_type = battery.battery_type
@@ -873,7 +873,7 @@ class BatteryDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return 02021002
+            return 2021002
 
     #修改电池状态
     #param usr:当前登录用户
@@ -1909,7 +1909,7 @@ class ManagerDAO:
 
 
         #判断是否是一个班组
-        usr=self.session_usr.query(User).filter(User.user_id==borrower).first()
+        usr=self.session_usr.query(User).filter(User.user_name==borrower).first()
         self.session_usr.rollback()
         #如果用户不存在
         if usr==None:
@@ -1978,7 +1978,7 @@ class ManagerDAO:
 
             borrower = borrowItem.borrower_name
             #判断是否是一个班组
-            usr=self.session_usr.query(User).filter(User.user_id==borrower).first()
+            usr=self.session_usr.query(User).filter(User.user_name==borrower).first()
             self.session_usr.rollback()
             #如果用户不存在
             if usr==None:
@@ -2318,7 +2318,17 @@ class FaultDao:
             q = q.filter(Fault.device_ver == device_ver)
         allFaults = q.limit(page_size).offset((page_index-1)*page_size).all()
         self.session_uav.rollback()
-        return class_to_dict(allFaults)
+        items=class_to_dict(allFaults)
+        rsItems=[]
+        mngr=ManagerDAO()
+        for item in items:
+            itemMngr = mngr.manager_query_latestBorrower(item['device_id'])
+            if itemMngr is not None:
+                item['lastborrower']=itemMngr.borrower_name
+            else:
+                item['lastborrower']=''
+            rsItems.append(item)
+        return  rsItems
 
     #查询故障页数
     #param user:当前登录用户

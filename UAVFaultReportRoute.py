@@ -38,13 +38,15 @@ class FaultReportQuery(Resource):
             fpid  = data['fault_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             return self.dao.query(fpid)
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -80,19 +82,20 @@ class FaultReportUpdate(Resource):
             report.fault_crash_electric = reportdict[0]['fault_crash_electric']
             report.fault_crash_around = reportdict[0]['fault_crash_around']
 
-
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-            if user==-1:
-                return make_response(jsonify({'error': 'token expired'}), 399)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
 
             if self.dao.update(user,report)==1:
-                return make_response(jsonify({'success': 'Update success'}), 200)
+                return make_response(jsonify({'success': '更新炸机报告成功','errorcode':10000000}), 200)
             else:
-                return make_response(jsonify({'error': 'Unauthorized update'}), 401)
+                return make_response(jsonify({'error': '无权限更新炸机报告','errorcode':10000000}), 401)
         else:
-            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()

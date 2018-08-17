@@ -47,7 +47,7 @@ class UAVApprovalList(Resource):
             else:
                 return rs
         else:
-            return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+            return  make_response(jsonify({'error': '传入参数错误','errorcode':10000000}), 401)
 
     def get(self):
         return self.post()
@@ -89,10 +89,10 @@ class UAVApprovalAdd(Resource):
             if rs==1:
                 return make_response(jsonify({'success': '添加借调申请成功','errorcode':10000000}), 200)
             elif rs==2080601:
-                return make_response(jsonify({'error': '批准人不存在'},'errorcode':rs), 401)
+                return make_response(jsonify({'error': '批准人不存在','errorcode':rs}), 401)
             elif rs== 2080602 or rs==2080603:
                 #批准人不存在
-                return make_response(jsonify({'error': '批准人无批准权限'},'errorcode':rs), 501)
+                return make_response(jsonify({'error': '批准人无批准权限','errorcode':rs}), 501)
         else:
             return  make_response(jsonify({'error': '输入参数错误','errorcode':10000000}), 401)
 
@@ -122,14 +122,12 @@ class UAVApprovalAgree(Resource):
             approval.pad_ver = approvaldict[0]['pad_ver']
             approval.pad_number = approvaldict[0]['pad_number']
             approval.approval_person = user.user_id
-           if (not user):
+            if (not user):
                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
             if user == 1010301:
                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
             if user == 1010302:
                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
-
-
             rs=self.dao.approval_aggree(user,approval)
             if rs==2080401:
                 return make_response(jsonify({'error': '没有权限进行审批','errorcode':2080401}), 401)
@@ -231,7 +229,7 @@ class UAVApprovalListApprove(Resource):
 
             rs=self.dao.approval_query_approve(user)
             if rs==2080301:
-                return make_response(jsonify({'error': '没有权限进行查询','errorcode',rs}), 401)
+                return make_response(jsonify({'error': '没有权限进行查询','errorcode':rs}), 401)
             else:
                 return rs
         else:
