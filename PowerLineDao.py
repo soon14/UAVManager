@@ -505,12 +505,21 @@ class DefectDao:
         #查询线路所有杆塔
         lines  = self.session_power.query(Lines).filter(Lines.lines_name==line_name).all()
         towers = self.session_power.query(Towers).filter(Towers.tower_linename==line_name).all()
-        photos = self.session_power.query(Photo.id).filter(Photo.photo_date<end_time,Photo.photo_date>st_time).all()
+        qphoto= self.session_power.query(Photo.photo_id)
+        if st_time != None:
+            qphoto=qphoto.filter(Photo.photo_date>st_time)
+        if end_time != None:
+            qphoto=qphoto.filter(Photo.photo_date<end_time)
+        photos = qphoto.all()
+        photoids = []
+        for itemphoto in photos:
+            photoids.append(itemphoto[0])
+
         lineids=[]
         labels=[]
         for toweritem in towers:
             item={}
-            num=self.session_power.query(func.count(Defect.tb_defect_id)).filter(Defect.tb_defect_towerid==toweritem.tower_id,Defect.tb_defect_photoid.in_(photos)).scalar()
+            num=self.session_power.query(func.count(Defect.tb_defect_id)).filter(Defect.tb_defect_towerid==toweritem.tower_id,Defect.tb_defect_photoid.in_(photoids)).scalar()
             item['tower_lng']=toweritem.tower_lng
             item['tower_lat'] = toweritem.tower_lat
             item['tower_elevation'] = toweritem.tower_elevation

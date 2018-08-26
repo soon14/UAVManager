@@ -29,9 +29,9 @@ from datetime import datetime,date,time
 parser = reqparse.RequestParser()
 parser.add_argument('tower_id', type=int, location='args')
 parser.add_argument('photo_id', type=int, location='args')
-parser.add_argument('linename', type=int, location='args')
-parser.add_argument('start_time', type=int, location='args')
-parser.add_argument('end_time', type=int, location='args')
+parser.add_argument('linename', type=str, location='args')
+parser.add_argument('start_time', type=str, location='args')
+parser.add_argument('end_time', type=str, location='args')
 
 
 #查询缺陷等级的请求的响应请求与响应
@@ -119,9 +119,16 @@ class DefectLineName(Resource):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         args = parser.parse_args()
         linename = args.get('linename')
-        sttime = datetime.strptime(args.get('start_time'), '%Y-%m-%d').date()
-        endtime = datetime.strptime(args.get('end_time'), '%Y-%m-%d').date()
-        rs=self.dao.query_defect_tower(None,linename)
+        strSttime=args.get('start_time')
+        strEndtime=args.get('end_time')
+        sttime=None
+        endtime=None
+        endtime=None
+        if strSttime !=None:
+            sttime = datetime.strptime(strSttime, '%Y-%m-%d').date()
+        if strEndtime !=None:
+            endtime = datetime.strptime(strEndtime, '%Y-%m-%d').date()
+        rs=self.dao.query_defect_linename(None,linename,sttime,endtime);
         if rs==None:
             return make_response(jsonify({'error': '查询杆塔故障信息失败','errorcode' : 10000000}), 401)
         else:
