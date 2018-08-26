@@ -47,11 +47,11 @@ class UAVBatteryList(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             args = parser.parse_args()
             battery_status = args.get('battery_status')
@@ -77,11 +77,11 @@ class UAVBatteryAll(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             return self.dao.query_all(user)
         else:
@@ -103,11 +103,11 @@ class UAVBatteryGetID(Resource):
             battery_id = data['battery_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
 
             return self.dao.query_condition(user, battery_id, None, None,None,1, 1)
@@ -129,11 +129,11 @@ class UAVBatteryStatisticsList(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.dao.query_statistic_all(user)
             if rs == None:
@@ -158,14 +158,14 @@ class UAVBatteryStatistic(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs=self.dao.query_statistic(user,battery_status)
-            if rs==-None:
+            if rs==None:
                 return make_response(jsonify({'error': '获取统计信息失败','errorcode':10000000}), 401)
             else:
                 return rs
@@ -187,11 +187,11 @@ class UAVBatteryTypes(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs=self.dao.query_type()
             return rs
@@ -217,11 +217,11 @@ class UAVBatteryListPages(Resource):
             page_size = args.get('page_size')
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             return self.dao.query_pages(user,battery_type,battery_status,page_size)
 
@@ -252,19 +252,19 @@ class UAVBatteryAdd(Resource):
             battery_obj.battery_use_number = 0
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.dao.add_battery(user, battery_obj)
             if rs == 1:
                 return make_response(jsonify({'success': '添加电池成功'}), 200)
             elif rs==2020901:
-                return make_response(jsonify({'existed': '待添加的电池已经存在，添加电池失败','errorcode':rs}), 404)
+                return make_response(jsonify({'error': '待添加的电池已经存在，添加电池失败','errorcode':rs}), 404)
             else:
-                return make_response(jsonify({'failed': '添加电池失败','errorcode':rs}), 401)
+                return make_response(jsonify({'error': '添加电池失败','errorcode':rs}), 401)
         else:
             return make_response(jsonify({'error': '输入参数错误','errorcode':10000000}), 401)
 
@@ -285,17 +285,17 @@ class UAVBatteryStatus(Resource):
             status = data['status']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.dao.modify_battery_status(user, battery_id, status)
             if rs == 1:
                 return make_response(jsonify({'success': '修改电池状态成功'}), 200)
             else:
-                return make_response(jsonify({'failed': '用户无权限修改电池状态','errorcode':rs}), 401)
+                return make_response(jsonify({'error': '用户无权限修改电池状态','errorcode':rs}), 401)
         else:
             return make_response(jsonify({'error': '输入参数错误','errorcode':10000000}), 401)
 
@@ -326,17 +326,17 @@ class UAVBatteryModify(Resource):
                 battery_obj.battery_use_dpartment = battery_dict[0]['use_department']
                 user = self.userDao.verify_token(token, '')
                 if (not user):
-                    return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                    return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
                 if user == 1010301:
-                    return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                    return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
                 if user == 1010302:
-                    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
                 rs = self.dao.modify_battery(user, battery_obj)
                 if rs == 1:
                     return make_response(jsonify({'success': '修改电池状态成功'}), 200)
                 elif rs==2021001:
-                    return make_response(jsonify({'failed': '待修改的电池不存在','errorcode':rs}), 401)
+                    return make_response(jsonify({'error': '待修改的电池不存在','errorcode':rs}), 401)
             else:
                 return make_response(jsonify({'error': '输入参数错误','errorcode':10000000}), 401)
     def get(self):

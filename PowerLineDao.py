@@ -27,7 +27,7 @@ sys.setdefaultencoding('utf8')
 
 import ConfigParser
 import json
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker,query
 from UAVManagerEntity import User, Lines, Towers,Photo,DefectLevel,DefectPart,Defect,DataService, class_to_dict
 from UAVManagerDAO import UserDAO
@@ -495,6 +495,49 @@ class DefectDao:
         photo = self.session_power.query(Photo).filter(Photo.photo_id.in_(photoids)).all()
         self.session_power.rollback()
         return class_to_dict(photo)
+
+    #查询线路每一级杆塔对应的缺陷的数目
+    #param user:输入的用户信息
+    #param line_name:线路名称
+    #param st_time:起始时间
+    #param end_time:结束时间
+    def query_defect_linename(self,user,line_name,st_time,end_time):
+        #查询线路所有杆塔
+        lines  = self.session_power.query(Lines).filter(Lines.lines_name==line_name).all()
+        towers = self.session_power.query(Towers).filter(Towers.tower_linename==line_name).all()
+        photos = self.session_power.query(Photo.id).filter(Photo.photo_date<end_time,Photo.photo_date>st_time).all()
+        lineids=[]
+        labels=[]
+        for toweritem in towers:
+            item={}
+            num=self.session_power.query(func.count(Defect.tb_defect_id)).filter(Defect.tb_defect_towerid==toweritem.tower_id,Defect.tb_defect_photoid.in_(photos)).scalar()
+            item['tower_lng']=toweritem.tower_lng
+            item['tower_lat'] = toweritem.tower_lat
+            item['tower_elevation'] = toweritem.tower_elevation
+            item['tower_linename'] = toweritem.tower_linename
+            item['tower_idx'] = toweritem.tower_idx
+            item['number'] = num
+            labels.append(item)
+        return labels
+
+    def query_defect_line_voltage(self,user,voltage,st_time,end_time):
+        #查询线路所有杆塔
+        lines  = self.session_power.query(Lines.lines_name).filter(Lines.lines_voltage==voltage).all()
+        towers = self.session_power.query(Towers).filter(Towers.tower_linename.in_(lines)).all()
+        photos = self.session_power.query(Photo.id).filter(Photo.photo_date<end_time,Photo.photo_date>st_time).all()
+        lineids=[]
+        labels=[]
+        for toweritem in towers:
+            item={}
+            num=self.session_power.query(func.count(Defect.tb_defect_id)).filter(Defect.tb_defect_towerid==toweritem.tower_id,Defect.tb_defect_photoid.in_(photos)).scalar()
+            item['tower_lng']=toweritem.tower_lng
+            item['tower_lat'] = toweritem.tower_lat
+            item['tower_elevation'] = toweritem.tower_elevation
+            item['tower_linename'] = toweritem.tower_linename
+            item['tower_idx'] = toweritem.tower_idx
+            item['number'] = num
+            labels.append(item)
+        return labels
 
     #根据杆塔id和照片id查询对应的照片实际上有照片id了就不太需要杆塔id了 有点鸡肋
     def query_search(self,tower_id,photo_id):

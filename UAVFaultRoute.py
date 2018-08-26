@@ -41,11 +41,11 @@ class UAVFaultList(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             args = parser.parse_args()
             page_index = args.get('page_index')
@@ -73,11 +73,11 @@ class UAVFaultListPages(Resource):
             device_ver = args.get('device_ver')
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             return self.dao.query_pages(user,device_ver,page_size)
         else:
@@ -98,11 +98,11 @@ class UAVFaultDeviceVersion(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             return self.dao.query_types()
         else:
@@ -123,11 +123,11 @@ class UAVFaultStatistics(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs=self.dao.query_statistics(user)
             if rs==None:
@@ -161,11 +161,11 @@ class UAVFaultAdd(Resource):
 
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs=self.dao.add_fault(user,fault)
             if rs==2060601:
@@ -194,11 +194,11 @@ class UAVFaultFinished(Resource):
 
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs=1
             for item in fault_list:
@@ -229,11 +229,11 @@ class UAVFaultScrap(Resource):
             fault_list = data['fault_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = 1
             for item in fault_list:
@@ -247,7 +247,7 @@ class UAVFaultScrap(Resource):
             else:
                 return make_response(jsonify({'success': '报废处理成功'}), 200)
         else:
-            return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
+            return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
     def get(self):
         return self.post()

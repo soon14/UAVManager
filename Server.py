@@ -14,7 +14,8 @@ from flask_restful import Api
 from flask_httpauth import HTTPBasicAuth
 from flask import Flask, render_template
 
-import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPadRoute,UAVFaultReportRoute,PhotoUpload,PowerLinesRoute,UserManagerRoute,DefectRoute,DataServiceRoute
+import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPlanRoute
+import UAVPadRoute,UAVFaultReportRoute,PhotoUpload,PowerLinesRoute,UserManagerRoute,DefectRoute,DataServiceRoute
 import UAVManagerDAO
 
 auth = HTTPBasicAuth()
@@ -77,6 +78,7 @@ api.add_resource(UserManagerRoute.UserTeam,'/usermanager/api/v1.0/user/team')
 api.add_resource(UserManagerRoute.UserTeams,'/usermanager/api/v1.0/user/teams')
 #get user team manager
 api.add_resource(UserManagerRoute.TeamManager,'/usermanager/api/v1.0/user/teammanager')
+api.add_resource(UserManagerRoute.TeamUsers,'/usermanager/api/v1.0/team/user')
 #api.add_resource(UserManagerRoute.AuthorityAdd,'/usermanager/api/v1.0/user/AddAuthority')
 
 
@@ -164,6 +166,10 @@ api.add_resource(UAVApporvalRoute.UAVApprovalAdd, '/uavmanager/api/v1.0/approval
 api.add_resource(UAVApporvalRoute.UAVApprovalAgree, '/uavmanager/api/v1.0/approval/agree')
 api.add_resource(UAVApporvalRoute.UAVApprovalDisagree, '/uavmanager/api/v1.0/approval/disagree')
 
+
+#查询巡检计划
+api.add_resource(UAVPlanRoute.UAVPlanSearch,'/uavmanager/api/v1.0/plan/search')
+
 ###################################################################文件上传模块
 api.add_resource(PhotoUpload.FileUpload,'/gis/api/v1.0/fileupload')
 api.add_resource(PhotoUpload.FileUploadDraw,'/gis/api/v1.0/fileuploaddraw')
@@ -201,9 +207,11 @@ api.add_resource(PowerLinesRoute.PowerTowerPhotoDate,'/gis/api/v1.0/tower/photod
 api.add_resource(DefectRoute.DefectLevel, '/gis/api/v1.0/defectlevel')
 api.add_resource(DefectRoute.DefectPart, '/gis/api/v1.0/defectPart')
 api.add_resource(DefectRoute.DefectTowerID,'/gis/api/v1.0/searchdefect/towerid')
+api.add_resource(DefectRoute.DefectLineName,'/gis/api/v1.0/searchdefect/linename')
 api.add_resource(DefectRoute.DefectPhotoID,'/gis/api/v1.0/searchdefect/photoid')
 api.add_resource(DefectRoute.DefectPhotoIDSearch,'/gis/api/v1.0/defectsearch')
 api.add_resource(DefectRoute.DefectAdd,'/gis/api/v1.0/defectadd')
+
 
 api.add_resource(DataServiceRoute.DataServiceAdd, '/gis/api/v1.0/dataservice/add')
 api.add_resource(DataServiceRoute.DataServiceModify,'/gis/api/v1.0/dataservice/modify')

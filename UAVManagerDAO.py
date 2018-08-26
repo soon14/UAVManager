@@ -34,7 +34,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker,query
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import  SignatureExpired,BadSignature
-from UAVManagerEntity import User, Role, Role_basic, Manager,Battery,Device,Pad,Parts,Approval,Fault,FaultReport,Approval_db, class_to_dict
+from UAVManagerEntity import User, Role, Role_basic, Manager,Battery,Device,Pad,Parts,Approval,Fault,FaultReport,Approval_db,Plan, class_to_dict
 
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
@@ -324,7 +324,7 @@ class UserDAO:
                 roles.append(tmpItem)
         return json.dumps(roles)
 
-    #获取用户所在部门
+    #获取所有用户所在部门信息
     #param user:用户信息
     #返回用户所在部门
     def get_role_department(self,user):
@@ -348,7 +348,7 @@ class UserDAO:
         else:
             return None
 
-    #获取用户所在班组
+    #获取所有用户所在班组信息
     #param user:用户信息
     #返回用户所在班组
     def get_role_team(self,user):
@@ -396,6 +396,30 @@ class UserDAO:
             item['team_manager'] = i.user_name
             ret.append(item)
         return  ret
+
+    #获取当前登录用户所在班组信息
+    #如果当前登录用户是班组管理员则展示本班组用户
+    #如果当前登录用户是部门管理员则展示本部门用户
+    #如果当前登录用户是总管理员则展示所有用户
+    #param loginuser:当前登录的用户信息
+    #返回用户
+    def get_teamUser(self,loginuser):
+        teamusers=[]
+        if loginuser.user_role == 3:
+            teamusers=self.session_usr.query(User).filter(User.user_department==loginuser.user_department,User.user_team==loginuser.user_team).all()
+        elif loginuser.user_role == 4:
+            teamusers=self.session_usr.query(User).filter(User.user_department==loginuser.user_department).all()
+        elif loginuser.user_role == 5:
+            teamusers=self.session_usr.query(User).all()
+        else:
+            return 1011501
+        #解析用户名称
+        rs_teamUsers=[]
+        for item in teamusers:
+            tmp={}
+            tmp['username']=item.user_name
+            rs_teamUsers.append(tmp)
+        return rs_teamUsers
 
 #无人机设备对象操作类
 #包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
@@ -537,17 +561,30 @@ class DeviceDAO:
         rs = self.session_uav.execute(sql).fetchall()
         self.session_uav.rollback()
         ret=[]
-        for idx in rs:
-            item = {}
-            strType=idx[0]
-            item['name']=strType
-            item['count']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_use_dpartment==user.user_department).all())
-            item['instock']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='在库',Device.device_use_dpartment==user.user_department).all())
-            item['removal'] = len(self.session_uav.query(Device).filter(Device.device_type == strType, Device.device_status == '出库',Device.device_use_dpartment==user.user_department).all())
-            item['maintain']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='维修',Device.device_use_dpartment==user.user_department).all())
-            item['scrap'] = len(self.session_uav.query(Device).filter(Device.device_type == strType, Device.device_status == '报废',Device.device_use_dpartment==user.user_department).all())
-            item['lost']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='丢失',Device.device_use_dpartment==user.user_department).all())
-            ret.append(item)
+        if user.user_role<=4:
+            for idx in rs:
+                item = {}
+                strType=idx[0]
+                item['name']=strType
+                item['count']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_use_dpartment==user.user_department).all())
+                item['instock']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='在库',Device.device_use_dpartment==user.user_department).all())
+                item['removal'] = len(self.session_uav.query(Device).filter(Device.device_type == strType, Device.device_status == '出库',Device.device_use_dpartment==user.user_department).all())
+                item['maintain']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='维修',Device.device_use_dpartment==user.user_department).all())
+                item['scrap'] = len(self.session_uav.query(Device).filter(Device.device_type == strType, Device.device_status == '报废',Device.device_use_dpartment==user.user_department).all())
+                item['lost']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='丢失',Device.device_use_dpartment==user.user_department).all())
+                ret.append(item)
+        else:
+            for idx in rs:
+                item = {}
+                strType=idx[0]
+                item['name']=strType
+                item['count']=len(self.session_uav.query(Device).filter(Device.device_type==strType).all())
+                item['instock']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='在库').all())
+                item['removal'] = len(self.session_uav.query(Device).filter(Device.device_type == strType, Device.device_status == '出库').all())
+                item['maintain']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='维修').all())
+                item['scrap'] = len(self.session_uav.query(Device).filter(Device.device_type == strType, Device.device_status == '报废').all())
+                item['lost']=len(self.session_uav.query(Device).filter(Device.device_type==strType,Device.device_status=='丢失').all())
+                ret.append(item)
         return json.dumps(ret)
 
     #获取设备类型和设备型号
@@ -792,17 +829,30 @@ class BatteryDAO:
         sql = 'select battery_type from tb_battery where battery_use_dpartment=\'' + user.user_department + '\' group by battery_type;'
         rs = self.session_uav.execute(sql).fetchall()
         ret=[]
-        for idx in rs:
-            item = {}
-            strType=idx[0]
-            item['name']=strType
-            item['count']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.user_team==user.user_team).all())
-            item['instock']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='在库',Battery.user_team==user.user_team).all())
-            item['removal']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='出库',Battery.user_team==user.user_team).all())
-            item['maintain']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='维修',Battery.user_team==user.user_team).all())
-            item['scrap']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='报废',Battery.user_team==user.user_team).all())
-            item['lost'] = len(self.session_uav.query(Battery).filter(Battery.battery_type == strType, Battery.battery_status == '丢失',Battery.user_team == user.user_team).all())
-            ret.append(item)
+        if user.user_role<=4:
+            for idx in rs:
+                item = {}
+                strType=idx[0]
+                item['name']=strType
+                item['count']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_use_dpartment==user.user_department).all())
+                item['instock']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='在库',Battery.battery_use_dpartment==user.user_department).all())
+                item['removal']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='出库',Battery.battery_use_dpartment==user.user_department).all())
+                item['maintain']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='维修',Battery.battery_use_dpartment==user.user_department).all())
+                item['scrap']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='报废',Battery.battery_use_dpartment==user.user_department).all())
+                item['lost'] = len(self.session_uav.query(Battery).filter(Battery.battery_type == strType, Battery.battery_status == '丢失',Battery.battery_use_dpartment==user.user_department).all())
+                ret.append(item)
+        else:
+            for idx in rs:
+                item = {}
+                strType=idx[0]
+                item['name']=strType
+                item['count']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType).all())
+                item['instock']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='在库').all())
+                item['removal']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='出库').all())
+                item['maintain']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='维修').all())
+                item['scrap']=len(self.session_uav.query(Battery).filter(Battery.battery_type==strType,Battery.battery_status=='报废').all())
+                item['lost'] = len(self.session_uav.query(Battery).filter(Battery.battery_type == strType, Battery.battery_status == '丢失').all())
+                ret.append(item)
         return json.dumps(ret)
 
     #查询电池类型
@@ -891,7 +941,7 @@ class BatteryDAO:
                 self.session_uav.rollback()
             return 1
         else:
-            return 02021101
+            return 2021101
 
 #平板设备对象操作类
 #包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
@@ -1190,12 +1240,12 @@ class PartsDao:
     def query_statistic(self,user,part_status):
         usrDao=UserDAO()
         roles = usrDao.get_role(user)
-        if '1' in roles and '5' not in roles:
+        if user.user_role<=4:
             sql=''
             if(part_status!='总数'):
-                sql='select parts_type,count(parts_type) from tb_parts where user_team=\''+user.user_team+'\'&& parts_status=\''+part_status+'\' group by parts_type;'
+                sql='select parts_type,count(parts_type) from tb_parts where user_department=\''+user.user_department+'\'&& parts_status=\''+part_status+'\' group by parts_type;'
             else:
-                sql = 'select parts_type,count(parts_type) from tb_parts where user_team=\'' + user.user_team + '\' group by parts_type;'
+                sql = 'select parts_type,count(parts_type) from tb_parts where user_department=\'' + user.user_department + '\' group by parts_type;'
             rs = self.session_uav.execute(sql).fetchall()
             ret = []
             for i in rs:
@@ -1204,7 +1254,7 @@ class PartsDao:
                 item['value']=i[1]
                 ret.append(item)
             return json.dumps(ret)
-        elif '5' in roles:
+        elif user.user_role>=5:
             sql=''
             if(part_status!='总数'):
                 sql='select parts_type, count(parts_type) from tb_parts where parts_status=\''+part_status+'\' group by parts_type;'
@@ -2079,11 +2129,11 @@ class ManagerDAO:
     def manager_return(self,user,device_id,return_date,device_cond):
         usrDao=UserDAO()
         roles=usrDao.get_role(user)
-        if '4' in roles or '5' in roles:
-            device = self.session_uav.query(Device).filter(Device.device_id==device_id).first()
-            battery= self.session_uav.query(Battery).filter(Battery.battery_id==device_id).first()
-            part   = self.session_uav.query(Battery).filter(Parts.parts_id==device_id).first()
-            pad = self.session_uav.query(Battery).filter(Pad.pad_id == device_id).first()
+        if user.user_role>=3:
+            device = self.session_uav.query(Device).filter(Device.device_id==device_id,Device.user_team==user.user_team).first()
+            battery= self.session_uav.query(Battery).filter(Battery.battery_id==device_id,Battery.user_team==user.user_team).first()
+            part   = self.session_uav.query(Battery).filter(Parts.parts_id==device_id,Parts.user_team==user.user_team).first()
+            pad = self.session_uav.query(Battery).filter(Pad.pad_id == device_id,Pad.user_team==user.user_team).first()
             manager = self.session_uav.query(Manager).filter(Manager.device_id==device_id,Manager.manager_status=='借用').first()
             idx=0
             if device:
@@ -2106,6 +2156,7 @@ class ManagerDAO:
                     self.session_uav.rollback()
             else:
                 return 2052102
+
 
             if idx==1:
                 if device_cond=='正常':
@@ -2199,24 +2250,24 @@ class ManagerDAO:
                 result.append(tmp)
             if idx==2:
                 tmp['type'] = battery.battery_type
-                tmp['id'] = battery.device_id
+                tmp['id'] = battery.battery_id
                 tmp['team'] = battery.user_team
                 tmp['return_date'] = returnItem.return_date.strftime('%Y-%m-%d')
-                tmp['borrower'] = self.manager_query_latestBorrower(device.device_id).borrower_name
+                tmp['borrower'] = self.manager_query_latestBorrower(battery.battery_id).borrower_name
                 result.append(tmp)
             if idx==3:
                 tmp['type'] = part.parts_type
                 tmp['id'] = part.parts_id
                 tmp['team'] = part.user_team
                 tmp['return_date'] = returnItem.return_date.strftime('%Y-%m-%d')
-                tmp['borrower'] = self.manager_query_latestBorrower(device.device_id).borrower_name
+                tmp['borrower'] = self.manager_query_latestBorrower(part.parts_id).borrower_name
                 result.append(tmp)
             if idx==4:
                 tmp['type'] = pad.pad_type
                 tmp['id'] = pad.pad_id
                 tmp['team'] = pad.user_team
                 tmp['return_date'] = returnItem.return_date.strftime('%Y-%m-%d')
-                tmp['borrower'] = self.manager_query_latestBorrower(device.device_id).borrower_name
+                tmp['borrower'] = self.manager_query_latestBorrower(pad.pad_id).borrower_name
                 result.append(tmp)
         #返回
         return result
@@ -2777,6 +2828,8 @@ class FaultReportDao:
             return 2070201
 
 #借调申请管理
+#author：Wu Wei
+#version: 1.0.0.0
 #所有错误代码以0208XXXX开始
 class ApprovalDao:
     def __init__(self):
@@ -2862,6 +2915,7 @@ class ApprovalDao:
                     self.session_uav.commit()
                 except:
                     self.session_uav.rollback()
+                return 1
         elif '5' in roles:
             self.session_uav.query(Approval).filter(Approval.apply_person == approval.apply_person).update(
                 {Approval.approval_status: 2}, synchronize_session=False)
@@ -2869,6 +2923,7 @@ class ApprovalDao:
                 self.session_uav.commit()
             except:
                 self.session_uav.rollback()
+                return 1
         return 2080501
     
     #添加借调申请
@@ -2934,3 +2989,33 @@ class ApprovalDao:
             self.session_uav.commit()
         except:
             self.session_uav.rollback()
+
+#巡检计划管理
+#author：Wu Wei
+#version: 1.0.0.0
+#所有错误代码以0209XXXX开始
+class PlanDao:
+    def __init__(self):
+        self.session_uav = Session_UAV()
+        self.session_usr = Session_User()
+    def __del__(self):
+        self.session_uav.close()
+        self.session_usr.close()
+
+    #查询巡检计划
+    #param linename: 线路名称
+    #param team :巡检班组
+    #param datast:起始日期
+    #param dataend:终止日期
+    def searchPlan(self,linename,team,datest,dateend):
+        q=self.session_uav.query(Plan)
+        if linename != None:
+            q=q.filter(Plan.plan_line==linename)
+        if team != None:
+            q=q.filter(Plan.plan_team==team)
+        if datest!=None:
+            q.q.filter(Plan.plan_time>datest)
+        if dateend!=None:
+            q.q.filter(Plan.plan_time<dateend)
+        rs = q.all()
+        return class_to_dict(rs)

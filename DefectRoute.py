@@ -23,9 +23,16 @@ from flask import Response,make_response
 from PowerLineDao import DefectDao,DefectLevelDao,DefectPartDao
 from UAVManagerDAO import UserDAO
 from UAVManagerEntity import User,Defect
+from datetime import datetime,date,time
+
+
 parser = reqparse.RequestParser()
 parser.add_argument('tower_id', type=int, location='args')
 parser.add_argument('photo_id', type=int, location='args')
+parser.add_argument('linename', type=int, location='args')
+parser.add_argument('start_time', type=int, location='args')
+parser.add_argument('end_time', type=int, location='args')
+
 
 #查询缺陷等级的请求的响应请求与响应
 class DefectLevel(Resource):
@@ -88,6 +95,33 @@ class DefectTowerID(Resource):
         args = parser.parse_args()
         towerid = args.get('tower_id')
         rs=self.dao.query_defect_tower(None,towerid)
+        if rs==None:
+            return make_response(jsonify({'error': '查询杆塔故障信息失败','errorcode' : 10000000}), 401)
+        else:
+            return rs
+    #else:
+        #    return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+    def get(self):
+        return self.post()
+
+#根据线路名称查询线路中每一级杆塔的故障统计情况的请求与响应
+class DefectLineName(Resource):
+    def __init__(self):
+        self.dao = DefectDao()
+
+    def post(self):
+        #if (request.data != ""):
+        #    data = json.loads(request.data)
+        #    token = data['token']
+        #    user = self.userDao.verify_token(token, '')
+        #    if (not user):
+        #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        args = parser.parse_args()
+        linename = args.get('linename')
+        sttime = datetime.strptime(args.get('start_time'), '%Y-%m-%d').date()
+        endtime = datetime.strptime(args.get('end_time'), '%Y-%m-%d').date()
+        rs=self.dao.query_defect_tower(None,linename)
         if rs==None:
             return make_response(jsonify({'error': '查询杆塔故障信息失败','errorcode' : 10000000}), 401)
         else:

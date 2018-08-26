@@ -1,5 +1,17 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+
+"""
+desc:设备借用记录进行管理，通过Flask构建服务器解析请求
+compiler:python2.7.x
+
+created by  : Frank.Wu
+company     : GEDI
+created time: 2018.08.16
+version     : version 1.0.0.0
+"""
+
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -58,11 +70,11 @@ class ManagerListPages(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 args = parser.parse_args()
                 device_type=args.get('device_type')
@@ -90,11 +102,11 @@ class ManagerListPageNum(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 args = parser.parse_args()
                 device_type=args.get('device_type')
@@ -121,11 +133,11 @@ class ManagerHistoryPages(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 args = parser.parse_args()
                 page_size = args.get('page_size')
@@ -149,11 +161,11 @@ class ManagerHistory(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 args = parser.parse_args()
                 page_size = args.get('page_size')
@@ -178,11 +190,11 @@ class ManagerHistorySearchPages(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 args = parser.parse_args()
                 page_size = args.get('page_size')
@@ -208,11 +220,11 @@ class ManagerHistorySearch(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 args = parser.parse_args()
                 page_size = args.get('page_size')
@@ -240,11 +252,11 @@ class ManagerBorrow(Resource):
             borrowList=data['borrow']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 ret=[]
                 borrower = borrowList['borrower']
@@ -303,11 +315,11 @@ class ManagerBorrowConfirm(Resource):
                 return make_response(jsonify({'error': '没有提交借用设备','errorcode':10000000}), 401)
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 ret=[]
                 for item in borrowList:
@@ -343,11 +355,11 @@ class ManagerReturn(Resource):
             returnList=data['return']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 ret=[]
                 returntime = datetime.strptime(returnList['return_time'], '%Y-%m-%d').date()
@@ -397,11 +409,11 @@ class ManagerReturnConfirm(Resource):
             returnList=data['return']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             elif user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             elif user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             else:
                 ret=[]
                 for item in returnList:
@@ -412,10 +424,9 @@ class ManagerReturnConfirm(Resource):
                     if rs==2052101:
                         return make_response(jsonify({'error': '设备没有被借用','errorcode':rs}), 401)
                     if rs==2052102:
-                        return make_response(jsonify({'error': '设备不存在','errorcode':rs}), 401)
+                        return make_response(jsonify({'error': '设备不存在或不是本班组设备','errorcode':rs}), 401)
                     if rs == 2052103:
                         return make_response(jsonify({'error': '设备无权限归还','errorcode':rs}), 401)
-                    #ret = self.dao.manager_query_device(int(item['uav_id']),returntime.strftime('%Y-%m-%d'),item['borrower'],'')
 
                 return make_response(jsonify({'success': '设备归还成功','errorcode':rs}), 200)
         else:

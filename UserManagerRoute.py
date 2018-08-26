@@ -40,11 +40,11 @@ class UserList(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             args = parser.parse_args()
             department = args.get('department')
@@ -74,11 +74,11 @@ class UserGetID(Resource):
             user_id=data['user_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
 
             rs = self.userDao.get_user_byId(user_id)
@@ -104,11 +104,11 @@ class DelUserID(Resource):
             user_id = data['user_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.userDao.delete_user_byId(user,user_id)
             if rs == None:
@@ -132,11 +132,11 @@ class UserPages(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             args = parser.parse_args()
             department = args.get('department')
@@ -175,11 +175,11 @@ class UserAdd(Resource):
             
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
 
             rs=self.userDao.insert_user(userAdd,user)
@@ -219,11 +219,11 @@ class UserModify(Resource):
 
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
 
             rs = self.userDao.modify_user(userModify, user)
@@ -250,11 +250,11 @@ class UserRole(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.userDao.get_role_type(user)
             if rs == None:
@@ -278,11 +278,11 @@ class UserDepartment(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.userDao.get_role_department(user)
             if rs == None:
@@ -306,11 +306,11 @@ class UserTeam(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.userDao.get_role_team(user)
             if rs == None:
@@ -334,11 +334,11 @@ class UserTeams(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.userDao.get_role_teams()
             if rs == None:
@@ -362,14 +362,42 @@ class TeamManager(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.userDao.get_teamManager(user)
             if rs == None:
+                return make_response(jsonify({'error': '获取班组管理员失败','errorcode':10000000}), 401)
+            else:
+                return rs
+        else:
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
+
+    def get(self):
+        return self.post()
+
+#查询当前登录用户所在班组中所有成员
+class TeamUsers(Resource):
+    def __init__(self):
+        self.userDao = UserDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
+
+            rs = self.userDao.get_teamUser(user)
+            if rs == 1011501:
                 return make_response(jsonify({'error': '获取班组管理员失败','errorcode':10000000}), 401)
             else:
                 return rs

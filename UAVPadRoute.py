@@ -47,11 +47,11 @@ class UAVPadList(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             args = parser.parse_args()
             pad_status = args.get('pad_status')
             pad_type = args.get('pad_type')
@@ -77,11 +77,11 @@ class UAVPadAll(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 if (not user):
-                    return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                    return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
                 if user == 1010301:
-                    return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                    return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
                 if user == 1010302:
-                    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             return self.dao.query_all(user)
         else:
             return make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
@@ -101,11 +101,11 @@ class UAVPadGetID(Resource):
             pad_id = data['pad_id']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             return self.dao.query_condition(user, pad_id, None, None, None, 1, 1)
 
     def get(self):
@@ -127,11 +127,11 @@ class UAVPadListPages(Resource):
             page_size = args.get('page_size')
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             return self.dao.query_pages(user,pad_type,pad_status,page_size)
 
     def get(self):
@@ -150,11 +150,11 @@ class UAVPadTypes(Resource):
             user = self.userDao.verify_token(token, '')
             if (not user):
                 if (not user):
-                    return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                    return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
                 if user == 1010301:
-                    return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                    return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
                 if user == 1010302:
-                    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
             return self.dao.query_type()
 
     def get(self):
@@ -184,11 +184,11 @@ class UAVPadAdd(Resource):
             pad_obj.pad_use_number = 0
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.dao.add_pad(user,pad_obj)
             if rs==1:
@@ -225,11 +225,11 @@ class UAVPadModify(Resource):
             pad_obj.pad_use_dpartment = pad_dict[0]['use_department']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.dao.modify_pad(user,pad_obj)
             if rs==1:
@@ -256,11 +256,11 @@ class UAVPadStatus(Resource):
             status = data['status']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs = self.dao.modify_pad_status(user,pad_id,status)
             if rs==1:
@@ -285,11 +285,11 @@ class UAVPadsStatistic(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             rs=self.dao.query_statistic(user,pad_status)
             if rs==None:

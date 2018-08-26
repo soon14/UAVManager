@@ -82,6 +82,7 @@ class Manager(EntityBase):
     manager_status = Column(String(10))                 #借用状态
     return_date = Column(Date)                          #归还日期
     return_desc = Column(String(1024))                  #描述
+    manager_plan_id=Column(Integer)                     #计划巡检id
 
 #author:Wu Wei
 #Version 1.0.0.0
@@ -213,6 +214,18 @@ class FaultReport(EntityBase):
     fault_crash_damage=Column(String(1024))             #故障造成的损失
     fault_crash_electric=Column(String(1024))           #故障造成的电力设备损毁
     fault_crash_around=Column(String(1024))
+
+
+#author:Wu Wei
+#Version 1.0.0.0
+class Plan(EntityBase):
+    __tablename__ = 'tb_plan'
+    plan_id = Column(Integer,primary_key=True)          #巡线计划id
+    plan_team = Column(String(45))                      #计划巡线班组
+    plan_line = Column(String(45))                      #计划巡检线路
+    plan_towers=Column(String(512))                     #计划巡检杆塔
+    plan_time = Column(Date)                            #计划巡检时间
+    plan_state=Column(String(45))                       #计划状态 待处理/正在巡检/完成巡检
 
 ##############################################################################线路杆塔管理
 #author:Wu Wei

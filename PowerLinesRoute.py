@@ -161,7 +161,7 @@ class PowerLineDeleteRoute(Resource):
             if user==1010301:
                 return make_response(jsonify({'error': '登录过期','errorcode':user}), 401)
             if user==1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             args = parser.parse_args()
             lineid=args.get('lineid')
@@ -263,11 +263,11 @@ class PowerLineAddRoute(Resource):
              lineInfo = data['line']
              user = self.userDao.verify_token(token, '')
              if (not user):
-                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
              if user == 1010301:
-                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
              if user == 1010302:
-                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
              line=Lines()
              line.lines_name=lineInfo[0]['lines_name']
@@ -301,11 +301,11 @@ class PowerLineListPages(Resource):
              user = self.userDao.verify_token(token, '')
              user = self.userDao.verify_token(token, '')
              if (not user):
-                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
              if user == 1010301:
-                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
              if user == 1010302:
-                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
              rs=self.dao.query_line_pagesNumber(user,work_team,page_size)
              if rs==None:
@@ -330,11 +330,11 @@ class PowerLineTowerQueryRoute(Resource):
             token = data['token']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                 return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                 return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                 return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             args = parser.parse_args()
             voltage = args.get('voltage')
@@ -422,11 +422,11 @@ class PowerLineTowerAdd(Resource):
             towerdict = data['tower']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             tower=Towers()
             tower.tower_linename=towerdict[0]['tower_linename']
@@ -460,11 +460,11 @@ class PowerLineTowerUpdate(Resource):
             towerdict = data['tower']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             tower=Towers()
             tower.tower_linename=towerdict['tower_linename']
@@ -511,11 +511,11 @@ class PowerLineTowerUpdateLocation(Resource):
             towerdict = data['tower']
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
             tower=Towers()
             tower.tower_id=towerdict['tower_id']
@@ -545,11 +545,11 @@ class PowerLineTowerDeleteRoute(Resource):
 
             user = self.userDao.verify_token(token, '')
             if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 401)
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
             if user == 1010301:
-                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
             if user == 1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 401)
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
 
             args = parser.parse_args()
