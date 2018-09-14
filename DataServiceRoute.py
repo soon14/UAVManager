@@ -144,17 +144,17 @@ class DataServiceSearch(Resource):
     def post(self):
         if (request.data != ""):
             data = json.loads(request.data)
-            token = data['token']
+
+            #token = data['token']
+            #user = self.userDao.verify_token(token, '')
+            #if (not user):
+            #    return make_response(jsonify({'error': '用户不存在或登录过期','errorcode':10000000}), 400)
+            #if user==1010301:
+            #    return make_response(jsonify({'error': '登录过期','errorcode':user}), 400)
+            #if user==1010302:
+            #    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
+
             linename = data['linename']
-
-            user = self.userDao.verify_token(token, '')
-            if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期','errorcode':10000000}), 400)
-            if user==1010301:
-                return make_response(jsonify({'error': '登录过期','errorcode':user}), 400)
-            if user==1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
-
             rs = self.dao.dataservice_search(linename)
             if rs == None:
                 return make_response(jsonify({'error': '查询数据服务失败', 'errorcode': 10000000}), 401)
@@ -175,14 +175,14 @@ class DataServiceSearchLine(Resource):
     def post(self):
         if (request.data != ""):
             data = json.loads(request.data)
-            token = data['token']
-            user = self.userDao.verify_token(token, '')
-            if (not user):
-                return make_response(jsonify({'error': '用户不存在或登录过期','errorcode':10000000}), 400)
-            if user==1010301:
-                return make_response(jsonify({'error': '登录过期','errorcode':user}), 400)
-            if user==1010302:
-                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
+            #token = data['token']
+            #user = self.userDao.verify_token(token, '')
+            #if (not user):
+            #    return make_response(jsonify({'error': '用户不存在或登录过期','errorcode':10000000}), 400)
+            #if user==1010301:
+            #    return make_response(jsonify({'error': '登录过期','errorcode':user}), 400)
+            #if user==1010302:
+            #    return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
 
 
             rs = self.dao.dataservice_searchLine()

@@ -181,6 +181,18 @@ class LinesDao:
             ret.append(item)
         return json.dumps(ret)
 
+    #根据线路名称模糊查询电压等级
+    #param linename:模糊查询的线路名称
+    def query_lineTypesBlur(self,linename):
+        sql = 'select lines_voltage from tb_lines where lines_name like \'%'+linename+'%\' group by lines_voltage;'
+        rs = self.session_power.execute(sql).fetchall()
+        ret = []
+        for i in rs:
+            item = {}
+            item['voltage'] = i[0]
+            ret.append(item)
+        return json.dumps(ret)
+
     #查询线路的运维班组
     def query_lineWorkTeam(self):
         sql = 'select lines_work_team from tb_lines group by lines_work_team;'
@@ -196,6 +208,13 @@ class LinesDao:
     #param voltage:电压等级
     def query_lineVoltage(self,voltage):
         rs = self.session_power.query(Lines).filter(Lines.lines_voltage==voltage).all()
+        return class_to_dict(rs)
+
+    #根据电压等级和线路名称模糊查询电压等级
+    #param voltage:电压等级
+    #param linename:模糊查询的线路名称
+    def query_lineVoltageBlur(self,voltage,linename):
+        rs = self.session_power.query(Lines).filter(Lines.lines_voltage==voltage,Lines.lines_name.like('%'+linename+'%')).all()
         return class_to_dict(rs)
 
     #添加线路

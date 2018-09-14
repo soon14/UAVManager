@@ -157,7 +157,7 @@ class UserDAO:
                 exist=self.session_usr.query(User).filter(User.user_id==user.user_id).first()
                 if exist is None:
                     return 1010501
-                if user.user_team!=user_login.user_team:
+                if user.user_team!=user_login.user_team or user.user_department==user_login.user_department:
                     return 1010502
 
                 user.user_password=md5_key(user.user_password)
@@ -254,7 +254,7 @@ class UserDAO:
                 q=q.filter(User.user_department==department)
             if team is not None:
                 q=q.filter(User.user_team==team)
-            rs = q.filter(User.user_team==user.user_team).limit(page_size).offset((page_index-1)*page_size).all()
+            rs = q.filter(User.user_team==user.user_team,User.user_department==user.user_department).limit(page_size).offset((page_index-1)*page_size).all()
             self.session_usr.rollback()
             return class_to_dict(rs)
         elif '5' in roles or '6' in roles:

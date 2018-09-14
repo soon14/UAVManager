@@ -189,7 +189,14 @@ class PowerLineTypeRoute(Resource):
         #    user = self.userDao.verify_token(token, '')
         #    if (not user):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-        rs=self.dao.query_lineTypes()
+        args = parser.parse_args()
+        linename = args.get('linename')
+        rs=[]
+        if(linename==None or linename==''):
+            rs=self.dao.query_lineTypes()
+        else:
+            rs = self.dao.query_lineTypesBlur(linename)
+
         if rs==None:
             return make_response(jsonify({'error': '查询线路电压等级失败','errorcode':10000000}), 401)
         else:
@@ -239,7 +246,12 @@ class PowerLineVoltageRoute(Resource):
         #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         args = parser.parse_args()
         voltage = args.get('voltage')
-        rs=self.dao.query_lineVoltage(voltage)
+        linename= args.get('linename')
+        rs=[];
+        if(linename==None):
+            rs=self.dao.query_lineVoltage(voltage)
+        else:
+            rs=self.dao.query_lineVoltageBlur(voltage,linename)
         if rs==None:
             return make_response(jsonify({'error': '根据电压等级查询线路信息失败','errorcode':10000000}), 401)
         else:

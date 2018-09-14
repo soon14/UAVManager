@@ -16,7 +16,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, DateTime, FLOAT, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, FLOAT, Date,ForeignKey
 import json
 from datetime import date
 
