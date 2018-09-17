@@ -298,6 +298,7 @@ class PowerLineAddRoute(Resource):
         return self.post()   
 
 #查询线路信息总页数的url的解析与响应
+
 class PowerLineListPages(Resource):
     def __init__(self):
         self.dao = LinesDao()
