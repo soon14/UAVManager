@@ -522,7 +522,9 @@ class DefectDao:
     #param end_time:结束时间
     def query_defect_linename(self,user,line_name,st_time,end_time):
         #查询线路所有杆塔
-        lines  = self.session_power.query(Lines).filter(Lines.lines_name==line_name).all()
+        queryFunc  = self.query.query(Lines).filter(Lines.lines_name==line_name).all()
+
+        """在故障中添加时间字段避免大量的查询过程
         towers = self.session_power.query(Towers).filter(Towers.tower_linename==line_name).all()
         qphoto= self.session_power.query(Photo.photo_id)
         if st_time != None:
@@ -533,7 +535,7 @@ class DefectDao:
         photoids = []
         for itemphoto in photos:
             photoids.append(itemphoto[0])
-
+    
         lineids=[]
         labels=[]
         for toweritem in towers:
@@ -547,7 +549,7 @@ class DefectDao:
             item['number'] = num
             labels.append(item)
         return labels
-
+        """
     def query_defect_line_voltage(self,user,voltage,st_time,end_time):
         #查询线路所有杆塔
         lines  = self.session_power.query(Lines.lines_name).filter(Lines.lines_voltage==voltage).all()
