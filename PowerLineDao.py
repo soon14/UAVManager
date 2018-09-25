@@ -522,7 +522,24 @@ class DefectDao:
     #param end_time:结束时间
     def query_defect_linename(self,user,line_name,st_time,end_time):
         #查询线路所有杆塔
-        queryFunc  = self.query.query(Lines).filter(Lines.lines_name==line_name).all()
+        queryFunc  = self.session_power.query(func.count(Defect.tb_defect_id))
+        towers = self.session_power.query(Towers).filter(Towers.tower_linename==line_name).all()
+        lineids=[]
+        labels=[]
+        for toweritem in towers:
+            queryFunc=queryFunc.filter(Defect.tb_defect_towerid==toweritem.tower_id)
+            if st_time != None:
+                queryFunc=queryFunc.filter(Defect.tb_defect_date>st_time)
+            if end_time != None:
+                queryFunc=queryFunc.filter(Defect.tb_defect_date<end_time)
+            num = queryFunc.scalar()
+            item['tower_lng']=toweritem.tower_lng
+            item['tower_lat'] = toweritem.tower_lat
+            item['tower_elevation'] = toweritem.tower_elevation
+            item['tower_linename'] = toweritem.tower_linename
+            item['tower_idx'] = toweritem.tower_idx
+            item['number'] = num
+            labels.append(item)
 
         """在故障中添加时间字段避免大量的查询过程
         towers = self.session_power.query(Towers).filter(Towers.tower_linename==line_name).all()
@@ -550,6 +567,12 @@ class DefectDao:
             labels.append(item)
         return labels
         """
+    
+    #根据电压等级和起止时间查询
+    #param user:输入的用户信息
+    #param voltage:电压等级
+    #param st_time:起始时间
+    #param end_time:结束时间
     def query_defect_line_voltage(self,user,voltage,st_time,end_time):
         #查询线路所有杆塔
         lines  = self.session_power.query(Lines.lines_name).filter(Lines.lines_voltage==voltage).all()
@@ -595,6 +618,9 @@ class DefectDao:
 
     #添加缺陷
     def defect_add(self,defect):
+        #根据照片id查询时间，根据时间然后添加到缺陷信息中
+        photo_item=self.session_power.query(Photo).filter(Photo.photo_id==defect.tb_defect_photoid)
+        defect.tb_defect_date=photo_item.photo_date
         self.session_power.add(defect)
         isAdd = False
         self.session_power.commit()
@@ -602,7 +628,7 @@ class DefectDao:
 
 #数据服务管理，用来进行数据服务查询，数据服务加载等操作
 #数据服务查询模块应该独立出来单独作为一个模块
-#   所有错误代码以0307XXXX开头
+#   所有错误代码以0306XXXX开头
 class DataServiceDao:
     def __init__(self):
         self.session_power= Session_Power()

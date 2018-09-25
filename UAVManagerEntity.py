@@ -335,7 +335,7 @@ class Defect(EntityBase):
     tb_defect_level=Column(Integer)                         #缺陷等级
     tb_defect_part = Column(String(45))                     #缺陷部位
     tb_defect_desc = Column(String(256))                    #缺陷描述
-
+    tb_defect_date = Column(Date)                           #缺陷日期
 #author:Wu Wei
 #Version 1.0.0.0
 class DataService(EntityBase):
@@ -363,7 +363,7 @@ def class_to_dict(obj):
                 dict[key]=convert(tmpdict[key])
 
             #tmp=json.dumps(tmpdict,default=ComplexEncoder)
-           # jtmp=json.loads(tmp)
+            #jtmp=json.loads(tmp)
             #dict.update(json.loads(tmp))
             obj_arr.append(dict)
         return obj_arr
