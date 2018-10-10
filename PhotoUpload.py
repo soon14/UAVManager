@@ -25,6 +25,7 @@ from flask import Response,make_response
 from werkzeug import secure_filename
 from PowerLineDao import PhotoDao
 from UAVManagerDAO import UserDAO
+import UAVPhotoClassify
 from UAVManagerEntity import Photo
 from datetime import datetime
 from PIL import Image
@@ -97,6 +98,7 @@ class FileUpload(Resource):
     def get(self):
         return self.post()
 
+#绘制照片并上传
 class FileUploadDraw(Resource):
     def __init__(self):
         self.photoDao = PhotoDao()
@@ -151,8 +153,8 @@ class FileUploadDraw(Resource):
     def get(self):
         return self.post()
 
+#上传图片
 class ImageUpload(Resource):
-
     def allowed_file(self,filename):
         return '.' in filename and \
                filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -170,3 +172,56 @@ class ImageUpload(Resource):
                 return make_response(jsonify({'seccess': 'image upload success'}), 200)
         else:
             return make_response(jsonify({'error': 'param error'}), 401)
+
+#上传图片并分类
+class PhotoClassifyUpload(Resource):
+    # 检查文件后缀是否符合要求（是否是照片数据）
+    # param filename:照片文件的文件名
+    def allowed_file(self, filename):
+        return '.' in filename and \
+               filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+    # 生成缩略图
+    # param pathSrc:输入图片文件路径
+    # param pathThumbnail:输入缩略图路径
+    def generateThumbnail(self, pathSrc, pathThumbnail):
+        im = Image.open(pathSrc)
+        factor = 0.2
+        w, h = im.size
+        im.thumbnail((w * factor, h * factor))
+        im.save(pathThumbnail, 'jpeg')
+
+    def post(self):
+        if (request.form != ""):
+            data = request.form
+            # token = data['token'] #要不要登录
+            #line_id = data['lineid']
+            #classify = data['classify']
+
+            line_name=data['linename']
+            voltage = data['voltage']
+            date=datetime.datetime.strptime(data['date'],'%Y-%m-%d').date()
+            image = request.files['image']
+
+            # 获取文件存储路径
+            file_folder = save_folder
+            if not os.path.isdir(file_folder):
+                os.makedirs(file_folder)
+            if image and self.allowed_file(image.filename):
+                filename = secure_filename(image.filename)
+                image.save(os.path.join(file_folder, filename))
+            classify=UAVPhotoClassify()
+            towers = classify.GetTowerPosition(line_name)
+            #进行分类并获取缩略图
+            classifyRs = classify.ClassifyPhoto(towers,os.path.join(file_folder, filename),date,save_folder)
+            basePath = classifyRs[0]
+            self.generateThumbnail(os.path.join(file_folder, filename),os.path.join(thumbnail_folder, filename))
+            #添加到数据库中
+            towerIdx = classifyRs[1]
+            lineid = classifyRs[2]
+            rs = self.photoDao.add_photo(voltage, lineid, towers[towerIdx].t, classify, os.path.join(database_folder, basePath),
+                                         os.path.join(thumbnail_database_folder, basePath), date)
+            return make_response(jsonify({'seccess': '照片上传成功'}), 200)
+
+    def get(self):
+        return self.post()

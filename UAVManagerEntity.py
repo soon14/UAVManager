@@ -88,7 +88,7 @@ class Manager(EntityBase):
 #Version 1.0.0.0
 class Device(EntityBase):
     __tablename__ = 'tb_device'
-    device_id = Column(Integer, primary_key=True)       #设备ID（设备的唯一标识，考虑修改为字符类型）
+    device_id = Column(String(45), primary_key=True)    #设备ID（设备的唯一标识，考虑修改为字符类型）
     device_ver = Column(String(45))                     #设备版本信息
     device_type = Column(String(45))                    #设备类型
     uad_code = Column(String(45))                       #设备机身编码
@@ -106,7 +106,7 @@ class Device(EntityBase):
 #Version 1.0.0.0
 class Battery(EntityBase):
     __tablename__ = 'tb_battery'
-    battery_id = Column(Integer, primary_key=True)      #电池id
+    battery_id = Column(String(45), primary_key=True)   #电池id
     battery_ver = Column(String(45))                    #电池版本信息
     battery_type=Column(String(45))                     #电池类型
     battery_fact=Column(String(45))                     #维护人
@@ -120,7 +120,7 @@ class Battery(EntityBase):
 #Version 1.0.0.0
 class Pad(EntityBase):
     __tablename__ = 'tb_pad'
-    pad_id = Column(Integer,primary_key=True)           #平板id
+    pad_id = Column(String(45),primary_key=True)        #平板id
     pad_ver=Column(String(45))                          #平板版本
     pad_type=Column(String(45))                         #平板类型
     pad_fact=Column(String(45))                         #平板维护人
@@ -134,7 +134,7 @@ class Pad(EntityBase):
 #Version 1.0.0.0
 class Parts(EntityBase):
     __tablename__ = 'tb_parts'
-    parts_id = Column(Integer,primary_key=True)         #配件id
+    parts_id = Column(String(45),primary_key=True)      #配件id
     parts_ver=Column(String(45))                        #配件版本
     parts_type=Column(String(45))                       #配件类型
     parts_fact=Column(String(45))                       #配件维护人

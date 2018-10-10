@@ -27,6 +27,8 @@ sys.setdefaultencoding('utf8')
 
 import ConfigParser
 import json
+import UAVCoordinateTrans
+
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker,query
 from UAVManagerEntity import User, Lines, Towers,Photo,DefectLevel,DefectPart,Defect,DataService, class_to_dict
@@ -342,6 +344,44 @@ class TowerDao:
             self.session_power.rollback()
         return 1
 
+    #获取简化的线路走向缩略图
+    #将各个杆塔转换后的坐标交给前端进行渲染
+    #param linename: 线路名称
+    #param tower_id: 杆塔id
+    #param width : 图片宽度
+    #parma hegith: 图片高度
+    #返回转换后杆塔坐标数据
+    def thumb_line_direction(self,linename,tower_id,width,height):
+        towers = self.session_power.query(Towers).filter(Towers.tower_linename==linename)
+        towerUTMCoordsX={}
+        towerUTMCoordsY={}
+        for towerItem in towers:
+            utmCoord = UAVCoordinateTrans.LL2UTM_USGS(towerItem.tower_lat,towerItem.tower_lng,111,0)
+            towerUTMCoordsX.append(utmCoord[0])
+            towerUTMCoordsX.append(utmCoord[1])
+
+        maxx = max(towerUTMCoordsX)
+        minx = min(towerUTMCoordsX)
+
+        maxy = max(towerUTMCoordsY)
+        miny = min(towerUTMCoordsY)
+
+        scalex = (width-10.0)/(maxx - minx)
+        scaley = (height-10.0)/(maxy - miny)
+
+        scale = min(scalex,scaley)
+        towerPos=[]
+        #将地理坐标转换为图片坐标
+        for towerItem in towers:
+            utmCoord = UAVCoordinateTrans.LL2UTM_USGS(towerItem.tower_lat,towerItem.tower_lng,111,0)
+            pixelx = scale*(utmCoord[0]-minx)
+            pixely = scale*(utmCoord[1]-miny)
+            tmpTower={}
+            tmpTower['pixelx'] = pixelx
+            tmpTower['pixely'] = pixely
+            tmpTower['towerid'] = towerItem.tower_id
+            towerPos.append(tmpTower)
+        return towerPos
 
 #杆塔数据处理
 #包括杆塔信息的查询，修改添加等处理
@@ -522,16 +562,18 @@ class DefectDao:
     #param end_time:结束时间
     def query_defect_linename(self,user,line_name,st_time,end_time):
         #查询线路所有杆塔
-        queryFunc  = self.session_power.query(func.count(Defect.tb_defect_id))
+
         towers = self.session_power.query(Towers).filter(Towers.tower_linename==line_name).all()
         lineids=[]
         labels=[]
         for toweritem in towers:
+            queryFunc = self.session_power.query(func.count(Defect.tb_defect_id))
             queryFunc=queryFunc.filter(Defect.tb_defect_towerid==toweritem.tower_id)
             if st_time != None:
                 queryFunc=queryFunc.filter(Defect.tb_defect_date>st_time)
             if end_time != None:
                 queryFunc=queryFunc.filter(Defect.tb_defect_date<end_time)
+            item = {}
             num = queryFunc.scalar()
             item['tower_lng']=toweritem.tower_lng
             item['tower_lat'] = toweritem.tower_lat
@@ -540,7 +582,7 @@ class DefectDao:
             item['tower_idx'] = toweritem.tower_idx
             item['number'] = num
             labels.append(item)
-
+        return labels
         """在故障中添加时间字段避免大量的查询过程
         towers = self.session_power.query(Towers).filter(Towers.tower_linename==line_name).all()
         qphoto= self.session_power.query(Photo.photo_id)
@@ -619,7 +661,7 @@ class DefectDao:
     #添加缺陷
     def defect_add(self,defect):
         #根据照片id查询时间，根据时间然后添加到缺陷信息中
-        photo_item=self.session_power.query(Photo).filter(Photo.photo_id==defect.tb_defect_photoid)
+        photo_item=self.session_power.query(Photo).filter(Photo.photo_id==defect.tb_defect_photoid).first()
         defect.tb_defect_date=photo_item.photo_date
         self.session_power.add(defect)
         isAdd = False

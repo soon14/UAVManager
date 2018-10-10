@@ -262,6 +262,37 @@ class PowerLineVoltageRoute(Resource):
     def get(self):
         return self.post()
 
+#根据电压等级查询线路信息的url的解析与响应,传出数组
+class PowerLineVoltageArrayRoute(Resource):
+    def __init__(self):
+        self.dao = LinesDao()
+        self.userDao = UserDAO()
+
+    def post(self):
+        #if (request.data != ""):
+        #    data = json.loads(request.data)
+        #    token = data['token']
+        #    user = self.userDao.verify_token(token, '')
+        #    if (not user):
+        #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+        args = parser.parse_args()
+        voltage = args.get('voltage')
+        linename= args.get('linename')
+        rs=[];
+        if(linename==None):
+            rs=self.dao.query_lineVoltage(voltage)
+        else:
+            rs=self.dao.query_lineVoltageBlur(voltage,linename)
+        if rs==None:
+            return make_response(jsonify({'error': '根据电压等级查询线路信息失败','errorcode':10000000}), 401)
+        else:
+            return json.dumps(obj=rs)
+
+    def get(self):
+        return self.post()
+
+
+
 #添加线路信息的url的解析与响应
 class PowerLineAddRoute(Resource):
     def __init__(self):

@@ -174,6 +174,7 @@ api.add_resource(UAVPlanRoute.UAVPlanSearch,'/uavmanager/api/v1.0/plan/search')
 api.add_resource(PhotoUpload.FileUpload,'/gis/api/v1.0/fileupload')
 api.add_resource(PhotoUpload.FileUploadDraw,'/gis/api/v1.0/fileuploaddraw')
 api.add_resource(PhotoUpload.ImageUpload,'/gis/api/v1.0/imageupload')
+api.add_resource(PhotoUpload.PhotoClassifyUpload,'/gis/api/v1.0/uploadclassify')
 
 ###################################################################电力线路杆塔查询模块
 api.add_resource(PowerLinesRoute.PowerLineListRoute,'/gis/api/v1.0/lines')
@@ -182,6 +183,7 @@ api.add_resource(PowerLinesRoute.PowerLineListPages,'/gis/api/v1.0/lines/pages')
 api.add_resource(PowerLinesRoute.PowerLineListPageRoute,'/gis/api/v1.0/linesList')
 api.add_resource(PowerLinesRoute.PowerLineDeleteRoute,'/gis/api/v1.0/linesDelete')
 api.add_resource(PowerLinesRoute.PowerLineVoltageRoute,'/gis/api/v1.0/lines/lines/voltage')
+api.add_resource(PowerLinesRoute.PowerLineVoltageArrayRoute,'/gis/api/v1.0/lines/lines/voltage/array')
 
 api.add_resource(PowerLinesRoute.PowerLineRoute,'/gis/api/v1.0/line')
 api.add_resource(PowerLinesRoute.PowerLineAddRoute,'/gis/api/v1.0/line/add')
