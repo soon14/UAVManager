@@ -25,11 +25,12 @@ from flask import Response,make_response
 from werkzeug import secure_filename
 from PowerLineDao import PhotoDao
 from UAVManagerDAO import UserDAO
-import UAVPhotoClassify
+from UAVPhotoClassify import UAVPhotoClassify
 from UAVManagerEntity import Photo
 from datetime import datetime
 from PIL import Image
 import datetime
+import threading
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg','JPG', 'jpeg', 'gif'])
 cf = ConfigParser.ConfigParser()
@@ -174,22 +175,48 @@ class ImageUpload(Resource):
             return make_response(jsonify({'error': 'param error'}), 401)
 
 #上传图片并分类
+
+# 生成缩略图
+# param pathSrc:输入图片文件路径
+# param pathThumbnail:输入缩略图路径
+def generateThumbnail(pathSrc, pathThumbnail):
+    im = Image.open(pathSrc)
+    factor = 0.2
+    w, h = im.size
+    im.thumbnail((w * factor, h * factor))
+    im.save(pathThumbnail, 'jpeg')
+
+#图片分类处理线程
+# param linename:线路名称
+# param voltage: 电压等级
+# param date:照片拍摄时间
+# param fileNames:文件名数组
+# param imagePaths:照片路径数组
+def photoClassifyThread(linename,voltage,date,fileNames,imagePaths):
+    classify = UAVPhotoClassify()
+    towers = classify.GetTowerPosition(linename)
+    photoDao = PhotoDao()
+    # 进行分类并获取缩略图
+    for i in range(len(fileNames)):
+        classifyRs = classify.ClassifyPhoto(towers, imagePaths[i], date, save_folder)
+        basePath = classifyRs[0]
+        paththunmnail=thumbnail_folder+basePath
+        dirthumbnail=os.path.dirname(paththunmnail)
+        if not os.path.isdir(dirthumbnail):
+            os.makedirs(dirthumbnail)
+        generateThumbnail(os.path.join(save_folder+basePath),paththunmnail)
+        # 添加到数据库中
+        towerIdx = classifyRs[1]
+        lineid = classifyRs[2]
+        rs = photoDao.add_photo(voltage, lineid, towers[towerIdx]['tower_id'], '未分类', database_folder+basePath,
+                                  thumbnail_database_folder+ basePath, datetime.datetime.strptime(date,'%Y-%m-%d').date())
+
 class PhotoClassifyUpload(Resource):
     # 检查文件后缀是否符合要求（是否是照片数据）
     # param filename:照片文件的文件名
     def allowed_file(self, filename):
         return '.' in filename and \
                filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-    # 生成缩略图
-    # param pathSrc:输入图片文件路径
-    # param pathThumbnail:输入缩略图路径
-    def generateThumbnail(self, pathSrc, pathThumbnail):
-        im = Image.open(pathSrc)
-        factor = 0.2
-        w, h = im.size
-        im.thumbnail((w * factor, h * factor))
-        im.save(pathThumbnail, 'jpeg')
 
     def post(self):
         if (request.form != ""):
@@ -201,27 +228,29 @@ class PhotoClassifyUpload(Resource):
             line_name=data['linename']
             voltage = data['voltage']
             date=datetime.datetime.strptime(data['date'],'%Y-%m-%d').date()
-            image = request.files['image']
-
-            # 获取文件存储路径
+            image = request.files
             file_folder = save_folder
+            # 获取文件存储路径
             if not os.path.isdir(file_folder):
                 os.makedirs(file_folder)
-            if image and self.allowed_file(image.filename):
-                filename = secure_filename(image.filename)
-                image.save(os.path.join(file_folder, filename))
-            classify=UAVPhotoClassify()
-            towers = classify.GetTowerPosition(line_name)
-            #进行分类并获取缩略图
-            classifyRs = classify.ClassifyPhoto(towers,os.path.join(file_folder, filename),date,save_folder)
-            basePath = classifyRs[0]
-            self.generateThumbnail(os.path.join(file_folder, filename),os.path.join(thumbnail_folder, filename))
-            #添加到数据库中
-            towerIdx = classifyRs[1]
-            lineid = classifyRs[2]
-            rs = self.photoDao.add_photo(voltage, lineid, towers[towerIdx].t, classify, os.path.join(database_folder, basePath),
-                                         os.path.join(thumbnail_database_folder, basePath), date)
+
+            fileNames=[]
+            imagePaths=[]
+            for key, file in image.iteritems():
+                #print file.filename
+                if file and self.allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    fileNames.append(filename)
+                    file.save(os.path.join(file_folder, filename))
+                    imagePaths.append(os.path.join(file_folder, filename))
+
+            #如果不做多线程可能会卡死
+            photoClassifyThread(line_name,voltage,data['date'],fileNames,imagePaths)
+            #进行分类
+            #t = threading.Thread(target=photoClassifyThread, args=(line_name,voltage,date,fileNames,imagePaths))
+            #t.start()
             return make_response(jsonify({'seccess': '照片上传成功'}), 200)
+
 
     def get(self):
         return self.post()

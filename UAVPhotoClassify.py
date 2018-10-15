@@ -38,7 +38,7 @@ class UAVPhotoClassify:
     # 返回坐标信息
     def GetPhotoCoordinate(self,photoPath):
         """Get embedded EXIF data from image file."""
-        ret = []
+        ret = {}
         try:
             img = Image.open(photoPath)
             if hasattr( img, '_getexif' ):
@@ -85,21 +85,21 @@ class UAVPhotoClassify:
         # 综合考虑之后采用直接通过经度和纬度差异的方式进行计算
         unitLat = 111000.0
         photoCoordinate = self.GetPhotoCoordinate(photoPath)
-        dis = {}
+        dis = []
         for towerItem in towers:
             unitLng = unitLat*math.cos(math.radians(photoCoordinate['lat']))
-            dLat = (towerItem.tower_lat-photoCoordinate['lat'])*unitLat*(towerItem.tower_lat-photoCoordinate['lat'])*unitLat
-            dLng = (towerItem.tower_lng-photoCoordinate['lng'])*unitLng*(towerItem.tower_lng-photoCoordinate['lng'])*unitLng
+            dLat = (towerItem['tower_lat']-photoCoordinate['lat'])*unitLat*(towerItem['tower_lat']-photoCoordinate['lat'])*unitLat
+            dLng = (towerItem['tower_lng']-photoCoordinate['lng'])*unitLng*(towerItem['tower_lng']-photoCoordinate['lng'])*unitLng
             dis.append(math.sqrt(dLat+dLng))
         index = dis.index(min(dis))
 
         #将文件移动到对应的文件夹下
         daoLine=LinesDao()
-        line=daoLine.query_line_fuzzy(towers[index].tower_linename)
+        line=daoLine.query_line_fuzzy(towers[index]['tower_linename'])
         filename=os.path.basename(photoPath)
 
         #构建目标路径
-        basePath = '/'+line[0]['lines_voltage']+'/'+line[0]['lines_id']+'/'+str(towers[index].tower_id)+'/'+date+'/未分类/'+filename
+        basePath = '\\'+str(line[0]['lines_voltage'])+'\\'+str(line[0]['lines_id'])+'\\'+str(towers[index]['tower_id'])+'\\'+date+'\\未分类\\'+filename
         distPath= basefolder+basePath
 
         #移动文件夹
