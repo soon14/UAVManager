@@ -43,19 +43,28 @@ class UAVPhotoClassify:
             img = Image.open(photoPath)
             if hasattr( img, '_getexif' ):
                 exifinfo = img._getexif()
-                if exifinfo[34853] != None:
-                    gpsInfo = exifinfo[34853]
-                    latTuple=gpsInfo[2]
-                    lngTuple=gpsInfo[4]
-                    lat = float(latTuple[0][0]) / float(latTuple[0][1]) + float(latTuple[1][0]) / float(latTuple[1][1]) / 60.0 + float(latTuple[2][0]) / \
-                          float(latTuple[2][1]) / 3600.0
-                    lng = float(lngTuple[0][0]) / float(lngTuple[0][1]) + float(lngTuple[1][0]) / float(lngTuple[1][1]) / 60.0 + float(lngTuple[2][0]) / \
-                          float(lngTuple[2][1]) / 3600.0
-                    ret['lat']=lat
-                    ret['lng']=lng
+                if exifinfo!= None:
+                    if 34853 in exifinfo:
+                        gpsInfo = exifinfo[34853]
+                        latTuple = gpsInfo[2]
+                        lngTuple = gpsInfo[4]
+                        lat = float(latTuple[0][0]) / float(latTuple[0][1]) + float(latTuple[1][0]) / float(
+                            latTuple[1][1]) / 60.0 + float(latTuple[2][0]) / \
+                              float(latTuple[2][1]) / 3600.0
+                        lng = float(lngTuple[0][0]) / float(lngTuple[0][1]) + float(lngTuple[1][0]) / float(
+                            lngTuple[1][1]) / 60.0 + float(lngTuple[2][0]) / \
+                              float(lngTuple[2][1]) / 3600.0
+                        ret['lat'] = lat
+                        ret['lng'] = lng
+                    else:
+                        ret['lat'] = 0.0
+                        ret['lng'] = 0.0
                 else:
                     ret['lat']=0.0
                     ret['lng']=0.0
+            else:
+                ret['lat'] = 0.0
+                ret['lng'] = 0.0
         except IOError:
             print 'IOERROR ' + photoPath
         return ret

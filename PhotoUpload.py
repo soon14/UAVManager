@@ -32,7 +32,7 @@ from PIL import Image
 import datetime
 import threading
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg','JPG', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg','JPG', 'jpeg', 'gif','bmp','BMP'])
 cf = ConfigParser.ConfigParser()
 cf.read("config.conf")
 save_folder = cf.get("picture","UPLOAD_FOLDER")
@@ -184,8 +184,17 @@ def generateThumbnail(pathSrc, pathThumbnail):
     factor = 0.2
     w, h = im.size
     im.thumbnail((w * factor, h * factor))
-    im.save(pathThumbnail, 'jpeg')
-
+    ext=os.path.splitext(pathThumbnail)[1]
+    if(ext=='.png' or ext=='.PNG'):
+        im.save(pathThumbnail, 'png')
+    if (ext == '.jpg' or ext == '.JPG'):
+        im.save(pathThumbnail, 'jpeg')
+    if(ext=='.gif' or ext=='.GIF'):
+        im.save(pathThumbnail, 'gif')
+    if (ext == '.tif' or ext == '.TIF'):
+        im.save(pathThumbnail, 'tif')
+    if (ext == '.bmp' or ext == '.BMP'):
+        im.save(pathThumbnail, 'bmp')
 #图片分类处理线程
 # param linename:线路名称
 # param voltage: 电压等级
@@ -196,6 +205,8 @@ def photoClassifyThread(linename,voltage,date,fileNames,imagePaths):
     classify = UAVPhotoClassify()
     towers = classify.GetTowerPosition(linename)
     photoDao = PhotoDao()
+
+    classifyTowerRs=[]
     # 进行分类并获取缩略图
     for i in range(len(fileNames)):
         classifyRs = classify.ClassifyPhoto(towers, imagePaths[i], date, save_folder)
@@ -210,6 +221,18 @@ def photoClassifyThread(linename,voltage,date,fileNames,imagePaths):
         lineid = classifyRs[2]
         rs = photoDao.add_photo(voltage, lineid, towers[towerIdx]['tower_id'], '未分类', database_folder+basePath,
                                   thumbnail_database_folder+ basePath, datetime.datetime.strptime(date,'%Y-%m-%d').date())
+
+        idxTower = int(towers[towerIdx]['tower_idx']*100)
+        idxLevel1 = int(idxTower//100)
+        idxLevel2 = int((idxTower%100)//10)
+        idxLevel3 = int((idxTower%10))
+        strIdxTower = str(idxLevel1)
+        if(idxLevel2 != 0):
+            strIdxTower+='+'+str(idxLevel2)
+        if (idxLevel3 != 0):
+            strIdxTower += '+' + str(idxLevel3)
+        classifyTowerRs.append(strIdxTower)
+    return classifyTowerRs
 
 class PhotoClassifyUpload(Resource):
     # 检查文件后缀是否符合要求（是否是照片数据）
@@ -243,14 +266,15 @@ class PhotoClassifyUpload(Resource):
                     fileNames.append(filename)
                     file.save(os.path.join(file_folder, filename))
                     imagePaths.append(os.path.join(file_folder, filename))
+                else:
+                    return make_response(jsonify({'error': '文件为空或文件格式不支持'}), 400)
 
             #如果不做多线程可能会卡死
-            photoClassifyThread(line_name,voltage,data['date'],fileNames,imagePaths)
+            rs=photoClassifyThread(line_name,voltage,data['date'],fileNames,imagePaths)
             #进行分类
             #t = threading.Thread(target=photoClassifyThread, args=(line_name,voltage,date,fileNames,imagePaths))
             #t.start()
-            return make_response(jsonify({'seccess': '照片上传成功'}), 200)
-
+            return make_response(jsonify({'seccess': '照片上传成功','classify':rs[0]}),200)
 
     def get(self):
         return self.post()
