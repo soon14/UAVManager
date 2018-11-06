@@ -31,7 +31,7 @@ import UAVCoordinateTrans
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker,query
-from UAVManagerEntity import User, Lines, Towers,Photo,DefectLevel,DefectPart,Defect,DataService, class_to_dict
+from UAVManagerEntity import User, Lines, Towers,Photo,DefectLevel,DefectPart,Defect,DataService,Video, class_to_dict
 from UAVManagerDAO import UserDAO
 from datetime import datetime
 
@@ -47,6 +47,31 @@ secret_key = cf.get('token','SECRET_KEY')
 
 engine_power = create_engine('mysql+mysqldb://' + power_user + ':' + power_pass + '@' + power_host + ':' + str(power_port) + '/' + power_name+'?charset=utf8',pool_size=100,pool_recycle=3600)
 Session_Power= sessionmaker(bind=engine_power)
+
+#将杆塔id解析为+杆塔的形式
+#param towerIdx:杆塔序号
+def extractTowerName(towerIdx):
+    idxTower = int(towerIdx * 100)
+    idxLevel1 = int(idxTower // 100)
+    idxLevel2 = int((idxTower % 100) // 10)
+    idxLevel3 = int((idxTower % 10))
+    strIdxTower = str(idxLevel1)
+    if (idxLevel2 != 0):
+        strIdxTower += '+' + str(idxLevel2)
+    if (idxLevel3 != 0):
+        strIdxTower += '+' + str(idxLevel3)
+    return strIdxTower
+
+#将+杆塔的形式解析为杆塔编号的形式
+#param towerName:杆塔名字
+def extractTowerIdx(towerName):
+    towerIdxs = towerName.split('+')
+    length = len(towerIdxs)
+    towerIdx=0.0
+    for id in range(0,length):
+        towerIdx+=int(towerIdxs[id])/(pow(10,id))
+    return towerIdx
+
 
 ### 线路台账数据操作类
 #   定义并实现线路数据增、改、删、查等操作，实现统计以及
@@ -266,20 +291,32 @@ class TowerDao:
     #查询所有杆塔信息，无条件查询
     def query_towers_all(self):
         rs = self.session_power.query(Towers).filter(Towers.deleted==0).all()
-        return class_to_dict(rs)
+        trasnRs = []
+        for item in rs:
+            item.tower_idx = extractTowerName(item.tower_idx)
+            trasnRs.append(item)
+        return class_to_dict(trasnRs)
 
     #根据杆塔id查询杆塔信息
     #param tower_id:输入的杆塔id
     def query_tower_id(self,tower_id):
         rs = self.session_power.query(Towers).filter(Towers.tower_id==tower_id,Towers.deleted==0).all()
-        return class_to_dict(rs)
+        trasnRs = []
+        for item in rs:
+            item.tower_idx = extractTowerName(item.tower_idx)
+            trasnRs.append(item)
+        return class_to_dict(trasnRs)
 
     #查询线路下所有杆塔信息
     #param linename:线路名称
     def query_towers(self,linename):
         if linename is not None:
             rs = self.session_power.query(Towers).filter(Towers.tower_linename==linename,Towers.deleted==0).order_by(Towers.tower_idx).all()
-            return class_to_dict(rs)
+            trasnRs=[]
+            for item in rs:
+                item.tower_idx = extractTowerName(item.tower_idx)
+                trasnRs.append(item)
+            return class_to_dict(trasnRs)
         else:
             return self.query_towers_all()
 
@@ -719,4 +756,51 @@ class DataServiceDao:
         service.tb_dataservice_url = service_url
         service.tb_dataservice_type=service_type
         self.session_power.commit()
+        return 1
+
+#视频数据，数据标签和数据库管理
+#   所有错误代码以0307XXXX开头
+class VideoDataDAO:
+    def __init__(self):
+        self.session_power= Session_Power()
+    def __del__(self):
+        self.session_power.close()
+
+    #根据查询条件查询线路服务
+    #param linename:线路名称
+    #param videotime:视频上传时间
+    #返回数据库信息
+    def query_video(self,linename,videotime):
+        query=self.session_power.query(Video)
+        if linename!=None:
+            query=query.filter(Video.video_line==linename)
+        if videotime != None:
+            query=query.filter(Video.video_time==videotime)
+        videos = query.all()
+        return class_to_dict(videos)
+
+    #查询视频日期并按按照日期进行分组
+    #param linename:线路名称
+    #返回视频时间
+    def query_videotime(self,linename):
+        videotimes = self.session_power.query(Video).filter(Video.video_line==linename).group_by(Video.video_time).all()
+        ret = []
+        for i in videotimes:
+            item = {}
+            item['time'] = i[0].strftime("%Y-%m-%d")
+            ret.append(item)
+        return json.dumps(ret)
+
+    #添加视频信息到数据库中
+    #param video_linename:线路名称
+    #param video_path:视频路径
+    #param video_url:视频访问url
+    #param video_time:视频上传时间
+    def add_video(self,video_linename,video_path,video_url,video_time):
+        videoItem = Video(video_linename=video_linename,video_path=video_path,video_url=video_url,video_time=video_time)
+        self.session_power.add(videoItem)
+        try:
+            self.session_power.commit()
+        except:
+            self.session_power.rollback()
         return 1

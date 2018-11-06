@@ -195,6 +195,7 @@ def generateThumbnail(pathSrc, pathThumbnail):
         im.save(pathThumbnail, 'tif')
     if (ext == '.bmp' or ext == '.BMP'):
         im.save(pathThumbnail, 'bmp')
+
 #图片分类处理线程
 # param linename:线路名称
 # param voltage: 电压等级
@@ -210,6 +211,9 @@ def photoClassifyThread(linename,voltage,date,fileNames,imagePaths):
     # 进行分类并获取缩略图
     for i in range(len(fileNames)):
         classifyRs = classify.ClassifyPhoto(towers, imagePaths[i], date, save_folder)
+        if classifyRs==None:
+            return None
+
         basePath = classifyRs[0]
         paththunmnail=thumbnail_folder+basePath
         dirthumbnail=os.path.dirname(paththunmnail)
@@ -222,7 +226,7 @@ def photoClassifyThread(linename,voltage,date,fileNames,imagePaths):
         rs = photoDao.add_photo(voltage, lineid, towers[towerIdx]['tower_id'], '未分类', database_folder+basePath,
                                   thumbnail_database_folder+ basePath, datetime.datetime.strptime(date,'%Y-%m-%d').date())
 
-        idxTower = int(towers[towerIdx]['tower_idx']*100)
+        idxTower = int(int(towers[towerIdx]['tower_idx'])*100)
         idxLevel1 = int(idxTower//100)
         idxLevel2 = int((idxTower%100)//10)
         idxLevel3 = int((idxTower%10))
@@ -271,6 +275,8 @@ class PhotoClassifyUpload(Resource):
 
             #如果不做多线程可能会卡死
             rs=photoClassifyThread(line_name,voltage,data['date'],fileNames,imagePaths)
+            if rs==None:
+                return make_response(jsonify({'error': '图片不含GPS信息无法上传'}), 400)
             #进行分类
             #t = threading.Thread(target=photoClassifyThread, args=(line_name,voltage,date,fileNames,imagePaths))
             #t.start()

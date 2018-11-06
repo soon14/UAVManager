@@ -57,14 +57,11 @@ class UAVPhotoClassify:
                         ret['lat'] = lat
                         ret['lng'] = lng
                     else:
-                        ret['lat'] = 0.0
-                        ret['lng'] = 0.0
+                        return None
                 else:
-                    ret['lat']=0.0
-                    ret['lng']=0.0
+                    return None
             else:
-                ret['lat'] = 0.0
-                ret['lng'] = 0.0
+                return None
         except IOError:
             print 'IOERROR ' + photoPath
         return ret
@@ -82,7 +79,6 @@ class UAVPhotoClassify:
             shutil.move(srcfile,dstfile)          #移动文件
             #print "move %s -> %s"%( srcfile,dstfile)
 
-
     # 获取照片中的经纬度信息
     # param towers  : 线路所有杆塔信息
     # param photoPath : 照片路径
@@ -94,6 +90,8 @@ class UAVPhotoClassify:
         # 综合考虑之后采用直接通过经度和纬度差异的方式进行计算
         unitLat = 111000.0
         photoCoordinate = self.GetPhotoCoordinate(photoPath)
+        if photoCoordinate==None:
+            return None
         dis = []
         for towerItem in towers:
             unitLng = unitLat*math.cos(math.radians(photoCoordinate['lat']))

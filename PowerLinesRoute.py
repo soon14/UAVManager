@@ -20,7 +20,7 @@ from flask_restful import Resource
 from flask_restful import reqparse
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
-from PowerLineDao import LinesDao, TowerDao,PhotoDao
+from PowerLineDao import LinesDao, TowerDao, PhotoDao, extractTowerIdx
 from UAVManagerDAO import UserDAO
 from UAVManagerEntity import User,Lines,Towers
 from datetime import datetime
@@ -474,7 +474,7 @@ class PowerLineTowerAdd(Resource):
 
             tower=Towers()
             tower.tower_linename=towerdict[0]['tower_linename']
-            tower.tower_idx=towerdict[0]['tower_idx']
+            tower.tower_idx=extractTowerIdx(towerdict[0]['tower_idx'])
             tower.tower_type=towerdict[0]['tower_type']
             tower.tower_height=towerdict[0]['tower_height']
             tower.tower_lat=towerdict[0]['tower_lat']
@@ -513,7 +513,7 @@ class PowerLineTowerUpdate(Resource):
             tower=Towers()
             tower.tower_linename=towerdict['tower_linename']
             tower.tower_id=towerdict['tower_id']
-            tower.tower_idx = towerdict['tower_idx']
+            tower.tower_idx = extractTowerIdx(towerdict['tower_idx'])
             tower.tower_type=towerdict['tower_type']
             tower.tower_lat=towerdict['tower_lat']
             tower.tower_lng=towerdict['tower_lng']

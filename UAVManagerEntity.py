@@ -249,7 +249,7 @@ class Towers(EntityBase):
     __tablename__='tb_tower'
     tower_id = Column(Integer,primary_key=True)
     tower_linename = Column(String(128))             #所在线路名称
-    tower_idx = Column(Integer)                      #杆塔序号
+    tower_idx = Column(FLOAT)                      #杆塔序号
     tower_type = Column(String(45))                  #杆塔类型
     tower_date = Column(Date)                        #杆塔日期
     tower_span_small = Column(FLOAT)                 #小号侧杆塔距离
@@ -305,6 +305,17 @@ class Photo(EntityBase):
 
 #author:Wu Wei
 #Version 1.0.0.0
+class Video(EntityBase):
+    __tablename__="tb_video"
+    video_id = Column(Integer,primary_key=True)
+    video_path=Column(String(256))                  #视频存储的物理路径
+    video_url =Column(String(256))                  #视频片的url路径
+    video_line=Column(String(45))                   #视频所在线路名称
+    video_time=Column(Date)                         #视频上传时间
+    video_desc=Column(String(256))                  #视频描述
+
+#author:Wu Wei
+#Version 1.0.0.0
 class TowerPart(EntityBase):
     __tablename__="tb_part_dict"
     tb_partid = Column(Integer,primary_key=True)    #部位id
@@ -336,6 +347,7 @@ class Defect(EntityBase):
     tb_defect_part = Column(String(45))                     #缺陷部位
     tb_defect_desc = Column(String(256))                    #缺陷描述
     tb_defect_date = Column(Date)                           #缺陷日期
+
 #author:Wu Wei
 #Version 1.0.0.0
 class DataService(EntityBase):
