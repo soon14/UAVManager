@@ -14,7 +14,7 @@ from flask_restful import Api
 from flask_httpauth import HTTPBasicAuth
 from flask import Flask, render_template
 
-import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPlanRoute
+import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPlanRoute,UAVVideoRoute
 import UAVPadRoute,UAVFaultReportRoute,PhotoUpload,PowerLinesRoute,UserManagerRoute,DefectRoute,DataServiceRoute
 import UAVManagerDAO
 
@@ -202,6 +202,11 @@ api.add_resource(PowerLinesRoute.PowerLineTowerUpdateLocation,'/gis/api/v1.0/tow
 
 api.add_resource(PowerLinesRoute.PowerPhotoSearch,'/gis/api/v1.0/photo/search')
 api.add_resource(PowerLinesRoute.PowerPhotoIdx,'/gis/api/v1.0/photo/search/idx')
+
+#s搜索线路
+api.add_resource(UAVVideoRoute.VideoSearchRoute,'/gis/api/v1.0/video/search')
+
+
 api.add_resource(PowerLinesRoute.PowerLinePhotoIdxRoute,'/gis/api/v1.0/line/photo')
 api.add_resource(PowerLinesRoute.PowerTowerPhotoIdxRoute,'/gis/api/v1.0/tower/photo')
 api.add_resource(PowerLinesRoute.PowerTowerPhotoDate,'/gis/api/v1.0/tower/photodate')

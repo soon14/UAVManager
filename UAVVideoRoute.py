@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 """
-desc:对于视频上传的请求响应
+desc:对于视频上传的请求响应,前端采用web uploader进行分块上传，后端分块接收并写入文件中，最后通过将分块数据写入文件
 compiler:python2.7.x
 
 created by  : Frank.Wu
@@ -27,10 +27,28 @@ from UAVManagerDAO import UserDAO
 from UAVManagerEntity import Video
 from datetime import datetime
 
+parser = reqparse.RequestParser()
+parser.add_argument('linename', type=str, location='args')
+
 cf = ConfigParser.ConfigParser()
 cf.read("config.conf")
 video_folder = cf.get("picture","DATABASEFOLDER")
 video_url    = cf.get("picture","DATABASETHUMBNAIL")
+
+#根据线路查询线路视频
+class VideoSearchRoute(Resource):
+    def __init__(self):
+        self.dao = VideoDataDAO()
+        self.userDao = UserDAO()
+
+    def post(self):
+        args = parser.parse_args()
+        linename = args.get('linename')
+        sttime   = datetime.strptime(args.get('date'), '%Y-%m-%d').date()
+        rs=self.dao.query_video(linename,sttime);
+        return rs
+    def get(self):
+        return self.post()
 
 #上传部分视频
 class VideoUploadPartRoute(Resource):
@@ -73,7 +91,6 @@ class VideoUploadMergeRoute(Resource):
                 os.remove(filename)  # 删除该分片，节约空间
 
         #将文件写入数据库中
-        
         return make_response(jsonify({'success': target_filename + '上传成功'}), 200)
 
     def get(self):

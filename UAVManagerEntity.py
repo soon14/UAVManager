@@ -215,7 +215,6 @@ class FaultReport(EntityBase):
     fault_crash_electric=Column(String(1024))           #故障造成的电力设备损毁
     fault_crash_around=Column(String(1024))
 
-
 #author:Wu Wei
 #Version 1.0.0.0
 class Plan(EntityBase):
