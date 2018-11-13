@@ -145,21 +145,16 @@ class DefectPhotoID(Resource):
         self.dao = DefectDao()
 
     def post(self):
-        #if (request.data != ""):
-        #    data = json.loads(request.data)
-        #    token = data['token']
-        #    user = self.userDao.verify_token(token, '')
-        #    if (not user):
-        #         return make_response(jsonify({'error': 'Unauthorized access'}), 401)
         args = parser.parse_args()
         photo_id = args.get('photo_id')
-        rs=self.dao.query_photo_id(None,photo_id)
+        if(photo_id!=None):
+            rs=self.dao.query_defect_photo(None,photo_id)
+        else:
+            return make_response(jsonify({'error': '根据照片查询故障信息失败', 'errorcode': 10000000}), 401)
         if rs==None:
             return make_response(jsonify({'error': '根据照片查询故障信息失败','errorcode' : 10000000}), 401)
         else:
             return rs
-    #else:
-        #    return  make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
     def get(self):
         return self.post()

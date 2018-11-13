@@ -203,9 +203,9 @@ api.add_resource(PowerLinesRoute.PowerLineTowerUpdateLocation,'/gis/api/v1.0/tow
 api.add_resource(PowerLinesRoute.PowerPhotoSearch,'/gis/api/v1.0/photo/search')
 api.add_resource(PowerLinesRoute.PowerPhotoIdx,'/gis/api/v1.0/photo/search/idx')
 
-#s搜索线路
+#搜索线路视频
 api.add_resource(UAVVideoRoute.VideoSearchRoute,'/gis/api/v1.0/video/search')
-
+api.add_resource(UAVVideoRoute.VideoUploadPartRoute,'/gis/api/v1.0/video/upload')
 
 api.add_resource(PowerLinesRoute.PowerLinePhotoIdxRoute,'/gis/api/v1.0/line/photo')
 api.add_resource(PowerLinesRoute.PowerTowerPhotoIdxRoute,'/gis/api/v1.0/tower/photo')
