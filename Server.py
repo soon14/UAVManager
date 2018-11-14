@@ -203,14 +203,17 @@ api.add_resource(PowerLinesRoute.PowerLineTowerUpdateLocation,'/gis/api/v1.0/tow
 api.add_resource(PowerLinesRoute.PowerPhotoSearch,'/gis/api/v1.0/photo/search')
 api.add_resource(PowerLinesRoute.PowerPhotoIdx,'/gis/api/v1.0/photo/search/idx')
 
-#搜索线路视频
-api.add_resource(UAVVideoRoute.VideoSearchRoute,'/gis/api/v1.0/video/search')
-api.add_resource(UAVVideoRoute.VideoUploadPartRoute,'/gis/api/v1.0/video/upload')
-
 api.add_resource(PowerLinesRoute.PowerLinePhotoIdxRoute,'/gis/api/v1.0/line/photo')
 api.add_resource(PowerLinesRoute.PowerTowerPhotoIdxRoute,'/gis/api/v1.0/tower/photo')
 api.add_resource(PowerLinesRoute.PowerTowerPhotoDate,'/gis/api/v1.0/tower/photodate')
 
+#搜索线路视频
+api.add_resource(UAVVideoRoute.VideoSearchRoute,'/gis/api/v1.0/video/search')
+api.add_resource(UAVVideoRoute.VideoTimeSearchRoute,'/gis/api/v1.0/video/time/search')
+api.add_resource(UAVVideoRoute.VideoUploadPartRoute,'/gis/api/v1.0/video/upload')
+api.add_resource(UAVVideoRoute.VideoUploadMergeRoute,'/gis/api/v1.0/video/success')
+
+#搜索缺陷
 api.add_resource(DefectRoute.DefectLevel, '/gis/api/v1.0/defectlevel')
 api.add_resource(DefectRoute.DefectPart, '/gis/api/v1.0/defectPart')
 api.add_resource(DefectRoute.DefectTowerID,'/gis/api/v1.0/searchdefect/towerid')

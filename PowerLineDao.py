@@ -783,11 +783,13 @@ class VideoDataDAO:
     #param linename:线路名称
     #返回视频时间
     def query_videotime(self,linename):
-        videotimes = self.session_power.query(Video).filter(Video.video_line==linename).group_by(Video.video_time).all()
+        sql = 'select video_time from tb_video  where video_line=\''+linename+'\' group by video_time ;'
+        rs = self.session_power.execute(sql).fetchall()
+        self.session_power.rollback()
         ret = []
-        for i in videotimes:
+        for i in rs:
             item = {}
-            item['time'] = i[0].strftime("%Y-%m-%d")
+            item['date'] = i[0].strftime("%Y-%m-%d")
             ret.append(item)
         return json.dumps(ret)
 
@@ -797,7 +799,7 @@ class VideoDataDAO:
     #param video_url:视频访问url
     #param video_time:视频上传时间
     def add_video(self,video_linename,video_path,video_url,video_time):
-        videoItem = Video(video_linename=video_linename,video_path=video_path,video_url=video_url,video_time=video_time)
+        videoItem = Video(video_line=video_linename,video_path=video_path,video_url=video_url,video_time=video_time)
         self.session_power.add(videoItem)
         try:
             self.session_power.commit()
