@@ -65,6 +65,15 @@ class Role_basic(EntityBase):
     role_basic_id = Column(Integer,primary_key=True)    #基本权限id
     role_basic_type = Column(String(45))                #权限类型
 
+#author:Wu Wei
+#Version 1.0.0.0
+class LogInfo(EntityBase):
+    __tablename__ = "tb_loginfo"
+    tb_loginfo_idx=Column(Integer,primary_key=True)      #登录日志id
+    tb_loguser=Column(String(45))                        #登录用户名
+    tb_logtime = Column(Date)                            #登录时间
+    tb_logdepart =  Column(String(45))                   #用户部门
+
 #############################################################################无人机管理
 #author:Wu Wei
 #Version 1.0.0.0

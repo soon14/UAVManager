@@ -20,11 +20,14 @@ from flask_restful import Resource
 from flask_restful import reqparse
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
-from UAVManagerDAO import UserDAO
+from UAVManagerDAO import UserDAO,UserLogDAO
 from UAVManagerEntity import User
+import datetime
 
 parser = reqparse.RequestParser()
 parser.add_argument('department', type=str, location='args')
+parser.add_argument('starttime', type=str, location='args')
+parser.add_argument('endtime', type=str, location='args')
 parser.add_argument('team',type=str,location='args')
 parser.add_argument('page_index',type=int,location='args')
 parser.add_argument('page_size',type=int,location='args')
@@ -316,6 +319,7 @@ class UserTeam(Resource):
             if rs == None:
                 return make_response(jsonify({'error': '无权限获取用户班组信息','errorcode':1000000}), 401)
             else:
+                #添加
                 return rs
         else:
             return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
@@ -399,6 +403,44 @@ class TeamUsers(Resource):
             rs = self.userDao.get_teamUser(user)
             if rs == 1011501:
                 return make_response(jsonify({'error': '获取班组管理员失败','errorcode':10000000}), 401)
+            else:
+                return rs
+        else:
+            return  make_response(jsonify({'error': '输入参数有误','errorcode':10000000}), 401)
+
+    def get(self):
+        return self.post()
+
+#查询用户统计信息
+class UserLogStatistic(Resource):
+    def __init__(self):
+        self.logDao = UserLogDAO()
+
+    def post(self):
+        if (request.data != ""):
+            data = json.loads(request.data)
+            token = data['token']
+            deparment=None
+            sttiem   =None
+            endtime  =None
+            if(data['deparment'] != None):
+                deparment = data['deparment']
+            if(data['sttime'] != None):
+                sttiem    = datetime.strptime(data['starttime'] , '%Y-%m-%d').date()
+            if(data['endtime']!=None):
+                endtiem   = datetime.strptime(data['endtime'] , '%Y-%m-%d').date()
+
+            user = self.userDao.verify_token(token, '')
+            if (not user):
+                return make_response(jsonify({'error': '用户不存在或登录过期', 'errorcode': 10000000}), 400)
+            if user == 1010301:
+                return make_response(jsonify({'error': '登录过期', 'errorcode': user}), 400)
+            if user == 1010302:
+                return make_response(jsonify({'error': '用户验证错误', 'errorcode': user}), 400)
+
+            rs = self.logDao.queryStatistic(deparment,sttiem,endtime)
+            if rs == 1011501:
+                return make_response(jsonify({'error': '获取登录日志信息失败','errorcode':10000000}), 401)
             else:
                 return rs
         else:

@@ -17,6 +17,7 @@ from flask import Flask, render_template
 import UAVManagerRoute,UAVDeviceRoute,UAVBatteryRoute,UAVFaultRoute,UAVApporvalRoute,UAVPartsRoute,UAVPlanRoute,UAVVideoRoute
 import UAVPadRoute,UAVFaultReportRoute,PhotoUpload,PowerLinesRoute,UserManagerRoute,DefectRoute,DataServiceRoute
 import UAVManagerDAO
+import datetime
 
 auth = HTTPBasicAuth()
 app = Flask(__name__)
@@ -54,6 +55,13 @@ def login():
         userDao = UAVManagerDAO.UserDAO()
         user = userDao.get_user_byName(username)
         if(userDao.verify_password(username,password)):
+            #add user login log info
+            logDao = UAVManagerDAO.UserLogDAO()
+            logTime = datetime.datetime.now()
+            department = user.user_department
+            logname = username
+            logDao.addUserLog(logname,department,logTime)
+
             rst = make_response(jsonify({'Status':True,'Token': generate_auth_token(user.user_id,3600),'ID': user.user_id,'Authority':user.user_role}))
             rst.headers['Access-Control-Allow-Origin'] = '*'
             rst.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
@@ -79,6 +87,7 @@ api.add_resource(UserManagerRoute.UserTeams,'/usermanager/api/v1.0/user/teams')
 #get user team manager
 api.add_resource(UserManagerRoute.TeamManager,'/usermanager/api/v1.0/user/teammanager')
 api.add_resource(UserManagerRoute.TeamUsers,'/usermanager/api/v1.0/team/user')
+api.add_resource(UserManagerRoute.UserLogStatistic,'/usermanager/api/v1.0/logstatistic')
 #api.add_resource(UserManagerRoute.AuthorityAdd,'/usermanager/api/v1.0/user/AddAuthority')
 
 

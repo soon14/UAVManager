@@ -34,7 +34,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker,query
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import  SignatureExpired,BadSignature
-from UAVManagerEntity import User, Role, Role_basic, Manager,Battery,Device,Pad,Parts,Approval,Fault,FaultReport,Approval_db,Plan, class_to_dict
+from UAVManagerEntity import User, Role, Role_basic,LogInfo, Manager,Battery,Device,Pad,Parts,Approval,Fault,FaultReport,Approval_db,Plan, class_to_dict
 
 from flask import Flask, request ,jsonify
 from flask import Response,make_response
@@ -420,6 +420,31 @@ class UserDAO:
             tmp['username']=item.user_name
             rs_teamUsers.append(tmp)
         return rs_teamUsers
+
+#用户登录信息查询
+class UserLogDAO:
+    def __init__(self):
+        self.session_usr = Session_User()
+
+    def __del__(self):
+        self.session_usr.close()
+
+    #添加用户登录日志信息
+    def addUserLog(self,username,department,logtime):
+        logInfo = LogInfo()
+        logInfo.tb_logtime=logtime
+        logInfo.tb_logdepart=department
+        logInfo.tb_loguser=username
+
+    #根据用户部门，起止时间查询所有用户登录信息
+    def queryStatistic(self,depart,sttime,endtime):
+        q = self.session_usr.query(LogInfo.tb_loguser,func.count(LogInfo.tb_loginfo_idx)).group_by(LogInfo.tb_loguse)
+        if(depart!=None):
+            q=q.filter(LogInfo.tb_logdepart==depart)
+        else:
+            q=q.filter(LogInfo.tb_logtime>sttime,LogInfo.tb_logtime<endtime)
+        rs = q.all()
+
 
 #无人机设备对象操作类
 #包括设备查询，分页查询，条件查询，设备各种条件的统计以及设备的添加修改和删除功能
