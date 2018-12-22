@@ -435,15 +435,27 @@ class UserLogDAO:
         logInfo.tb_logtime=logtime
         logInfo.tb_logdepart=department
         logInfo.tb_loguser=username
+        self.session_usr.add(logInfo)
+        self.session_usr.commit()
 
     #根据用户部门，起止时间查询所有用户登录信息
     def queryStatistic(self,depart,sttime,endtime):
-        q = self.session_usr.query(LogInfo.tb_loguser,func.count(LogInfo.tb_loginfo_idx)).group_by(LogInfo.tb_loguse)
+        q = self.session_usr.query(LogInfo,func.count(LogInfo.tb_loginfo_idx)).group_by(LogInfo.tb_loguser)
         if(depart!=None):
             q=q.filter(LogInfo.tb_logdepart==depart)
-        else:
-            q=q.filter(LogInfo.tb_logtime>sttime,LogInfo.tb_logtime<endtime)
+        if(sttime!=None and endtime!=None):
+            q = q.filter(LogInfo.tb_logtime > sttime, LogInfo.tb_logtime < endtime)
         rs = q.all()
+        statistic = []
+        for item in rs:
+            tmpItem={}
+            tmpItem["name"]=item[0].tb_loguser
+            tmpItem["department"]=item[0].tb_logdepart
+            tmpItem["value"]=item[1]
+            tmpItem["totalcount"]=len(rs)
+            statistic.append(tmpItem)
+
+        return statistic
 
 
 #无人机设备对象操作类

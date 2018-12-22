@@ -415,6 +415,7 @@ class TeamUsers(Resource):
 class UserLogStatistic(Resource):
     def __init__(self):
         self.logDao = UserLogDAO()
+        self.userDao = UserDAO()
 
     def post(self):
         if (request.data != ""):
@@ -423,12 +424,12 @@ class UserLogStatistic(Resource):
             deparment=None
             sttiem   =None
             endtime  =None
-            if(data['deparment'] != None):
-                deparment = data['deparment']
-            if(data['sttime'] != None):
-                sttiem    = datetime.strptime(data['starttime'] , '%Y-%m-%d').date()
-            if(data['endtime']!=None):
-                endtiem   = datetime.strptime(data['endtime'] , '%Y-%m-%d').date()
+            if(data['department'] != None):
+                deparment = data['department']
+            if(data['sttime'] != ""):
+                sttiem    = datetime.datetime.strptime(data['sttime'] , '%Y-%m-%d').date()
+            if(data['endtime']!=""):
+                endtiem   = datetime.datetime.strptime(data['endtime'] , '%Y-%m-%d').date()
 
             user = self.userDao.verify_token(token, '')
             if (not user):
