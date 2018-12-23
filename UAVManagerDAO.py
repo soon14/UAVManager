@@ -447,7 +447,8 @@ class UserLogDAO:
             q = q.filter(LogInfo.tb_logtime > sttime, LogInfo.tb_logtime < endtime)
         rs = q.all()
         statistic = []
-        for item in rs:
+        rsSorted=sorted(rs, key=lambda x: x[1],reverse=True)
+        for item in rsSorted:
             tmpItem={}
             tmpItem["name"]=item[0].tb_loguser
             tmpItem["department"]=item[0].tb_logdepart
